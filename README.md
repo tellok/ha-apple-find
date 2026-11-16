@@ -31,6 +31,8 @@ The current macOS Find My daemon was observed issuing `SubscribeAndFetch` with t
 
 The emulation and native protocol probes reference the [Zerotistic protocol analysis](https://zerotistic.blog/posts/find-my-people-linux/), [pypush](https://github.com/JJTech0130/pypush), [rustpush](https://github.com/stek29/rustpush) and [os-findmy-e](https://github.com/sacca97/os-findmy-e). See [bundled assets and sources](custom_components/apple_findmy_people/assets/README.md).
 
+Apple Find's original code and documentation are available under the [MIT License](LICENSE). Bundled third-party code, binaries, certificates, and artwork remain subject to their respective terms. See the [bundled asset notes](custom_components/apple_findmy_people/assets/README.md) for source and license information.
+
 ## Test
 
 ```sh
