@@ -310,6 +310,28 @@ async def discover_contacts(provider):
         await client.close()
 
 
+def share_key_path(handle):
+    return NATIVE / f"share-{hashlib.sha256(handle.encode()).hexdigest()[:20]}.plist"
+
+
+def read_share_key(handle):
+    path = share_key_path(handle)
+    try:
+        key = plistlib.loads(path.read_bytes())
+    except (FileNotFoundError, plistlib.InvalidFileException):
+        return None
+    return key if isinstance(key, dict) else None
+
+
+def save_share_key(handle, key):
+    path = share_key_path(handle)
+    tmp = path.with_suffix(".tmp")
+    tmp.write_bytes(plistlib.dumps(key))
+    tmp.chmod(0o600)
+    tmp.replace(path)
+    (NATIVE / path.name.replace("share-", "pending-envelope-")).unlink(missing_ok=True)
+
+
 async def collect_once(args, *, refresh_key=False):
     provider = getattr(args, "provider", None)
     client = PeopleClient(args.target, provider=provider) if provider else PeopleClient(args.target)
@@ -317,7 +339,6 @@ async def collect_once(args, *, refresh_key=False):
     target_uri = client.target if client.target.startswith("tel:") else f"mailto:{client.target}"
     sender_uri = args.self_uri or f"mailto:{client.state['account']['username'].lower()}"
     target_hash = hashlib.sha256(client.target.encode()).hexdigest()[:20]
-    path = NATIVE / f"share-{target_hash}.plist"
     output = args.snapshot or NATIVE / f"position-{target_hash}.json"
     receiver = None
     directory = None
@@ -332,7 +353,7 @@ async def collect_once(args, *, refresh_key=False):
         directory = await receiver.lookup_selected("com.apple.private.alloy.fmd")
 
     try:
-        key = plistlib.loads(path.read_bytes()) if path.is_file() else None
+        key = read_share_key(client.target)
         # The native missing-key flow introduces an already connected courier
         # to Friends before refreshing the relationship and requesting a key.
         if args.keys and (not key or refresh_key):
@@ -386,12 +407,8 @@ async def collect_once(args, *, refresh_key=False):
                         temp.chmod(0o600)
                         temp.replace(spool)
                     continue
-                tmp = path.with_suffix(".tmp")
-                tmp.write_bytes(plistlib.dumps(candidate))
-                tmp.chmod(0o600)
-                tmp.replace(path)
+                save_share_key(client.target, candidate)
                 key = candidate
-                (NATIVE / f"pending-envelope-{target_hash}.plist").unlink(missing_ok=True)
                 log_diagnostic(json.dumps({"stage": "key_delivery", "signature_verified": True, "selected_share_matched": True}), flush=True)
                 try:
                     await receiver.acknowledge_verified(packet, directory, topic)
@@ -421,17 +438,24 @@ def poll_targets(args):
     return [PollTarget(argparse.Namespace(**(vars(args) | {"target": handle}))) for handle in targets]
 
 
-async def poll_target(target, interval):
+async def poll_target(target, interval, *, shared_keys=False):
     delay = interval
     now = time.monotonic()
-    refresh = target.needs_refresh and now >= target.next_key_refresh
+    refresh = not shared_keys and target.needs_refresh and now >= target.next_key_refresh
     if refresh:
         target.next_key_refresh = now + 1800
     generation = account_generation()
     try:
-        target.needs_refresh = not await collect_once(target.args, refresh_key=refresh)
+        opts = argparse.Namespace(**(vars(target.args) | {"keys": False})) if shared_keys else target.args
+        key = read_share_key(opts.target) if shared_keys else None
+        relationship_id = getattr(opts, "relationship_id", None)
+        if shared_keys and (not key or relationship_id is not None and key.get("fm_id") != relationship_id):
+            target.needs_refresh = True
+            target.due = now + interval
+            return 0
+        target.needs_refresh = not await collect_once(opts, refresh_key=refresh)
         mark_reauth("people", generation, required=False)
-        if target.needs_refresh:
+        if target.needs_refresh and not shared_keys:
             delay = max(delay, 300)
     except AppleRequestError as error:
         log_diagnostic(json.dumps({"stage": "people_poll", "http_status": error.status}), flush=True)
@@ -448,7 +472,7 @@ async def poll_target(target, interval):
     return 0
 
 
-async def run(args, *, targets=None):
+async def run(args, *, targets=None, shared_keys=False):
     if targets is None:
         targets = poll_targets(args)
     if args.poll_interval is None:
@@ -468,7 +492,8 @@ async def run(args, *, targets=None):
                 for item in targets:
                     item.due = 0.0
             continue
-        result = await poll_target(target, getattr(target.args, "poll_interval", args.poll_interval))
+        result = await poll_target(target, getattr(target.args, "poll_interval", args.poll_interval),
+                                   shared_keys=shared_keys)
         if result > 0:
             until = time.monotonic() + result
             for item in targets:

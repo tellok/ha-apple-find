@@ -60,11 +60,12 @@ class NativeRuntime:
 
     async def _main(self):
         backend_environment.environment = backend_environment.Environment.for_core(self.workspace)
-        from .backend import native_devices, native_people
+        from .backend import native_devices, native_people, people_keys
         from .backend.emulated_anisette import EmulatedMacAnisette
         from .backend.native_authorization import AuthorizationBridge
 
         self.native_people = native_people
+        self.people_keys = people_keys
         self.native_devices = native_devices
         self.loop = asyncio.get_running_loop()
         self.stop = asyncio.Event()
@@ -210,12 +211,12 @@ class NativeRuntime:
         targets = [
             self.native_people.PollTarget(argparse.Namespace(
                 target=handle, snapshot=Path(path), self_uri=None, keys=True,
-                check_receiver=True, wait=60 if relationship_id else 300, provider=self.provider,
+                provider=self.provider,
                 poll_interval=interval, relationship_id=relationship_id,
             ))
             for handle, path, interval, relationship_id in entries
         ]
-        await self.native_people.run(settings, targets=targets)
+        await self.people_keys.run_household(settings, targets)
 
     async def async_play_sound(self, target):
         error = await self._call(self._play_sound, target)

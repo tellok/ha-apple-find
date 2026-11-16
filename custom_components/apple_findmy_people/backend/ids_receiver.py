@@ -34,7 +34,7 @@ class CourierDisconnected(RuntimeError):
 class Receiver:
     def __init__(self, http, target_uri, self_uri):
         self.http = http
-        self.target_uri = target_uri.lower()
+        self.target_uri = target_uri.lower() if target_uri else None
         self.self_uri = self_uri.lower()
         self.push = json.loads((PRIVATE / "apns-identity.json").read_text())
         self.registration = json.loads((PRIVATE / "ids-registration.json").read_text())
@@ -125,7 +125,10 @@ class Receiver:
                         self.counters["pair_ec_messages"] += int(is_pair_ec)
                         self.counters["selected_sender"] += int(expected_uri)
                         self.counters["selected_token"] += int(expected_token)
-                        if is_pair_ec and (expected_uri or expected_token):
+                        account_delivery = self.target_uri is None and topic in (
+                            "com.apple.private.alloy.fmd", "com.apple.private.alloy.fmf",
+                        )
+                        if is_pair_ec and (expected_uri or expected_token or account_delivery):
                             self.counters["selected_pair_ec"] += 1
                             if not self.notifications.full():
                                 self.notifications.put_nowait((values.get(2), packet))
@@ -143,7 +146,7 @@ class Receiver:
                 if not future.done():
                     future.set_exception(CourierDisconnected(self.courier_error))
 
-    async def lookup_selected(self, topic="com.apple.private.alloy.fmf", *, self_lookup=False):
+    async def lookup_selected(self, topic="com.apple.private.alloy.fmf", *, self_lookup=False, target_uri=None):
         if self.self_uri not in [u["uri"].lower() for u in self.registration["uris"]]:
             raise ValueError("Configured self handle not registered")
         response = await self.http.get("https://init.ess.apple.com/WebObjects/VCInit.woa/wa/getBag?ix=3")
@@ -152,7 +155,9 @@ class Receiver:
         url = urlparse(endpoint)
         if url.scheme != "https" or not url.hostname.endswith(".apple.com"):
             raise ValueError("Unexpected IDS directory endpoint")
-        requested_uri = self.self_uri if self_lookup else self.target_uri
+        requested_uri = self.self_uri if self_lookup else (target_uri or self.target_uri)
+        if requested_uri is None:
+            raise ValueError("A friend handle is required for IDS lookup")
         body = gzip.compress(plistlib.dumps({"uris": [requested_uri]}), mtime=0)
         signatures = signing_headers(bag_key="id-query", query=url.query, body=body,
             token=self.push["token"], auth=self.registration, push=self.push)
@@ -200,6 +205,8 @@ class Receiver:
                                   "key_sharing": flags.get("supports-key-sharing") is True,
                                   "encryption_keys_matched": keys_match}), flush=True)
                 return selected
+            if target_uri is not None:
+                return selected
             self.selected_push_tokens = {identity["push-token"] for identity in selected.get("identities", [])
                                          if isinstance(identity.get("push-token"), bytes)}
             diagnostic = {"stage": "selected_friend_directory", "status": data.get("status"),
@@ -216,7 +223,7 @@ class Receiver:
         finally:
             self.pending.pop(identifier, None)
 
-    async def acknowledge_verified(self, packet, directory, topic):
+    async def acknowledge_verified(self, packet, directory, topic, *, target_uri=None):
         """Application ACK only after caller has verified sender and selected key."""
         identities = [d for d in directory.get("identities", []) if d["push-token"] == packet.get("t")]
         if len(identities) != 1 or topic not in TOPICS:
@@ -226,7 +233,7 @@ class Receiver:
             raise ValueError("Invalid acknowledged UUID")
         message = {"c": 244, "rI": identifier, "sP": self.self_uri,
                    "U": uuid.uuid4().bytes, "i": secrets.randbits(32), "v": 8, "fcn": 1,
-                   "dtl": [{"tP": self.target_uri, "D": False, "t": packet["t"], "sT": identities[0]["session-token"]}]}
+                   "dtl": [{"tP": target_uri or self.target_uri, "D": False, "t": packet["t"], "sT": identities[0]["session-token"]}]}
         self.writer.write(frame(0x0a, [(4, secrets.token_bytes(4)),
             (1, hashlib.sha1(topic.encode()).digest()), (2, base64.b64decode(self.push["token"])),
             (3, plistlib.dumps(message, fmt=plistlib.FMT_BINARY))]))
