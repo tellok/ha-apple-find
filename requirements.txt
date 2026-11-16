@@ -1,0 +1,4 @@
+findmy==0.10.2
+pyicloud==2026.10.0
+cryptography>=42.0.0
+pytest>=8.0

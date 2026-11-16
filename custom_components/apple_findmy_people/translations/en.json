@@ -1,0 +1,77 @@
+{
+  "config": {
+    "step": {
+      "tracker": {
+        "title": "Add a contact",
+        "description": "Enter the Apple email address or international phone number the contact uses to share their location.",
+        "data": {
+          "handle": "Sharing email or phone number",
+          "name": "Tracker name"
+        }
+      },
+      "apple_login": {
+        "title": "登录 Apple 账户",
+        "description": "使用 Apple 账户密码登录 HA 上的原生查找采集器。",
+        "data": {
+          "username": "Apple 账户",
+          "password": "密码"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple 双重认证",
+        "description": "在受信任设备上点「允许」，然后输入这次显示的六位验证码。需要新验证码时，可勾选重新发送。",
+        "data": {
+          "code": "六位验证码",
+          "resend": "重新发送验证码"
+        }
+      },
+      "user": {
+        "title": "Add Apple Find",
+        "menu_options": {
+          "devices": "Discover devices",
+          "tracker": "Add a contact sharing their location"
+        }
+      },
+      "devices": {
+        "title": "Discover Find My devices",
+        "description": "Create one tracker per device for which Apple provides a usable location."
+      }
+    },
+    "error": {
+      "invalid_auth": "Apple 未接受登录信息。",
+      "authorization_failed": "Apple 授权未完成，请检查登录信息后重试。",
+      "enrollment_failed": "查找身份注册失败，请重试。",
+      "collector_unavailable": "Home Assistant Core could not start Apple Find My authorization.",
+      "account_mismatch": "请输入与当前查找采集器相同的 Apple 账户。",
+      "invalid_code": "Apple 未接受这次验证码。",
+      "code_format": "请输入六位数字。",
+      "session_expired": "验证会话已过期，请重新登录。",
+      "invalid_handle": "Enter an email address or phone number with a country code."
+    },
+    "abort": {
+      "already_configured": "This contact or device discovery is already configured.",
+      "session_expired": "验证会话已过期，请重新登录。"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Play Sound"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple does not currently offer Play Sound for this device."
+    },
+    "sound_reauth": {
+      "message": "Apple requires reauthentication. Sign in again from Home Assistant Repairs."
+    },
+    "sound_rejected": {
+      "message": "Apple rejected the Play Sound request."
+    },
+    "sound_request_failed": {
+      "message": "Could not confirm whether Apple received the Play Sound request."
+    }
+  }
+}

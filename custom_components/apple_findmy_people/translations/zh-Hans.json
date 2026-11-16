@@ -1,0 +1,77 @@
+{
+  "config": {
+    "step": {
+      "tracker": {
+        "title": "添加联系人",
+        "description": "输入对方用于共享位置的 Apple 邮箱或带国家码的手机号。",
+        "data": {
+          "handle": "共享邮箱或手机号",
+          "name": "实体名称"
+        }
+      },
+      "apple_login": {
+        "title": "登录 Apple 账户",
+        "description": "使用 Apple 账户密码登录 HA 上的原生查找采集器。",
+        "data": {
+          "username": "Apple 账户",
+          "password": "密码"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple 双重认证",
+        "description": "在受信任设备上点「允许」，然后输入这次显示的六位验证码。需要新验证码时，可勾选重新发送。",
+        "data": {
+          "code": "六位验证码",
+          "resend": "重新发送验证码"
+        }
+      },
+      "user": {
+        "title": "添加 Apple Find",
+        "menu_options": {
+          "devices": "自动发现设备",
+          "tracker": "添加已共享位置的联系人"
+        }
+      },
+      "devices": {
+        "title": "自动发现查找设备",
+        "description": "为 Apple 返回可用位置的每台设备建立一个实体。"
+      }
+    },
+    "error": {
+      "invalid_auth": "Apple 未接受登录信息。",
+      "authorization_failed": "Apple 授权未完成，请检查登录信息后重试。",
+      "enrollment_failed": "查找身份注册失败，请重试。",
+      "collector_unavailable": "HA Core 无法启动 Apple 查找授权服务。",
+      "account_mismatch": "请输入与当前查找采集器相同的 Apple 账户。",
+      "invalid_code": "Apple 未接受这次验证码。",
+      "code_format": "请输入六位数字。",
+      "session_expired": "验证会话已过期，请重新登录。",
+      "invalid_handle": "请输入有效的邮箱或带国家码的手机号。"
+    },
+    "abort": {
+      "already_configured": "此联系人或设备发现已配置。",
+      "session_expired": "验证会话已过期，请重新登录。"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "播放声音"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple 当前未为此设备提供播放声音功能。"
+    },
+    "sound_reauth": {
+      "message": "Apple 要求重新验证。请在 HA 的「修复」中重新登录。"
+    },
+    "sound_rejected": {
+      "message": "Apple 拒绝了播放声音请求。"
+    },
+    "sound_request_failed": {
+      "message": "未能确认 Apple 是否收到播放声音请求。"
+    }
+  }
+}
