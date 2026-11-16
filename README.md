@@ -42,7 +42,7 @@ docker run --rm -v "$PWD:/workspace:ro" findmy-people-research:local python -m p
 
 On Home Assistant 2026.11 or later, open **Settings → Marketplace → Add from link** and enter `https://github.com/tellok/ha-apple-find`. Install **Apple Find** and restart Home Assistant when prompted.
 
-Home Assistant Marketplace requires public GitHub repositories. While this repository is private, authorized readers can download a release archive through GitHub.
+[![Open Apple Find in Home Assistant](https://my.home-assistant.io/badges/marketplace_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=tellok&repository=ha-apple-find&category=integration)
 
 The installation includes the integration code, brand assets, CoreADI emulator and library, Apple trust roots, and enrollment resources. On first sign-in, HA provisions a new ADI identity and stores it in `.findmy-people-headless/state` under its configuration directory. This directory also holds the Apple session, registration keys, contact share keys, and location snapshots. Preserve it when updating an existing Apple Find installation.
 

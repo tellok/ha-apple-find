@@ -1,13 +1,18 @@
 {
   "domain": "apple_findmy_people",
   "name": "Apple Find",
-  "version": "0.5.2",
-  "config_flow": true,
-  "documentation": "https://github.com/tellok/ha-apple-find",
-  "dependencies": [],
+  "categories": [
+    "presence_location"
+  ],
   "codeowners": [
     "@tellok"
   ],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/tellok/ha-apple-find",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/tellok/ha-apple-find/issues",
   "requirements": [
     "findmy==0.10.2",
     "unicorn==2.1.4",
@@ -15,7 +20,5 @@
     "phonenumbers==9.0.43",
     "vobject==0.9.9"
   ],
-  "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/tellok/ha-apple-find/issues",
-  "integration_type": "service"
+  "version": "0.5.3"
 }
