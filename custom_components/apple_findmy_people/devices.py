@@ -21,6 +21,7 @@ class NativeDevice:
     name: str
     position: Position | None
     play_sound: bool
+    discovery_key: str | None = None
 
     def device_info(self, target):
         return DeviceInfo(identifiers={(DOMAIN, target)}, name=self.name, manufacturer="Apple")
@@ -46,7 +47,8 @@ class DevicesCoordinator(DataUpdateCoordinator[dict[str, NativeDevice]]):
                     position = Position.from_snapshot(report, target_id=target, now=now, max_age=900)
                 except (TypeError, ValueError, KeyError):
                     pass
-            devices[target] = NativeDevice(row["name"], position, row.get("play_sound") is True)
+            devices[target] = NativeDevice(row["name"], position, row.get("play_sound") is True,
+                                           row.get("discovery_key"))
         return devices
 
     async def _async_update_data(self):

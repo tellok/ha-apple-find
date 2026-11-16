@@ -14,7 +14,7 @@ from .environment import log_diagnostic
 from .apple_probe import PRIVATE, PROXY, VerifiedHttpSession, account_generation, mark_reauth, save_private
 from .native_people import AppleRequestError, apple_url
 from .emulated_anisette import EmulatedMacAnisette
-from ..protocol import Position
+from ..protocol import Position, device_discovery_key
 
 OUTPUT = PRIVATE / "native-devices.json"
 MAX_AGE = 900
@@ -59,6 +59,8 @@ def device_snapshot(devices, previous, now):
             continue
         name = device.get("name") or device.get("deviceDisplayName") or "Apple device"
         catalog[target] = {"target_id": target, "name": name, "position": position, "play_sound": sound}
+        if device.get("fmlyShare") is False and (discovery_key := device_discovery_key(device.get("deviceDiscoveryId"))):
+            catalog[target]["discovery_key"] = discovery_key
     return {"schema_version": 1, "devices": list(catalog.values())}
 
 

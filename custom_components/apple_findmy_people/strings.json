@@ -1,14 +1,6 @@
 {
   "config": {
     "step": {
-      "tracker": {
-        "title": "Add a contact",
-        "description": "Enter the Apple email address or international phone number the contact uses to share their location.",
-        "data": {
-          "handle": "Sharing email or phone number",
-          "name": "Tracker name"
-        }
-      },
       "apple_login": {
         "title": "登录 Apple 账户",
         "description": "使用 Apple 账户密码登录 HA 上的原生查找采集器。",
@@ -24,17 +16,6 @@
           "code": "六位验证码",
           "resend": "重新发送验证码"
         }
-      },
-      "user": {
-        "title": "Add Apple Find",
-        "menu_options": {
-          "devices": "Discover devices",
-          "tracker": "Add a contact sharing their location"
-        }
-      },
-      "devices": {
-        "title": "Discover Find My devices",
-        "description": "Create one tracker per device for which Apple provides a usable location."
       }
     },
     "error": {
@@ -45,11 +26,10 @@
       "account_mismatch": "请输入与当前查找采集器相同的 Apple 账户。",
       "invalid_code": "Apple 未接受这次验证码。",
       "code_format": "请输入六位数字。",
-      "session_expired": "验证会话已过期，请重新登录。",
-      "invalid_handle": "Enter an email address or phone number with a country code."
+      "session_expired": "验证会话已过期，请重新登录。"
     },
     "abort": {
-      "already_configured": "This contact or device discovery is already configured.",
+      "already_configured": "Apple Find is already configured.",
       "session_expired": "验证会话已过期，请重新登录。"
     }
   },
@@ -57,6 +37,11 @@
     "button": {
       "play_sound": {
         "name": "Play Sound"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Me"
       }
     }
   },

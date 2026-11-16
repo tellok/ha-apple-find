@@ -15,6 +15,7 @@ from .backend import environment as backend_environment
 LOGGER = logging.getLogger(__name__)
 PEOPLE_POLL_SECONDS = 60
 DEVICE_POLL_SECONDS = 120
+CONTACT_DISCOVERY_SECONDS = 300
 
 
 class NativeRuntime:
@@ -30,6 +31,9 @@ class NativeRuntime:
         self.workspace = workspace_path(hass)
         self.ready = hass.loop.create_future()
         self.entries = {}
+        self.contacts = ()
+        self.own_device = None
+        self.contact_generation = None
         self.collectors = {}
         self.authorization_tasks = set()
 
@@ -113,16 +117,72 @@ class NativeRuntime:
             if self.provider is None:
                 return
 
-            people = tuple(sorted(
-                (entry["target_id"].removeprefix("friend:"), entry["snapshot_path"], entry["poll_seconds"])
-                for entry in self.entries.values() if entry.get("kind") != "devices"
-            ))
             devices = any(entry.get("kind") == "devices" for entry in self.entries.values())
-            await self._set_collector("people", people, lambda: self._collect_people(people))
+            await self._set_collector("contacts", devices, self._discover_contacts)
+            if not devices:
+                self.contacts = ()
+                self.own_device = None
+            await self._sync_people()
             await self._set_collector(
                 "devices", devices,
                 lambda: self.native_devices.run(DEVICE_POLL_SECONDS, provider=self.provider),
             )
+
+    async def _sync_people(self):
+        people = [
+            (entry["target_id"].removeprefix("friend:"), entry["snapshot_path"], entry["poll_seconds"], None)
+            for entry in self.entries.values() if entry.get("kind") != "devices"
+        ]
+        manual = {handle for handle, *_ in people}
+        people.extend(
+            (contact.handles[0], str(self.state / "contacts" / contact.snapshot_name),
+             PEOPLE_POLL_SECONDS, contact.relationship_id)
+            for contact in self.contacts if manual.isdisjoint(contact.handles)
+        )
+        settings = tuple(sorted(people, key=lambda item: item[:2]))
+        await self._set_collector("people", settings, lambda: self._collect_people(settings))
+
+    async def async_contacts(self):
+        return await self._call(self._contacts)
+
+    async def _contacts(self):
+        from .backend.apple_probe import account_generation
+
+        if self.contact_generation != account_generation():
+            return (), None
+        return self.contacts, self.own_device
+
+    async def _discover_contacts(self):
+        from aiohttp import ClientError
+
+        from .backend.apple_probe import account_generation, mark_reauth
+        from .backend.native_people import AppleRequestError
+
+        while True:
+            generation = account_generation()
+            delay = CONTACT_DISCOVERY_SECONDS
+            try:
+                contacts, own_device = await self.native_people.discover_contacts(self.provider)
+            except AppleRequestError as error:
+                if error.status == 401:
+                    mark_reauth("contacts", generation, required=True)
+                if error.status == 429:
+                    delay = 2700
+                LOGGER.debug("Find My contact discovery was rejected (%s)", error.status)
+            except (ClientError, OSError, ValueError, KeyError, TypeError, RuntimeError) as error:
+                LOGGER.debug("Find My contact discovery will retry (%s)", type(error).__name__)
+            else:
+                async with self.entry_lock:
+                    if generation == account_generation():
+                        self.contacts = contacts
+                        self.own_device = own_device
+                        self.contact_generation = generation
+                        await self._sync_people()
+                mark_reauth("contacts", generation, required=False)
+            for remaining in range(0, delay, 15):
+                await asyncio.sleep(min(15, delay - remaining))
+                if account_generation() != generation:
+                    break
 
     async def _set_collector(self, name, settings, collect):
         current = self.collectors.get(name)
@@ -150,10 +210,10 @@ class NativeRuntime:
         targets = [
             self.native_people.PollTarget(argparse.Namespace(
                 target=handle, snapshot=Path(path), self_uri=None, keys=True,
-                check_receiver=True, wait=300, provider=self.provider,
-                poll_interval=interval,
+                check_receiver=True, wait=60 if relationship_id else 300, provider=self.provider,
+                poll_interval=interval, relationship_id=relationship_id,
             ))
-            for handle, path, interval in entries
+            for handle, path, interval, relationship_id in entries
         ]
         await self.native_people.run(settings, targets=targets)
 

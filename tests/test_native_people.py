@@ -197,3 +197,77 @@ def test_key_request_refreshes_the_share_with_courier_already_online(monkeypatch
     assert asyncio.run(native.collect_once(args)) is False
     assert events == ["courier", "directory", "initClient", "minCallback/refreshClient",
                       "minCallback/selFriend/refreshClient", "distribute"]
+
+
+def test_discovery_only_lists_accepted_incoming_shares_and_deduplicates_aliases(monkeypatch):
+    native = module(monkeypatch)
+    contacts, = native.shared_contacts({
+        "following": [
+            {"id": "same-person", "invitationAcceptedHandles": ["mailto:Friend@example.invalid", "+12345678901"],
+             "optedNotToShare": True},
+            {"id": "same-person", "invitationAcceptedHandles": ["friend@example.invalid", "tel:+12345678901"]},
+            {"id": "pending", "invitationFromHandles": ["pending@example.invalid"]},
+            {"id": "event-only", "invitationAcceptedHandles": ["event@example.invalid"], "onlyInEvent": True},
+        ],
+        "followers": [{"id": "outgoing", "invitationAcceptedHandles": ["outgoing@example.invalid"]}],
+    })
+    assert contacts.handles == ("friend@example.invalid", "tel:+12345678901")
+    assert contacts.name == "friend@example.invalid"
+    renamed, = native.shared_contacts({"following": [
+        {"id": "same-person", "invitationAcceptedHandles": ["new@example.invalid"], "displayName": "Other name"},
+    ]})
+    assert renamed.target == contacts.target
+    assert renamed.snapshot_name != contacts.snapshot_name
+    assert renamed.name == "Other name"
+    assert native.shared_contacts({"following": []}) == ()
+    with pytest.raises(ValueError, match="following list"):
+        native.shared_contacts({"followers": []})
+
+
+def test_selected_relationship_must_match_when_alias_is_reused(monkeypatch, tmp_path):
+    native = module(monkeypatch)
+    monkeypatch.setattr(native, "NATIVE", tmp_path)
+    client = native.PeopleClient.__new__(native.PeopleClient)
+    client.target = "tel:+12345678901"
+    client.selected = "stale"
+    client.relationship_id = "original-share"
+
+    async def friends_request(route):
+        return {"following": [
+            {"id": "other-share", "invitationAcceptedHandles": ["tel:+12345678901"]},
+            {"id": "original-share", "invitationAcceptedHandles": ["+12345678901"]},
+        ], "locations": [
+            {"id": "other-share", "location": {"other": True}},
+            {"id": "original-share", "location": {"expected": True}},
+        ]}, {}
+
+    client.context = client.data_context = {}
+    client._friends_request = friends_request
+    assert asyncio.run(client.friends("initClient")) == [
+        {"id": "original-share", "location": {"expected": True}},
+    ]
+    client.relationship_id = "revoked-share"
+    assert asyncio.run(client.friends("initClient")) == []
+    assert client.selected is None
+
+
+def test_me_uses_apple_selected_device_and_only_matches_owned_location(monkeypatch):
+    native = module(monkeypatch)
+    from custom_components.apple_findmy_people.backend.native_devices import device_snapshot
+
+    payload = {"myInfo": {"deviceId": "requesting-client", "meDeviceId": "selected"},
+               "devices": [{"id": "selected", "idsDeviceId": "MATCH-ID"},
+                           {"id": "requesting-client", "idsDeviceId": "client-id"}]}
+    identifier = native.own_location_device(payload)
+    assert identifier
+    assert native.own_location_device(payload | {"devices": []}) is None
+
+    now = native.datetime.now(native.timezone.utc)
+    phone = {"deviceDiscoveryId": "match-id", "name": "Same name", "locationEnabled": True,
+             "location": {"timeStamp": now.timestamp()*1000, "latitude": 1,
+                          "longitude": 2, "horizontalAccuracy": 10}}
+    devices = [phone | {"id": "owned", "fmlyShare": False},
+               phone | {"id": "family", "fmlyShare": True}]
+    owned, family = device_snapshot(devices, [], now)["devices"]
+    assert owned["discovery_key"] == identifier
+    assert "discovery_key" not in family

@@ -31,7 +31,7 @@ def authorization_required(directory):
         generation = (directory / "account.json").stat().st_mtime_ns
     except OSError:
         generation = None
-    for source in ("people", "devices"):
+    for source in ("people", "devices", "contacts"):
         try:
             marker = json.loads((directory / f"reauth-{source}.json").read_text())
             if marker["generation"] == generation:

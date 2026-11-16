@@ -198,7 +198,7 @@ class AuthorizationBridge:
             if name != "account.json" and (stage / name).is_file():
                 (stage / name).replace(self.state / name)
         (stage / "account.json").replace(self.state / "account.json")
-        for source in ("people", "devices"):
+        for source in ("people", "devices", "contacts"):
             (self.state / f"reauth-{source}.json").unlink(missing_ok=True)
 
     async def handle(self, request):

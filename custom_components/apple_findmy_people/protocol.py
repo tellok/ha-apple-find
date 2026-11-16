@@ -11,6 +11,7 @@ import math
 import plistlib
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
+from hashlib import sha256
 
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec
@@ -18,6 +19,13 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from cryptography.hazmat.primitives.kdf.x963kdf import X963KDF
+
+
+def device_discovery_key(identifier):
+    """Build a local key for the discovery identifier shared by Apple's APIs."""
+    if isinstance(identifier, str) and identifier.strip():
+        return sha256(identifier.strip().casefold().encode()).hexdigest()
+    return None
 
 
 def public_bytes(key):

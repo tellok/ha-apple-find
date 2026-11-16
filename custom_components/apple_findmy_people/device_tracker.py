@@ -1,7 +1,7 @@
 """Expose verified Apple Find My People location snapshots as GPS trackers.
 
 HA's Recorder can retain position attributes whenever the tracker state updates.
-Only normalized snapshots for explicitly configured targets are accepted.
+Locations are loaded from verified snapshots for the corresponding share.
 """
 from datetime import timedelta
 import json
@@ -9,15 +9,92 @@ import logging
 from pathlib import Path
 
 from homeassistant.components.device_tracker import TrackerEntity, SourceType
+from homeassistant.core import callback
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity, DataUpdateCoordinator, UpdateFailed,
 )
 from homeassistant.util import dt as dt_util
 
-from . import DEVICES_ID
+from . import DEVICES_ID, DOMAIN, workspace_path
 from .protocol import Position
+from .runtime import async_get_runtime
 
 LOGGER = logging.getLogger(__name__)
+OWN_LOCATION = "me"
+
+
+def read_positions(path, targets, max_age):
+    with path.open("rb") as stream:
+        content = stream.read(1024 * 1024 + 1)
+    if len(content) > 1024 * 1024:
+        raise ValueError("Snapshot too large")
+    snapshot = json.loads(content)
+    if snapshot.get("schema_version") != 1:
+        raise ValueError("Unsupported snapshot schema")
+    positions = {}
+    for value in snapshot["positions"]:
+        target = value["target_id"]
+        if target not in targets or target in positions:
+            raise ValueError("Unexpected or duplicate target")
+        positions[target] = Position.from_snapshot(
+            value, target_id=target, now=dt_util.utcnow(), max_age=max_age,
+        )
+    return positions
+
+
+async def async_setup_contacts(hass, entry, async_add_entities):
+    runtime = await async_get_runtime(hass)
+    directory = workspace_path(hass) / "state" / "contacts"
+    registered = set()
+
+    def read_contacts(contacts):
+        data = {}
+        for contact in contacts:
+            target_id = "friend:" + contact.handles[0]
+            try:
+                position = read_positions(directory / contact.snapshot_name, {target_id}, 300).get(target_id)
+            except (OSError, ValueError, KeyError, TypeError, AttributeError):
+                position = None
+            data[contact.target] = (contact.name, position)
+        return data
+
+    async def update():
+        manual = {
+            candidate.data["target_id"].removeprefix("friend:")
+            for candidate in hass.config_entries.async_entries(DOMAIN)
+            if candidate.data.get("kind") != "devices" and "target_id" in candidate.data
+        }
+        contacts, own_device = await runtime.async_contacts()
+        data = await hass.async_add_executor_job(
+            read_contacts, [contact for contact in contacts if manual.isdisjoint(contact.handles)]
+        )
+        devices = entry.runtime_data
+        matches = [
+            device.position for device in (devices.data or {}).values()
+            if own_device and devices.last_update_success and device.discovery_key == own_device
+        ]
+        data[OWN_LOCATION] = (None, matches[0] if len(matches) == 1 else None)
+        return data
+
+    coordinator = DataUpdateCoordinator(
+        hass, LOGGER, name="Apple Find shared contacts", update_method=update,
+        update_interval=timedelta(seconds=30), always_update=False, config_entry=entry,
+    )
+
+    @callback
+    def discover():
+        entities = []
+        for target, (name, _) in (coordinator.data or {}).items():
+            if target not in registered:
+                registered.add(target)
+                tracker = OwnLocationTracker if target == OWN_LOCATION else SharedContactTracker
+                entities.append(tracker(coordinator, target, name))
+        if entities:
+            async_add_entities(entities)
+
+    await coordinator.async_refresh()
+    entry.async_on_unload(coordinator.async_add_listener(discover))
+    discover()
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
@@ -27,6 +104,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
         coordinator.async_discover(
             entry, async_add_entities, lambda target, device: NativeDeviceTracker(coordinator, target, device)
         )
+        await async_setup_contacts(hass, entry, async_add_entities)
         return
     path = Path(config["snapshot_path"])
     if not path.is_absolute():
@@ -35,27 +113,9 @@ async def async_setup_entry(hass, entry, async_add_entities):
     if not targets:
         raise ValueError("At least one explicit target is required")
 
-    def read_snapshot():
-        with path.open("rb") as stream:
-            content = stream.read(1024 * 1024 + 1)
-        if len(content) > 1024 * 1024:
-            raise ValueError("Snapshot too large")
-        snapshot = json.loads(content)
-        if snapshot.get("schema_version") != 1:
-            raise ValueError("Unsupported snapshot schema")
-        result = {}
-        for value in snapshot["positions"]:
-            target = value["target_id"]
-            if target not in targets or target in result:
-                raise ValueError("Unselected or duplicate target")
-            result[target] = Position.from_snapshot(
-                value, target_id=target, now=dt_util.utcnow(), max_age=config["max_age"],
-            )
-        return result
-
     async def update():
         try:
-            result = await hass.async_add_executor_job(read_snapshot)
+            result = await hass.async_add_executor_job(read_positions, path, targets, config["max_age"])
         except (OSError, ValueError, KeyError, TypeError, AttributeError):
             # Avoid leaking file content or coordinates in logs.
             raise UpdateFailed("Location snapshot missing, stale, or invalid") from None
@@ -77,7 +137,8 @@ class SelectedTracker(CoordinatorEntity, TrackerEntity):
     def __init__(self, coordinator, target, name):
         super().__init__(coordinator)
         self.target = target
-        self._attr_name = name
+        if name is not None:
+            self._attr_name = name
         self._attr_unique_id = "apple_findmy_people:" + target
 
     @property
@@ -116,6 +177,19 @@ class SelectedTracker(CoordinatorEntity, TrackerEntity):
         if position.floor is not None:
             attributes["floor"] = position.floor
         return attributes
+
+
+class SharedContactTracker(SelectedTracker):
+    @property
+    def _position(self):
+        contact = (self.coordinator.data or {}).get(self.target)
+        return contact[1] if contact else None
+
+
+class OwnLocationTracker(SharedContactTracker):
+    _attr_has_entity_name = True
+    _attr_translation_key = "me"
+    _attr_suggested_object_id = "apple_find_me"
 
 
 class NativeDeviceTracker(SelectedTracker):

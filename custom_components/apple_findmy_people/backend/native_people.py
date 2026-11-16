@@ -15,6 +15,7 @@ import logging
 import os
 from pathlib import Path
 import plistlib
+import re
 import sys
 import time
 from urllib.parse import urlsplit
@@ -28,7 +29,7 @@ from .ids_receiver import CourierDisconnected, Receiver, TOPICS_BY_HASH
 from .ids_register import message_identity
 from .location_pipeline import decrypt_selected_message, selected_key
 from cryptography.exceptions import InvalidSignature, InvalidTag
-from ..protocol import fetch_body, decrypt_report, decode_share_key, position_from_report
+from ..protocol import device_discovery_key, fetch_body, decrypt_report, decode_share_key, position_from_report
 from findmy.util.http import HttpResponse
 
 NATIVE = PRIVATE
@@ -36,6 +37,68 @@ NATIVE = PRIVATE
 
 def normalize_target(handle):
     return handle.strip().lower().removeprefix("mailto:")
+
+
+@dataclass(frozen=True)
+class SharedContact:
+    relationship_id: str
+    handles: tuple[str, ...]
+    name: str
+
+    @property
+    def target(self):
+        return "contact:" + hashlib.sha256(self.relationship_id.encode()).hexdigest()
+
+    @property
+    def snapshot_name(self):
+        handle_hash = hashlib.sha256(self.handles[0].encode()).hexdigest()[:20]
+        return f"{self.target.removeprefix('contact:')}-{handle_hash}.json"
+
+
+def shared_contacts(payload):
+    """Return accepted incoming shares. Followers are people who can see us."""
+    following = payload.get("following")
+    if not isinstance(following, list):
+        raise ValueError("Missing Find My following list")
+    ids, names = {}, {}
+    for row in following:
+        if not isinstance(row, dict) or row.get("onlyInEvent") is True:
+            continue
+        relationship_id = row.get("id")
+        aliases = row.get("invitationAcceptedHandles")
+        if not isinstance(relationship_id, str) or not relationship_id or not isinstance(aliases, list):
+            continue
+        for alias in aliases:
+            if not isinstance(alias, str):
+                continue
+            handle = normalize_target(alias)
+            if handle.startswith("+"):
+                handle = "tel:" + handle
+            if re.fullmatch(r"tel:\+[1-9]\d{6,14}|[^\s:@]+@[^\s:@]+\.[^\s:@]+", handle):
+                ids.setdefault(relationship_id, set()).add(handle)
+                for field in ("displayName", "name"):
+                    if isinstance(name := row.get(field), str) and name.strip():
+                        names[relationship_id] = name.strip()
+                        break
+    contacts = []
+    for relationship_id, aliases in sorted(ids.items()):
+        handles = tuple(sorted(aliases, key=lambda h: (h.startswith("tel:"), h)))
+        contacts.append(SharedContact(relationship_id, handles, names.get(relationship_id, handles[0].removeprefix("tel:"))))
+    return tuple(contacts)
+
+
+def own_location_device(payload):
+    """Read the device selected by Apple for sharing our location."""
+    me = payload.get("myInfo")
+    me_id = me.get("meDeviceId") if isinstance(me, dict) else None
+    devices = payload.get("devices")
+    if not isinstance(me_id, str) or not me_id or not isinstance(devices, list):
+        return None
+    matches = [
+        device_discovery_key(device.get("idsDeviceId"))
+        for device in devices if isinstance(device, dict) and device.get("id") == me_id
+    ]
+    return matches[0] if len(matches) == 1 else None
 
 
 @dataclass
@@ -62,7 +125,8 @@ def apple_url(value):
 
 class PeopleClient:
     def __init__(self, target, *, provider=None):
-        self.target = normalize_target(target)
+        self.target = normalize_target(target) if target is not None else None
+        self.relationship_id = None
         account_path = NATIVE / "account.json"
         settings_path = NATIVE / "findmy-settings.json"
         self.state = json.loads(account_path.read_text())
@@ -76,7 +140,7 @@ class PeopleClient:
         self.push = json.loads((PRIVATE / "apns-identity.json").read_text())
         self.owns_provider = provider is None
         self.provider = provider or EmulatedMacAnisette.from_json()
-        self.http = VerifiedHttpSession(PROXY)
+        self.http = VerifiedHttpSession(PROXY, persist_cookies=target is not None)
         self.context = {"authToken": base64.b64encode(self.tokens["mmeFMFAppToken"].encode()).decode(),
                         "clientId": base64.b64encode(f"friends/fmfd~~{self.dsid}~~{int(time.time() * 1000)}".encode()).decode(),
                         "prsId": self.dsid}
@@ -100,7 +164,7 @@ class PeopleClient:
                         "Content-Type": "application/json"})
         return headers
 
-    async def friends(self, route):
+    async def _friends_request(self, route):
         account = self.state["account"]["username"]
         now_ms = int(time.time() * 1000)
         context = {"appName": "findmylocated", "appVersion": "7.0",
@@ -132,8 +196,20 @@ class PeopleClient:
         self.data_context = data.get("dataContext", self.data_context)
         # Some versions carry the version in their context rather than headers.
         self.model = str(getattr(self.http, "model_version", None) or data.get("modelVersion", self.model))
-        matches = [f for f in data.get("following", []) if self.target in
-                   [str(h).removeprefix("mailto:").lower() for h in f.get("invitationAcceptedHandles", [])]]
+        return data, diagnostic
+
+    async def friends(self, route):
+        data, diagnostic = await self._friends_request(route)
+        relationship_id = getattr(self, "relationship_id", None)
+        target = self.target.removeprefix("tel:")
+        matches = [
+            row for row in data.get("following", [])
+            if (relationship_id is None or row.get("id") == relationship_id)
+            and any(normalize_target(alias).removeprefix("tel:") == target
+                    for alias in (row.get("invitationAcceptedHandles") or []) if isinstance(alias, str))
+        ]
+        if route == "initClient":
+            self.selected = None
         if matches:
             if len(matches) != 1:
                 raise ValueError("Ambiguous selected share")
@@ -225,9 +301,19 @@ class PeopleClient:
         return True
 
 
+async def discover_contacts(provider):
+    client = PeopleClient(None, provider=provider)
+    try:
+        data, _ = await client._friends_request("initClient")
+        return shared_contacts(data), own_location_device(data)
+    finally:
+        await client.close()
+
+
 async def collect_once(args, *, refresh_key=False):
     provider = getattr(args, "provider", None)
     client = PeopleClient(args.target, provider=provider) if provider else PeopleClient(args.target)
+    client.relationship_id = getattr(args, "relationship_id", None)
     target_uri = client.target if client.target.startswith("tel:") else f"mailto:{client.target}"
     sender_uri = args.self_uri or f"mailto:{client.state['account']['username'].lower()}"
     target_hash = hashlib.sha256(client.target.encode()).hexdigest()[:20]

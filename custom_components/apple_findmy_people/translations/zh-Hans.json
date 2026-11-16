@@ -1,14 +1,6 @@
 {
   "config": {
     "step": {
-      "tracker": {
-        "title": "添加联系人",
-        "description": "输入对方用于共享位置的 Apple 邮箱或带国家码的手机号。",
-        "data": {
-          "handle": "共享邮箱或手机号",
-          "name": "实体名称"
-        }
-      },
       "apple_login": {
         "title": "登录 Apple 账户",
         "description": "使用 Apple 账户密码登录 HA 上的原生查找采集器。",
@@ -24,17 +16,6 @@
           "code": "六位验证码",
           "resend": "重新发送验证码"
         }
-      },
-      "user": {
-        "title": "添加 Apple Find",
-        "menu_options": {
-          "devices": "自动发现设备",
-          "tracker": "添加已共享位置的联系人"
-        }
-      },
-      "devices": {
-        "title": "自动发现查找设备",
-        "description": "为 Apple 返回可用位置的每台设备建立一个实体。"
       }
     },
     "error": {
@@ -45,11 +26,10 @@
       "account_mismatch": "请输入与当前查找采集器相同的 Apple 账户。",
       "invalid_code": "Apple 未接受这次验证码。",
       "code_format": "请输入六位数字。",
-      "session_expired": "验证会话已过期，请重新登录。",
-      "invalid_handle": "请输入有效的邮箱或带国家码的手机号。"
+      "session_expired": "验证会话已过期，请重新登录。"
     },
     "abort": {
-      "already_configured": "此联系人或设备发现已配置。",
+      "already_configured": "Apple Find 已配置。",
       "session_expired": "验证会话已过期，请重新登录。"
     }
   },
@@ -57,6 +37,11 @@
     "button": {
       "play_sound": {
         "name": "播放声音"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "我"
       }
     }
   },
