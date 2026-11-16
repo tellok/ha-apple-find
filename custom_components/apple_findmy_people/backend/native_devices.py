@@ -5,6 +5,7 @@ import base64
 from datetime import datetime, timezone
 from hashlib import sha256
 import json
+import logging
 import os
 import time
 
@@ -155,8 +156,11 @@ async def run(interval, *, provider=None):
                 save_private(OUTPUT, snapshot)
                 previous = snapshot["devices"]
                 mark_reauth("devices", generation, required=False)
-                log_diagnostic(json.dumps({"listed": len(devices), "discovered": len(previous),
-                                  "located": sum("position" in row for row in previous)}), flush=True)
+                log_diagnostic(json.dumps({
+                    "stage": "device_poll", "listed": len(devices), "discovered": len(previous),
+                    "located": sum("position" in row for row in previous),
+                    "play_sound_available": sum(row.get("play_sound") is True for row in previous),
+                }), flush=True)
                 delay = interval
             except (AppleRequestError, ClientError, OSError, ValueError, KeyError, TypeError, RuntimeError) as error:
                 if interval is None:
@@ -164,8 +168,11 @@ async def run(interval, *, provider=None):
                 status = getattr(error, "status", None)
                 if status == 401:
                     mark_reauth("devices", generation, required=True)
-                log_diagnostic(json.dumps({"error": type(error).__name__, "http_status": status}), flush=True)
                 delay = max(interval, 1800 if status in (401, 429) else 300)
+                log_diagnostic(json.dumps({
+                    "stage": "device_poll", "error_type": type(error).__name__,
+                    "http_status": status, "retry_seconds": delay,
+                }), flush=True, level=logging.DEBUG if status == 401 else logging.WARNING)
             if interval is None:
                 return
             while (remaining := started + delay - time.monotonic()) > 0:

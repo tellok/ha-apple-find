@@ -13,6 +13,7 @@ import tempfile
 from .environment import Environment, environment, module_command
 
 STATE = environment.state
+LOGGER = logging.getLogger(__name__)
 SOCKET = STATE / "authorization.sock"
 SESSION_FILES = ("account.json", "ids-bootstrap.json", "gsa-session.plist",
                  "gsa-header-tokens.json", "auth-cookies.json", "anisette-state.json",
@@ -34,8 +35,11 @@ async def worker():
     from .apple_probe import (PRIVATE, PROXY, ResearchAccount, ResearchAnisetteProvider,
                              VerificationCodeRejected, VerifiedHttpSession, save_private)
 
-    def reply(status):
-        print(json.dumps({"status": status}), file=responses, flush=True)
+    def reply(status, *, error_type=None):
+        response = {"status": status}
+        if error_type:
+            response["error_type"] = error_type
+        print(json.dumps(response), file=responses, flush=True)
 
     responses = os.fdopen(os.dup(sys.stdout.fileno()), "w")
     # Research routines print diagnostics. Keep them out of the IPC channel.
@@ -82,9 +86,8 @@ async def worker():
             return
         reply("authenticated")
     except Exception as error:
-        print(type(error).__name__, file=sys.stderr, flush=True)
         reply("invalid_auth" if getattr(account._http, "last_response_status", None) in (401, 403)
-              else "authorization_failed")
+              else "authorization_failed", error_type=type(error).__name__)
     finally:
         await account.close()
         responses.close()
@@ -151,7 +154,10 @@ class AuthorizationBridge:
         self.process.stdin.write(json.dumps(request).encode() + b"\n")
         await self.process.stdin.drain()
         raw = await asyncio.wait_for(self.process.stdout.readline(), 180)
-        return json.loads(raw)["status"]
+        response = json.loads(raw)
+        if error_type := response.get("error_type"):
+            LOGGER.debug("Apple sign-in worker failed (%s)", error_type)
+        return response["status"]
 
     async def commit(self):
         stage = Path(self.directory.name)
@@ -162,14 +168,18 @@ class AuthorizationBridge:
         existing_registration = current and all((self.state / name).is_file() for name in
                                                 ("apns-identity.json", "ids-registration.json", "ids-message-keys.json"))
         if not existing_registration:
+            LOGGER.debug("Enrolling Apple Find push and location services")
             command = await asyncio.create_subprocess_exec(
                 *module_command("prepare_people"),
                 env=self.settings.subprocess_env(staged_state=stage),
                 stdout=asyncio.subprocess.DEVNULL, stderr=asyncio.subprocess.DEVNULL,
             )
             try:
-                if await asyncio.wait_for(command.wait(), 210) != 0:
+                exit_code = await asyncio.wait_for(command.wait(), 210)
+                if exit_code != 0:
+                    LOGGER.debug("Apple Find enrollment process failed (exit code: %d)", exit_code)
                     return "enrollment_failed"
+                LOGGER.debug("Apple Find push and location services enrolled")
             finally:
                 if command.returncode is None:
                     with suppress(ProcessLookupError):

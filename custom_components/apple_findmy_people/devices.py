@@ -54,7 +54,8 @@ class DevicesCoordinator(DataUpdateCoordinator[dict[str, NativeDevice]]):
     async def _async_update_data(self):
         try:
             return await self.hass.async_add_executor_job(self.read_snapshot)
-        except (OSError, ValueError, KeyError, TypeError):
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            LOGGER.debug("Apple Find device snapshot could not be read (%s)", type(error).__name__)
             raise UpdateFailed("Native device snapshot unavailable") from None
 
     @callback
@@ -69,6 +70,7 @@ class DevicesCoordinator(DataUpdateCoordinator[dict[str, NativeDevice]]):
                     registered.add(target)
                     entities.append(entity)
             if entities:
+                LOGGER.debug("Registering %d Apple Find device entities", len(entities))
                 async_add_entities(entities, config_subentry_id=subentry_id)
 
         entry.async_on_unload(self.async_add_listener(discover))

@@ -78,7 +78,12 @@ async def async_setup_contacts(hass, entry, async_add_entities):
             device.position for device in (devices.data or {}).values()
             if own_device and devices.last_update_success and device.discovery_key == own_device
         ]
-        data[OWN_LOCATION] = (None, matches[0] if len(matches) == 1 else None, None)
+        own_position = matches[0] if len(matches) == 1 else None
+        LOGGER.debug(
+            "Apple Find contact trackers refreshed (contacts: %d, with location: %d, Me located: %s)",
+            len(data), sum(position is not None for _, position, _ in data.values()), own_position is not None,
+        )
+        data[OWN_LOCATION] = (None, own_position, None)
         return data
 
     coordinator = DataUpdateCoordinator(
@@ -99,6 +104,7 @@ async def async_setup_contacts(hass, entry, async_add_entities):
                 if device is not None and device.name != name:
                     registry.async_update_device(device.id, name=name)
         if entities:
+            LOGGER.debug("Registering %d Apple Find contact trackers", len(entities))
             async_add_entities(entities, config_subentry_id=subentry_id)
 
     await coordinator.async_refresh()

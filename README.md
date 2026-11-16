@@ -54,4 +54,22 @@ Use **Settings → Devices & services → Add integration → Apple Find** to si
 
 Open a tracked device in **Apple Find → Devices** to use its **Play Sound** button. The button appears when Apple advertises the sound capability. Home Assistant checks the device's current Apple identifier and sends the native command when the button is pressed.
 
+## Troubleshooting and logs
+
+In **Settings → Devices & services → Apple Find**, open the integration's menu and select **Enable debug logging**. Reproduce the problem, then select **Disable debug logging** to download the log. For missing or stale locations, leave it enabled for at least five minutes so the log can include a contact discovery cycle.
+
+To keep a particular level across restarts, use Home Assistant's [Logger integration](https://www.home-assistant.io/integrations/logger/) in `configuration.yaml`. Merge this into your existing `logger:` section if you have one:
+
+```yaml
+logger:
+  logs:
+    custom_components.apple_findmy_people: debug
+```
+
+You can also change the same logger at runtime with the `logger.set_level` action. Use `debug` for troubleshooting, `info` for events such as successful authorization, or `warning` for problems that may need attention.
+
+When reporting an issue, include your Home Assistant and Apple Find versions, the approximate time of the problem, and the lines from `custom_components.apple_findmy_people` and its submodules. Apple Find logs counts, status codes, and retry times. Review the download before sharing because it may contain messages from other Home Assistant integrations. Never attach your Apple Find state directory or Home Assistant backups.
+
+## Migrating older installations
+
 For an older deployment that still uses the separate native Devices integration, stop the old collectors and Home Assistant Core. Run `python scripts/migrate_ha_registry.py /config /config/private-migration-backup --apply` on the HA configuration directory, install the combined integration, and start Core. The migration preserves config entry IDs, entity IDs, and existing Apple state. Keep the backup until both clients are verified in Core. The script also supports a dry run and `--restore` while Core is stopped.

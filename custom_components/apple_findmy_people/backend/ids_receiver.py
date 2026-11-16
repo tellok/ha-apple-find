@@ -183,7 +183,11 @@ class Receiver:
                 payload = gzip.decompress(payload)
             data = plistlib.loads(payload)
             if data.get("status") != 0:
-                log_diagnostic(json.dumps({"stage": "selected_friend_directory", "status": data.get("status")}), flush=True)
+                status = data.get("status")
+                log_diagnostic(json.dumps({
+                    "stage": "selected_friend_directory", "result": "rejected",
+                    "status": status if type(status) is int else None,
+                }), flush=True)
                 raise RuntimeError("IDS directory rejected selected lookup")
             selected = data.get("results", {}).get(requested_uri, {})
             if self_lookup:

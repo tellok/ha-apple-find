@@ -66,8 +66,9 @@ def module_command(module, *args):
     return (sys.executable, "-m", f"{__package__}.{module}", *args)
 
 
-def log_diagnostic(message, *, flush=False):
+def log_diagnostic(message, *, flush=False, level=logging.DEBUG):
+    """Send shareable diagnostics to HA, or print them for standalone probes."""
     if environment.in_core:
-        LOGGER.debug("%s", message)
+        LOGGER.log(level, "%s", message)
     else:
         print(message, flush=flush)

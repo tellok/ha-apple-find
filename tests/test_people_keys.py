@@ -2,9 +2,11 @@
 
 import asyncio
 from argparse import Namespace
+import logging
 from unittest.mock import AsyncMock
 
 from custom_components.apple_findmy_people.backend import native_people as people, people_keys
+from custom_components.apple_findmy_people.backend import environment as settings
 
 
 def test_existing_location_poll_skips_push_and_missing_key_does_not_block(monkeypatch):
@@ -27,7 +29,8 @@ def test_existing_location_poll_skips_push_and_missing_key_does_not_block(monkey
     assert missing.needs_refresh
 
 
-def test_delayed_delivery_routes_to_verified_contact(monkeypatch, tmp_path):
+def test_delayed_delivery_routes_to_verified_contact(monkeypatch, tmp_path, caplog):
+    monkeypatch.setattr(settings, "environment", settings.Environment.for_core(tmp_path))
     a = people.PollTarget(Namespace(target="a@example.invalid"))
     b = people.PollTarget(Namespace(target="b@example.invalid"))
     a_directory = {"identities": [{"push-token": b"a-device"}]}
@@ -51,7 +54,10 @@ def test_delayed_delivery_routes_to_verified_contact(monkeypatch, tmp_path):
     receiver = AsyncMock()
     topic = "com.apple.private.alloy.fmd"
     packet = {"t": b"a-device"}
-    assert asyncio.run(people_keys.handle_delivery(receiver, bindings, topic, packet, 1))
+    with caplog.at_level(logging.DEBUG, logger="custom_components.apple_findmy_people"):
+        assert asyncio.run(people_keys.handle_delivery(receiver, bindings, topic, packet, 1))
+    assert '"result": "verified"' in caplog.text
+    assert all(value not in caplog.text for value in (a.args.target, b.args.target, "share-a", "a-device"))
     receiver.acknowledge_verified.assert_awaited_once_with(packet, a_directory, topic, target_uri="mailto:a@example.invalid")
     assert people.read_share_key(a.args.target) == {"fm_id": "share-a"}
     assert people.read_share_key(b.args.target) is None

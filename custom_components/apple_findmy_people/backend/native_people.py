@@ -233,7 +233,10 @@ class PeopleClient:
                           selected_location_fields=[sorted(p.get("location") or {}) for p in selected_locations])
         save_private(NATIVE / "people-status.json", diagnostic)
         save_private(NATIVE / "people-context.json", {"serverContext": self.context, "dataContext": self.data_context})
-        log_diagnostic(json.dumps(diagnostic), flush=True)
+        log_diagnostic(json.dumps({
+            "stage": route, "http_status": diagnostic.get("http_status"),
+            "selected_share_found": bool(self.selected), "selected_location_count": len(selected_locations),
+        }), flush=True)
         return selected_locations
 
     async def close(self):
@@ -255,9 +258,13 @@ class PeopleClient:
         data = response.json() if response.ok and response._content else {}
         diagnostic["response_fields"] = sorted(data)
         diagnostic["status_code"] = data.get("statusCode")
-        log_diagnostic(json.dumps(diagnostic), flush=True)
         save_private(NATIVE / "fetch-status.json", diagnostic)
         status = str(data.get("statusCode", "200"))
+        log_diagnostic(json.dumps({
+            "stage": diagnostic["stage"], "http_status": response.status_code,
+            "status_code": diagnostic["status_code"] if type(diagnostic["status_code"]) is int else None,
+            "accepted": response.ok and status == "200",
+        }), flush=True)
         if not response.ok or status != "200":
             effective_status = int(status) if response.ok and status.isdecimal() else response.status_code
             raise AppleRequestError("SearchParty request rejected", effective_status)
@@ -279,7 +286,7 @@ class PeopleClient:
                               plaintext_fields=[sorted(p["plaintext"]) for p in reports
                                                 if isinstance(p["plaintext"], dict)])
             save_private(NATIVE / "fetch-status.json", diagnostic)
-            log_diagnostic(json.dumps(diagnostic), flush=True)
+            log_diagnostic(json.dumps({"stage": "decrypt_locations", "report_count": len(reports)}), flush=True)
         return reports
 
     async def position(self, key, output, *, max_age=FRESH_LOCATION_SECONDS):
@@ -303,6 +310,7 @@ class PeopleClient:
             if previous["target_id"] != target_id:
                 raise ValueError("Snapshot output belongs to another target")
             if best.timestamp <= datetime.fromisoformat(previous["timestamp"]):
+                log_diagnostic(json.dumps({"stage": "snapshot", "result": "already_current", "fresh": fresh}))
                 return fresh
         save_private(output, {"schema_version": 1, "positions": [{
             "target_id": target_id, "latitude": best.latitude, "longitude": best.longitude,
@@ -391,8 +399,6 @@ async def collect_once(args, *, refresh_key=False):
                     result = "courier_disconnected" if isinstance(error, CourierDisconnected) else "no_selected_key_received"
                     diagnostic = {"stage": "key_delivery", "result": result, "counters": receiver.counters,
                                   "unsolicited_commands": receiver.unsolicited}
-                    if isinstance(error, CourierDisconnected):
-                        diagnostic["reason"] = str(error)
                     log_diagnostic(json.dumps(diagnostic), flush=True)
                     save_private(NATIVE / "key-delivery-status.json", diagnostic)
                     break
@@ -461,6 +467,7 @@ async def poll_target(target, interval, *, shared_keys=False):
         key = read_share_key(opts.target) if shared_keys else None
         relationship_id = getattr(opts, "relationship_id", None)
         if shared_keys and (not key or relationship_id is not None and key.get("fm_id") != relationship_id):
+            log_diagnostic(json.dumps({"stage": "people_poll", "result": "waiting_for_share_key"}))
             target.needs_refresh = True
             target.due = now + interval
             return 0
@@ -530,6 +537,7 @@ async def run(args, *, targets=None, shared_keys=False):
             if returned == 0:
                 log_diagnostic(json.dumps({"stage": "people_token_refresh", "status": "settings_reloaded"}), flush=True)
             else:
+                log_diagnostic(json.dumps({"stage": "people_token_refresh", "status": "failed", "exit_code": returned}))
                 mark_reauth("people", generation, required=True)
 
 

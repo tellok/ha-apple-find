@@ -58,6 +58,7 @@ class NativeRuntime:
 
     def _failed(self, error_type):
         if not self.ready.done():
+            LOGGER.warning("Apple Find runtime setup failed (%s)", error_type)
             self.ready.set_exception(RuntimeError(f"Find My runtime setup failed ({error_type})"))
         else:
             LOGGER.error("Find My runtime stopped (%s)", error_type)
@@ -81,6 +82,7 @@ class NativeRuntime:
         ).is_file() else None
         self.provision_lock = asyncio.Lock()
         self.authorization = AuthorizationBridge(workspace=backend_environment.environment, provider=self.provider)
+        LOGGER.info("Apple Find runtime started (Apple identity ready: %s)", self.provider is not None)
         self.hass.loop.call_soon_threadsafe(self.ready.set_result, None)
         await self.stop.wait()
 
@@ -91,6 +93,7 @@ class NativeRuntime:
         await self.authorization.discard()
         if self.provider is not None:
             await self.provider.close()
+        LOGGER.debug("Apple Find runtime stopped")
 
     async def async_stop(self, _event):
         try:
@@ -122,6 +125,7 @@ class NativeRuntime:
                 self.entries[entry_id] = {**data, CONF_CONTACTS_PASSWORD: (options or {}).get(CONF_CONTACTS_PASSWORD)}
 
             if self.provider is None:
+                LOGGER.debug("Waiting for Apple authorization before starting collectors")
                 return
 
             device_entry = next((entry for entry in self.entries.values() if entry.get("kind") == "devices"), None)
@@ -164,6 +168,7 @@ class NativeRuntime:
     async def async_validate_contacts_password(self, password):
         """Validate the app-specific password using the same read as discovery."""
         _, error = await self._call(self._read_address_book, password, self.hass.config.country)
+        LOGGER.debug("iCloud Contacts authorization check: %s", error or "accepted")
         return error
 
     async def _read_address_book(self, password, region):
@@ -177,7 +182,8 @@ class NativeRuntime:
             return await fetch_index(self.state / "account.json", password, region), None
         except ContactsAuthError:
             return None, "contacts_invalid_auth"
-        except (ClientError, DefusedXmlException, OSError, ParseError, ValueError, KeyError, TypeError):
+        except (ClientError, DefusedXmlException, OSError, ParseError, ValueError, KeyError, TypeError) as error:
+            LOGGER.debug("iCloud Contacts address book request failed (%s)", type(error).__name__)
             return None, "contacts_unavailable"
 
     async def _discover_contacts(self, password, region):
@@ -200,7 +206,7 @@ class NativeRuntime:
                     mark_reauth("contacts", generation, required=True)
                 if error.status == 429:
                     delay = 2700
-                LOGGER.debug("Find My contact discovery was rejected (%s)", error.status)
+                LOGGER.debug("Find My contact discovery rejected (status: %s, retry: %ss)", error.status, delay)
             except (ClientError, OSError, ValueError, KeyError, TypeError, RuntimeError) as error:
                 LOGGER.debug("Find My contact discovery will retry (%s)", type(error).__name__)
             else:
@@ -213,12 +219,21 @@ class NativeRuntime:
                         LOGGER.warning("iCloud Contacts could not refresh (%s)", error)
                     else:
                         address_book = index
+                        LOGGER.debug("iCloud Contacts address book refreshed")
                     next_refresh = monotonic() + ADDRESS_BOOK_REFRESH_SECONDS
+                matched = 0
                 if address_book:
+                    names = [match_name(contact.handles, address_book, region) for contact in contacts]
+                    matched = sum(bool(name) for name in names)
                     contacts = tuple(
-                        replace(contact, name=match_name(contact.handles, address_book, region) or contact.name)
-                        for contact in contacts
+                        replace(contact, name=name or contact.name)
+                        for contact, name in zip(contacts, names, strict=True)
                     )
+                LOGGER.debug(
+                    "Find My contact discovery completed (contacts: %d, names matched: %d, "
+                    "own location device selected: %s, position TTL: %ss)",
+                    len(contacts), matched, own_device is not None, position_ttl,
+                )
                 async with self.entry_lock:
                     if generation == account_generation():
                         self.contacts = contacts
@@ -242,8 +257,10 @@ class NativeRuntime:
             with suppress(asyncio.CancelledError):
                 await task
             self.collectors.pop(name, None)
+            LOGGER.debug("Apple Find %s collector stopped", name)
         if settings:
             self.collectors[name] = settings, asyncio.create_task(self._retry(name, collect))
+            LOGGER.debug("Apple Find %s collector started", name)
 
     async def _retry(self, name, collect):
         while True:
@@ -263,12 +280,15 @@ class NativeRuntime:
             ))
             for handle, path, interval, relationship_id, max_age in entries
         ]
+        LOGGER.debug("Find My People monitoring %d shares", len(targets))
         await self.people_keys.run_household(settings, targets)
 
     async def async_play_sound(self, target):
         error = await self._call(self._play_sound, target)
         if error:
+            LOGGER.warning("Find My Play Sound failed (%s)", error)
             raise HomeAssistantError(translation_domain=DOMAIN, translation_key=error)
+        LOGGER.info("Find My Play Sound accepted by Apple")
 
     async def _play_sound(self, target):
         from aiohttp import ClientError
@@ -281,16 +301,19 @@ class NativeRuntime:
         generation = account_generation()
         http = None
         try:
+            LOGGER.debug("Sending Find My Play Sound request")
             http = VerifiedHttpSession(PROXY, persist_cookies=False)
             await self.native_devices.play_sound(self.provider, http, target)
         except self.native_devices.SoundTargetUnavailable:
             return "sound_target_unavailable"
         except AppleRequestError as error:
+            LOGGER.debug("Find My Play Sound rejected (status: %s)", error.status)
             if error.status == 401:
                 mark_reauth("devices", generation, required=True)
                 return "sound_reauth"
             return "sound_rejected"
-        except (ClientError, OSError, ValueError, KeyError, TypeError, RuntimeError):
+        except (ClientError, OSError, ValueError, KeyError, TypeError, RuntimeError) as error:
+            LOGGER.debug("Find My Play Sound request failed (%s)", type(error).__name__)
             return "sound_request_failed"
         finally:
             if http is not None:
@@ -302,19 +325,31 @@ class NativeRuntime:
 
     async def _authorize(self, request):
         task = asyncio.current_task()
+        action = request.get("action")
         self.authorization_tasks.add(task)
         try:
             if self.provider is None:
-                if request.get("action") == "status":
+                if action == "status":
                     return {"status": "login_required"}
-                if request.get("action") == "login":
+                if action == "login":
                     from .backend.emulated_anisette import EmulatedMacAnisette
 
                     async with self.provision_lock:
                         if self.provider is None:
+                            LOGGER.debug("Provisioning Apple Find identity")
                             self.provider = await EmulatedMacAnisette.provision()
                             self.authorization.provider = self.provider
-            return await self.authorization.handle(request)
+                            LOGGER.debug("Apple Find identity provisioned")
+            result = await self.authorization.handle(request)
+            if action in ("login", "verify", "resend"):
+                status = result["status"]
+                if status == "authorized":
+                    LOGGER.info("Apple Find authorization completed")
+                elif status in ("verification_required", "invalid_code"):
+                    LOGGER.debug("Apple Find authorization: %s", status)
+                else:
+                    LOGGER.warning("Apple Find authorization failed (%s)", status)
+            return result
         except Exception as error:
             LOGGER.warning("Find My authorization failed (%s)", type(error).__name__)
             return {"status": "authorization_failed"}

@@ -205,7 +205,10 @@ def mark_reauth(source, generation, *, required):
         return
     path = PRIVATE / f"reauth-{source}.json"
     if required:
+        new_marker = environment.in_core and not path.exists()
         save_private(path, {"generation": generation})
+        if new_marker:
+            logging.getLogger(__name__).warning("Find My %s requires Apple reauthentication", source)
     else:
         path.unlink(missing_ok=True)
 

@@ -44,11 +44,16 @@ async def request_keys(receiver, targets, bindings, generation):
                 await client.friends("initClient")
                 if not client.selected:
                     bindings.pop(args.target, None)
+                    log_diagnostic(json.dumps({"stage": "people_key_request", "result": "share_not_found"}))
                     continue
                 bindings[args.target] = (target, uri, client.selected, directory)
                 await client.friends("minCallback/refreshClient")
                 await client.friends("minCallback/selFriend/refreshClient")
                 await client.fetch()
+                log_diagnostic(json.dumps({
+                    "stage": "people_key_request", "result": "accepted", "replacing_key": has_key,
+                    "directory_identities": len(directory.get("identities", [])),
+                }))
             except people.AppleRequestError as error:
                 log_diagnostic(json.dumps({"stage": "people_key_request", "http_status": error.status}))
                 if error.status == 401:
@@ -84,6 +89,7 @@ async def handle_delivery(receiver, bindings, topic, packet, generation):
         target.due = 0.0
         accepted.append((uri, directory))
     if accepted:
+        log_diagnostic(json.dumps({"stage": "key_delivery", "result": "verified", "share_count": len(accepted)}))
         uri, directory = accepted[0]
         try:
             await receiver.acknowledge_verified(packet, directory, topic, target_uri=uri)
@@ -111,6 +117,7 @@ async def watch_keys(targets):
             self_uri = f"mailto:{account.lower()}"
             receiver = Receiver(http, None, self_uri)
             await receiver.start()
+            log_diagnostic(json.dumps({"stage": "people_key_receiver", "result": "connected"}))
             await receiver.lookup_selected("com.apple.private.alloy.fmd", self_lookup=True)
             requests = asyncio.create_task(request_keys(receiver, targets, bindings, generation))
             while generation == account_generation():
@@ -124,7 +131,7 @@ async def watch_keys(targets):
                 await handle_delivery(receiver, bindings, TOPICS_BY_HASH.get(hash_), packet, generation)
         except (ClientError, OSError, ValueError, KeyError, TypeError, RuntimeError, TimeoutError) as error:
             stage = "people_key_reconnect" if isinstance(error, CourierDisconnected) else "people_key_receiver"
-            log_diagnostic(json.dumps({"stage": stage, "error_type": type(error).__name__}))
+            log_diagnostic(json.dumps({"stage": stage, "error_type": type(error).__name__, "retry_seconds": 30}))
         finally:
             if requests is not None:
                 requests.cancel()
