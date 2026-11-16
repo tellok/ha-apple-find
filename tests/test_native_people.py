@@ -271,3 +271,30 @@ def test_me_uses_apple_selected_device_and_only_matches_owned_location(monkeypat
     owned, family = device_snapshot(devices, [], now)["devices"]
     assert owned["discovery_key"] == identifier
     assert "discovery_key" not in family
+
+
+def test_older_report_within_apple_ttl_is_shown_while_refresh_remains_due(monkeypatch, tmp_path):
+    native = module(monkeypatch)
+    from datetime import timedelta
+
+    now = native.datetime.now(native.timezone.utc)
+    timestamp = now - timedelta(minutes=13)
+    epoch = native.datetime(2001, 1, 1, tzinfo=native.timezone.utc)
+    report = {"plaintext": {
+        "timestamp": (timestamp - epoch).total_seconds(),
+        "latitude": 10, "longitude": 20, "accuracy": 15,
+    }}
+    client = native.PeopleClient.__new__(native.PeopleClient)
+    client.target = "friend@example.invalid"
+
+    async def fetch(_):
+        return [report]
+
+    client.fetch = fetch
+    expires = native.contact_position_ttl({"config": {"locationTTL": 7200000}})
+    assert expires == 7200
+    assert native.contact_position_ttl({"config": {"locationTTL": "malformed"}}) == 300
+    path = tmp_path / "person.json"
+    assert asyncio.run(client.position({}, path, max_age=expires)) is False
+    location, = json.loads(path.read_text())["positions"]
+    assert native.datetime.fromisoformat(location["timestamp"]) == timestamp

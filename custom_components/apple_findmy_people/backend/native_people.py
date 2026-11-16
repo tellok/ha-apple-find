@@ -33,6 +33,7 @@ from ..protocol import device_discovery_key, fetch_body, decrypt_report, decode_
 from findmy.util.http import HttpResponse
 
 NATIVE = PRIVATE
+FRESH_LOCATION_SECONDS = 300
 
 
 def normalize_target(handle):
@@ -99,6 +100,15 @@ def own_location_device(payload):
         for device in devices if isinstance(device, dict) and device.get("id") == me_id
     ]
     return matches[0] if len(matches) == 1 else None
+
+
+def contact_position_ttl(payload):
+    """The Friends response supplies the last-known location TTL in milliseconds."""
+    config = payload.get("config")
+    ttl = config.get("locationTTL") if isinstance(config, dict) else None
+    if type(ttl) is int and ttl >= 1000:
+        return min(7200, ttl // 1000)
+    return FRESH_LOCATION_SECONDS
 
 
 @dataclass
@@ -272,19 +282,20 @@ class PeopleClient:
             log_diagnostic(json.dumps(diagnostic), flush=True)
         return reports
 
-    async def position(self, key, output):
+    async def position(self, key, output, *, max_age=FRESH_LOCATION_SECONDS):
         target_id = f"friend:{self.target}"
         positions = []
         now = datetime.now(timezone.utc)
         for report in await self.fetch(key):
             try:
-                positions.append(position_from_report(report, target_id=target_id, now=now, max_age=300))
+                positions.append(position_from_report(report, target_id=target_id, now=now, max_age=max_age))
             except (ValueError, TypeError, KeyError):
                 continue
         if not positions:
             log_diagnostic(json.dumps({"stage": "snapshot", "result": "no_fresh_supported_report"}), flush=True)
             return False
         best = max(positions, key=lambda position: position.timestamp)
+        fresh = (now - best.timestamp).total_seconds() <= FRESH_LOCATION_SECONDS
         previous = None
         if output.is_file():
             previous = json.loads(output.read_text())["positions"][0]
@@ -292,20 +303,20 @@ class PeopleClient:
             if previous["target_id"] != target_id:
                 raise ValueError("Snapshot output belongs to another target")
             if best.timestamp <= datetime.fromisoformat(previous["timestamp"]):
-                return True
+                return fresh
         save_private(output, {"schema_version": 1, "positions": [{
             "target_id": target_id, "latitude": best.latitude, "longitude": best.longitude,
             "accuracy": best.accuracy, "timestamp": best.timestamp.isoformat(), "floor": best.floor,
         }]})
         log_diagnostic(json.dumps({"stage": "snapshot", "result": "updated"}), flush=True)
-        return True
+        return fresh
 
 
 async def discover_contacts(provider):
     client = PeopleClient(None, provider=provider)
     try:
         data, _ = await client._friends_request("initClient")
-        return shared_contacts(data), own_location_device(data)
+        return shared_contacts(data), own_location_device(data), contact_position_ttl(data)
     finally:
         await client.close()
 
@@ -416,7 +427,7 @@ async def collect_once(args, *, refresh_key=False):
                     log_diagnostic(json.dumps({"stage": "key_delivery_ack", "error_type": type(error).__name__}), flush=True)
                 break
         if key:
-            return await client.position(key, output)
+            return await client.position(key, output, max_age=getattr(args, "max_age", FRESH_LOCATION_SECONDS))
         return False
     finally:
         if receiver:

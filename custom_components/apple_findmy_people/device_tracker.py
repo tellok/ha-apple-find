@@ -47,12 +47,12 @@ async def async_setup_contacts(hass, entry, async_add_entities):
     directory = workspace_path(hass) / "state" / "contacts"
     registered = set()
 
-    def read_contacts(contacts):
+    def read_contacts(contacts, max_age):
         data = {}
         for contact in contacts:
             target_id = "friend:" + contact.handles[0]
             try:
-                position = read_positions(directory / contact.snapshot_name, {target_id}, 300).get(target_id)
+                position = read_positions(directory / contact.snapshot_name, {target_id}, max_age).get(target_id)
             except (OSError, ValueError, KeyError, TypeError, AttributeError):
                 position = None
             data[contact.target] = (contact.name, position)
@@ -64,9 +64,9 @@ async def async_setup_contacts(hass, entry, async_add_entities):
             for candidate in hass.config_entries.async_entries(DOMAIN)
             if candidate.data.get("kind") != "devices" and "target_id" in candidate.data
         }
-        contacts, own_device = await runtime.async_contacts()
+        contacts, own_device, max_age = await runtime.async_contacts()
         data = await hass.async_add_executor_job(
-            read_contacts, [contact for contact in contacts if manual.isdisjoint(contact.handles)]
+            read_contacts, [contact for contact in contacts if manual.isdisjoint(contact.handles)], max_age,
         )
         devices = entry.runtime_data
         matches = [

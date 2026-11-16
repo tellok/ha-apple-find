@@ -33,6 +33,7 @@ class NativeRuntime:
         self.entries = {}
         self.contacts = ()
         self.own_device = None
+        self.contact_position_ttl = 300
         self.contact_generation = None
         self.collectors = {}
         self.authorization_tasks = set()
@@ -131,13 +132,13 @@ class NativeRuntime:
 
     async def _sync_people(self):
         people = [
-            (entry["target_id"].removeprefix("friend:"), entry["snapshot_path"], entry["poll_seconds"], None)
+            (entry["target_id"].removeprefix("friend:"), entry["snapshot_path"], entry["poll_seconds"], None, 300)
             for entry in self.entries.values() if entry.get("kind") != "devices"
         ]
         manual = {handle for handle, *_ in people}
         people.extend(
             (contact.handles[0], str(self.state / "contacts" / contact.snapshot_name),
-             PEOPLE_POLL_SECONDS, contact.relationship_id)
+             PEOPLE_POLL_SECONDS, contact.relationship_id, self.contact_position_ttl)
             for contact in self.contacts if manual.isdisjoint(contact.handles)
         )
         settings = tuple(sorted(people, key=lambda item: item[:2]))
@@ -150,8 +151,8 @@ class NativeRuntime:
         from .backend.apple_probe import account_generation
 
         if self.contact_generation != account_generation():
-            return (), None
-        return self.contacts, self.own_device
+            return (), None, self.contact_position_ttl
+        return self.contacts, self.own_device, self.contact_position_ttl
 
     async def _discover_contacts(self):
         from aiohttp import ClientError
@@ -163,7 +164,7 @@ class NativeRuntime:
             generation = account_generation()
             delay = CONTACT_DISCOVERY_SECONDS
             try:
-                contacts, own_device = await self.native_people.discover_contacts(self.provider)
+                contacts, own_device, position_ttl = await self.native_people.discover_contacts(self.provider)
             except AppleRequestError as error:
                 if error.status == 401:
                     mark_reauth("contacts", generation, required=True)
@@ -177,6 +178,7 @@ class NativeRuntime:
                     if generation == account_generation():
                         self.contacts = contacts
                         self.own_device = own_device
+                        self.contact_position_ttl = position_ttl
                         self.contact_generation = generation
                         await self._sync_people()
                 mark_reauth("contacts", generation, required=False)
@@ -212,9 +214,9 @@ class NativeRuntime:
             self.native_people.PollTarget(argparse.Namespace(
                 target=handle, snapshot=Path(path), self_uri=None, keys=True,
                 provider=self.provider,
-                poll_interval=interval, relationship_id=relationship_id,
+                poll_interval=interval, relationship_id=relationship_id, max_age=max_age,
             ))
-            for handle, path, interval, relationship_id in entries
+            for handle, path, interval, relationship_id, max_age in entries
         ]
         await self.people_keys.run_household(settings, targets)
 
