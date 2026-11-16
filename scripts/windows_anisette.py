@@ -8,8 +8,8 @@ if __name__ == "__main__" or not __package__:
 if __name__ == "__main__":
     from runpy import run_module
 
-    run_module("custom_components.apple_findmy_people.backend.windows_anisette", run_name="__main__")
+    run_module("custom_components.apple_find.backend.windows_anisette", run_name="__main__")
 else:
-    from custom_components.apple_findmy_people.backend import windows_anisette
+    from custom_components.apple_find.backend import windows_anisette
 
     sys.modules[__name__] = windows_anisette

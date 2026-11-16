@@ -9,7 +9,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from cryptography.hazmat.primitives.kdf.x963kdf import X963KDF
 
-from custom_components.apple_findmy_people.protocol import (
+from custom_components.apple_find.protocol import (
     Position, decode_share_key, decrypt_report, fetch_body, open_pair_ec, position_from_report,
     public_bytes,
 )

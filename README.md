@@ -1,6 +1,6 @@
 # Apple Find for Home Assistant
 
-<img src="custom_components/apple_findmy_people/brand/icon.png" alt="macOS Find My app icon" width="96">
+<img src="custom_components/apple_find/brand/icon.png" alt="macOS Find My app icon" width="96">
 
 Apple Find is a custom integration for Home Assistant Core. Its People and Devices clients share one Apple session, provisioned CoreADI state and APNs identity on the HA host. The People client polls Apple for location reports and uses Apple push to receive contact share keys when needed. The Devices client polls Apple's native device service and discovers trackers that provide usable locations.
 
@@ -25,13 +25,13 @@ The current macOS Find My daemon was observed issuing `SubscribeAndFetch` with t
 - `scripts/apple_probe.py` runs GrandSlam and a scoped MobileMe login with an interactive 2FA prompt. It saves session state and removes the password from the saved account.
 - `scripts/emulated_anisette.py` obtains a new OTP as needed from the bundled CoreADI emulator. Home Assistant creates a new ADI identity during first sign-in and stores it with the Apple session.
 - `scripts/people_bootstrap.py`, `scripts/ids_enroll.py`, `scripts/ids_register.py` and `scripts/ids_receiver.py` implement the IDS delegate, certificate, registration and receipt stages.
-- `custom_components/apple_findmy_people/backend` implements native People, Devices, and Apple authorization. HA Core owns the collectors. Both use one CoreADI provider and discover contacts and devices for the authorized account.
-- `custom_components/apple_findmy_people/device_tracker.py` validates normalized location snapshots. Device discovery runs every 120 seconds under normal conditions. Apple’s shared contact list is refreshed every five minutes. Each contact’s location is normally polled every 60 seconds. Requests are backed off on service errors.
+- `custom_components/apple_find/backend` implements native People, Devices, and Apple authorization. HA Core owns the collectors. Both use one CoreADI provider and discover contacts and devices for the authorized account.
+- `custom_components/apple_find/device_tracker.py` validates normalized location snapshots. Device discovery runs every 120 seconds under normal conditions. Apple’s shared contact list is refreshed every five minutes. Each contact’s location is normally polled every 60 seconds. Requests are backed off on service errors.
 - The command-line probes in `scripts` can still be used independently for development.
 
-The emulation and native protocol probes reference the [Zerotistic protocol analysis](https://zerotistic.blog/posts/find-my-people-linux/), [pypush](https://github.com/JJTech0130/pypush), [rustpush](https://github.com/stek29/rustpush) and [os-findmy-e](https://github.com/sacca97/os-findmy-e). See [bundled assets and sources](custom_components/apple_findmy_people/assets/README.md).
+The emulation and native protocol probes reference the [Zerotistic protocol analysis](https://zerotistic.blog/posts/find-my-people-linux/), [pypush](https://github.com/JJTech0130/pypush), [rustpush](https://github.com/stek29/rustpush) and [os-findmy-e](https://github.com/sacca97/os-findmy-e). See [bundled assets and sources](custom_components/apple_find/assets/README.md).
 
-Apple Find's original code and documentation are available under the [MIT License](LICENSE). Bundled third-party code, binaries, certificates, and artwork remain subject to their respective terms. See the [bundled asset notes](custom_components/apple_findmy_people/assets/README.md) for source and license information.
+Apple Find's original code and documentation are available under the [MIT License](LICENSE). Bundled third-party code, binaries, certificates, and artwork remain subject to their respective terms. See the [bundled asset notes](custom_components/apple_find/assets/README.md) for source and license information.
 
 ## Test
 
@@ -63,13 +63,19 @@ To keep a particular level across restarts, use Home Assistant's [Logger integra
 ```yaml
 logger:
   logs:
-    custom_components.apple_findmy_people: debug
+    custom_components.apple_find: debug
 ```
 
 You can also change the same logger at runtime with the `logger.set_level` action. Use `debug` for troubleshooting, `info` for events such as successful authorization, or `warning` for problems that may need attention.
 
-When reporting an issue, include your Home Assistant and Apple Find versions, the approximate time of the problem, and the lines from `custom_components.apple_findmy_people` and its submodules. Apple Find logs counts, status codes, and retry times. Review the download before sharing because it may contain messages from other Home Assistant integrations. Never attach your Apple Find state directory or Home Assistant backups.
+When reporting an issue, include your Home Assistant and Apple Find versions, the approximate time of the problem, and the lines from `custom_components.apple_find` and its submodules. Apple Find logs counts, status codes, and retry times. Review the download before sharing because it may contain messages from other Home Assistant integrations. Never attach your Apple Find state directory or Home Assistant backups.
 
 ## Migrating older installations
 
-For an older deployment that still uses the separate native Devices integration, stop the old collectors and Home Assistant Core. Run `python scripts/migrate_ha_registry.py /config /config/private-migration-backup --apply` on the HA configuration directory, install the combined integration, and start Core. The migration preserves config entry IDs, entity IDs, and existing Apple state. Keep the backup until both clients are verified in Core. The script also supports a dry run and `--restore` while Core is stopped.
+Starting with 0.6.0, the Home Assistant domain is `apple_find`. Existing installations must migrate their registries before starting Home Assistant with the new release. The script also migrates the Marketplace record so it can recognize the new domain, and handles older deployments that still use the separate native Devices integration.
+
+1. Stop Home Assistant Core and any standalone Apple Find collectors.
+2. From this repository, run `python3 scripts/migrate_ha_registry.py /config /config/private-migration-backup` against the HA configuration directory to preview the migration. Run it again with `--apply` to write the changes and save the original registries to a new backup directory.
+3. Extract `apple_find.zip` from the release into `/config/custom_components/apple_find`. Move the old `apple_findmy_people` and, if present, `apple_findmy_native_devices` code directories outside `custom_components`, then start Core. If you use Marketplace, refresh the repository and install the same release there to record the installed version.
+
+The migration preserves config entry IDs, entity IDs, device IDs, and Apple session state. Keep the backup until you verify the installation. To roll back, stop Core, run the script with `--restore`, and reinstall the previous integration code before starting Core.

@@ -24,7 +24,7 @@ def test_discovery_is_stable_and_missing_locations_become_unavailable(monkeypatc
 
 
 def test_sound_capability_survives_a_missing_location():
-    from custom_components.apple_findmy_people.backend.native_devices import device_snapshot, device_target
+    from custom_components.apple_find.backend.native_devices import device_snapshot, device_target
 
     now = datetime(2026, 11, 16, tzinfo=timezone.utc)
     previous = [{"target_id": device_target("phone-id"), "name": "iPhone"}]
@@ -41,7 +41,7 @@ def test_play_sound_addresses_only_the_currently_supported_device(monkeypatch):
     import pytest
     from findmy.util.http import HttpResponse
 
-    from custom_components.apple_findmy_people.backend import native_devices
+    from custom_components.apple_find.backend import native_devices
 
     async def exercise():
         other = {"id": "other-id", "name": "iPhone", "features": {"SND": True}}

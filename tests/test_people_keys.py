@@ -5,8 +5,8 @@ from argparse import Namespace
 import logging
 from unittest.mock import AsyncMock
 
-from custom_components.apple_findmy_people.backend import native_people as people, people_keys
-from custom_components.apple_findmy_people.backend import environment as settings
+from custom_components.apple_find.backend import native_people as people, people_keys
+from custom_components.apple_find.backend import environment as settings
 
 
 def test_existing_location_poll_skips_push_and_missing_key_does_not_block(monkeypatch):
@@ -54,7 +54,7 @@ def test_delayed_delivery_routes_to_verified_contact(monkeypatch, tmp_path, capl
     receiver = AsyncMock()
     topic = "com.apple.private.alloy.fmd"
     packet = {"t": b"a-device"}
-    with caplog.at_level(logging.DEBUG, logger="custom_components.apple_findmy_people"):
+    with caplog.at_level(logging.DEBUG, logger="custom_components.apple_find"):
         assert asyncio.run(people_keys.handle_delivery(receiver, bindings, topic, packet, 1))
     assert '"result": "verified"' in caplog.text
     assert all(value not in caplog.text for value in (a.args.target, b.args.target, "share-a", "a-device"))

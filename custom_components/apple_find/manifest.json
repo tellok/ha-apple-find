@@ -1,5 +1,5 @@
 {
-  "domain": "apple_findmy_people",
+  "domain": "apple_find",
   "name": "Apple Find",
   "categories": [
     "presence_location"
@@ -20,5 +20,5 @@
     "phonenumbers==9.0.43",
     "vobject>=0.9.9"
   ],
-  "version": "0.5.4"
+  "version": "0.6.0"
 }

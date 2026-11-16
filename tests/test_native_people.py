@@ -253,7 +253,7 @@ def test_selected_relationship_must_match_when_alias_is_reused(monkeypatch, tmp_
 
 def test_me_uses_apple_selected_device_and_only_matches_owned_location(monkeypatch):
     native = module(monkeypatch)
-    from custom_components.apple_findmy_people.backend.native_devices import device_snapshot
+    from custom_components.apple_find.backend.native_devices import device_snapshot
 
     payload = {"myInfo": {"deviceId": "requesting-client", "meDeviceId": "selected"},
                "devices": [{"id": "selected", "idsDeviceId": "MATCH-ID"},

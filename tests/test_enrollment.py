@@ -7,7 +7,7 @@ from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import hashes
 from cryptography.x509.oid import NameOID
 
-from custom_components.apple_findmy_people.enrollment import authenticate_body
+from custom_components.apple_find.enrollment import authenticate_body
 
 
 def test_ids_csr_has_legacy_signature_and_profile_cn():

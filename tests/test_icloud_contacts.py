@@ -2,7 +2,7 @@
 
 from xml.etree import ElementTree
 
-from custom_components.apple_findmy_people.backend.icloud_contacts import (
+from custom_components.apple_find.backend.icloud_contacts import (
     ADDRESS_DATA,
     index_cards,
     match_name,

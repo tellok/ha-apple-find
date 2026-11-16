@@ -14,7 +14,7 @@ def test_verified_ngm_wire_envelope_selects_only_requested_share(monkeypatch):
     monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
     from ids_wire import bytes_field, compact_key, compact_public, kt_data, prekey_data, raw_signature
     from location_pipeline import decrypt_selected_message, selected_key
-    from custom_components.apple_findmy_people.protocol import public_bytes
+    from custom_components.apple_find.protocol import public_bytes
 
     sender, receiver, receiver_prekey, ephemeral = [compact_key() for _ in range(4)]
     sender_prekey = compact_key()

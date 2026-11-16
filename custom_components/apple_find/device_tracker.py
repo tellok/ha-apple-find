@@ -155,6 +155,7 @@ class SelectedTracker(CoordinatorEntity, TrackerEntity):
         self.target = target
         if name is not None:
             self._attr_name = name
+        # This registry key predates the domain rename.
         self._attr_unique_id = "apple_findmy_people:" + target
 
     @property

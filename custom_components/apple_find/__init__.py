@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-DOMAIN = "apple_findmy_people"
+DOMAIN = "apple_find"
 DEVICES_ID = "apple_findmy_native_devices"
 
 

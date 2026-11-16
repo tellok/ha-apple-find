@@ -8,8 +8,8 @@ if __name__ == "__main__" or not __package__:
 if __name__ == "__main__":
     from runpy import run_module
 
-    run_module("custom_components.apple_findmy_people.backend.sync_emulated_adi", run_name="__main__")
+    run_module("custom_components.apple_find.backend.sync_emulated_adi", run_name="__main__")
 else:
-    from custom_components.apple_findmy_people.backend import sync_emulated_adi
+    from custom_components.apple_find.backend import sync_emulated_adi
 
     sys.modules[__name__] = sync_emulated_adi
