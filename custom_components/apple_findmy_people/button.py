@@ -4,6 +4,7 @@ from homeassistant.components.button import ButtonDeviceClass, ButtonEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from . import DEVICES_ID
+from .groups import DEVICES, group_id
 from .runtime import async_get_runtime
 
 
@@ -13,6 +14,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
     coordinator.async_discover(
         entry, async_add_entities,
         lambda target, device: PlaySoundButton(coordinator, runtime, target, device) if device.play_sound else None,
+        subentry_id=group_id(entry, DEVICES),
     )
 
 

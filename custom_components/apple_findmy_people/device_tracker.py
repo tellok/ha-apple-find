@@ -10,12 +10,15 @@ from pathlib import Path
 
 from homeassistant.components.device_tracker import TrackerEntity, SourceType
 from homeassistant.core import callback
+from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity, DataUpdateCoordinator, UpdateFailed,
 )
-from homeassistant.util import dt as dt_util
+from homeassistant.util import dt as dt_util, slugify
 
 from . import DEVICES_ID, DOMAIN, workspace_path
+from .groups import CONTACTS, DEVICES, group_id
 from .protocol import Position
 from .runtime import async_get_runtime
 
@@ -44,6 +47,8 @@ def read_positions(path, targets, max_age):
 
 async def async_setup_contacts(hass, entry, async_add_entities):
     runtime = await async_get_runtime(hass)
+    subentry_id = group_id(entry, CONTACTS)
+    registry = dr.async_get(hass)
     directory = workspace_path(hass) / "state" / "contacts"
     registered = set()
 
@@ -55,7 +60,7 @@ async def async_setup_contacts(hass, entry, async_add_entities):
                 position = read_positions(directory / contact.snapshot_name, {target_id}, max_age).get(target_id)
             except (OSError, ValueError, KeyError, TypeError, AttributeError):
                 position = None
-            data[contact.target] = (contact.name, position)
+            data[contact.target] = (contact.name, position, contact.handles[0])
         return data
 
     async def update():
@@ -73,7 +78,7 @@ async def async_setup_contacts(hass, entry, async_add_entities):
             device.position for device in (devices.data or {}).values()
             if own_device and devices.last_update_success and device.discovery_key == own_device
         ]
-        data[OWN_LOCATION] = (None, matches[0] if len(matches) == 1 else None)
+        data[OWN_LOCATION] = (None, matches[0] if len(matches) == 1 else None, None)
         return data
 
     coordinator = DataUpdateCoordinator(
@@ -84,13 +89,17 @@ async def async_setup_contacts(hass, entry, async_add_entities):
     @callback
     def discover():
         entities = []
-        for target, (name, _) in (coordinator.data or {}).items():
+        for target, (name, _, handle) in (coordinator.data or {}).items():
             if target not in registered:
                 registered.add(target)
                 tracker = OwnLocationTracker if target == OWN_LOCATION else SharedContactTracker
-                entities.append(tracker(coordinator, target, name))
+                entities.append(tracker(coordinator, target, name, handle))
+            elif name:
+                device = registry.async_get_device_by_identifier((DOMAIN, target), entry.entry_id)
+                if device is not None and device.name != name:
+                    registry.async_update_device(device.id, name=name)
         if entities:
-            async_add_entities(entities)
+            async_add_entities(entities, config_subentry_id=subentry_id)
 
     await coordinator.async_refresh()
     entry.async_on_unload(coordinator.async_add_listener(discover))
@@ -102,7 +111,8 @@ async def async_setup_entry(hass, entry, async_add_entities):
     if config.get("kind") == "devices":
         coordinator = entry.runtime_data
         coordinator.async_discover(
-            entry, async_add_entities, lambda target, device: NativeDeviceTracker(coordinator, target, device)
+            entry, async_add_entities, lambda target, device: NativeDeviceTracker(coordinator, target, device),
+            subentry_id=group_id(entry, DEVICES),
         )
         await async_setup_contacts(hass, entry, async_add_entities)
         return
@@ -180,6 +190,27 @@ class SelectedTracker(CoordinatorEntity, TrackerEntity):
 
 
 class SharedContactTracker(SelectedTracker):
+    def __init__(self, coordinator, target, name, handle=None):
+        super().__init__(coordinator, target, name)
+        if handle and (object_id := slugify(handle.removeprefix("tel:"))):
+            # HA uses this suggestion for new entries and restores existing IDs by unique ID.
+            self.entity_id = f"device_tracker.{object_id}"
+        # The integration page expands registry rows, so give each contact a
+        # logical service row alongside its existing tracker.
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, target)},
+            entry_type=DeviceEntryType.SERVICE,
+            name=name or "Me",
+            translation_key="me" if target == OWN_LOCATION else None,
+        )
+
+    @callback
+    def _handle_coordinator_update(self):
+        if contact := (self.coordinator.data or {}).get(self.target):
+            if contact[0] is not None:
+                self._attr_name = contact[0]
+        super()._handle_coordinator_update()
+
     @property
     def _position(self):
         contact = (self.coordinator.data or {}).get(self.target)
@@ -193,8 +224,11 @@ class OwnLocationTracker(SharedContactTracker):
 
 
 class NativeDeviceTracker(SelectedTracker):
+    _attr_has_entity_name = True
+    _attr_name = None
+
     def __init__(self, coordinator, target, device):
-        super().__init__(coordinator, target, f"{device.name} (查找设备)")
+        super().__init__(coordinator, target, None)
         self._attr_unique_id = DEVICES_ID + ":" + target
         self._attr_device_info = device.device_info(target)
 

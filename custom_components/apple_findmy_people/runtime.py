@@ -3,8 +3,10 @@
 import argparse
 import asyncio
 from contextlib import suppress
+from dataclasses import replace
 import logging
 from pathlib import Path
+from time import monotonic
 
 from homeassistant.const import EVENT_HOMEASSISTANT_STOP
 from homeassistant.exceptions import HomeAssistantError
@@ -16,6 +18,7 @@ LOGGER = logging.getLogger(__name__)
 PEOPLE_POLL_SECONDS = 60
 DEVICE_POLL_SECONDS = 120
 CONTACT_DISCOVERY_SECONDS = 300
+ADDRESS_BOOK_REFRESH_SECONDS = 1800
 
 
 class NativeRuntime:
@@ -106,21 +109,25 @@ class NativeRuntime:
             asyncio.run_coroutine_threadsafe(method(*args), self.loop)
         )
 
-    async def async_entry_changed(self, entry_id, data):
-        await self._call(self._entry_changed, entry_id, data)
+    async def async_entry_changed(self, entry_id, data, options=None):
+        await self._call(self._entry_changed, entry_id, data, options)
 
-    async def _entry_changed(self, entry_id, data):
+    async def _entry_changed(self, entry_id, data, options):
+        from .backend.icloud_contacts import CONF_CONTACTS_PASSWORD
+
         async with self.entry_lock:
             if data is None:
                 self.entries.pop(entry_id, None)
             else:
-                self.entries[entry_id] = data
+                self.entries[entry_id] = {**data, CONF_CONTACTS_PASSWORD: (options or {}).get(CONF_CONTACTS_PASSWORD)}
 
             if self.provider is None:
                 return
 
-            devices = any(entry.get("kind") == "devices" for entry in self.entries.values())
-            await self._set_collector("contacts", devices, self._discover_contacts)
+            device_entry = next((entry for entry in self.entries.values() if entry.get("kind") == "devices"), None)
+            devices = device_entry is not None
+            settings = (device_entry.get(CONF_CONTACTS_PASSWORD), self.hass.config.country) if devices else None
+            await self._set_collector("contacts", settings, lambda: self._discover_contacts(*settings))
             if not devices:
                 self.contacts = ()
                 self.own_device = None
@@ -154,12 +161,35 @@ class NativeRuntime:
             return (), None, self.contact_position_ttl
         return self.contacts, self.own_device, self.contact_position_ttl
 
-    async def _discover_contacts(self):
+    async def async_validate_contacts_password(self, password):
+        """Validate the app-specific password using the same read as discovery."""
+        _, error = await self._call(self._read_address_book, password, self.hass.config.country)
+        return error
+
+    async def _read_address_book(self, password, region):
+        from aiohttp import ClientError
+        from defusedxml.common import DefusedXmlException
+        from xml.etree.ElementTree import ParseError
+
+        from .backend.icloud_contacts import ContactsAuthError, fetch_index
+
+        try:
+            return await fetch_index(self.state / "account.json", password, region), None
+        except ContactsAuthError:
+            return None, "contacts_invalid_auth"
+        except (ClientError, DefusedXmlException, OSError, ParseError, ValueError, KeyError, TypeError):
+            return None, "contacts_unavailable"
+
+    async def _discover_contacts(self, password, region):
         from aiohttp import ClientError
 
         from .backend.apple_probe import account_generation, mark_reauth
+        from .backend.icloud_contacts import match_name
         from .backend.native_people import AppleRequestError
 
+        address_book = {}
+        address_book_generation = None
+        next_refresh = 0
         while True:
             generation = account_generation()
             delay = CONTACT_DISCOVERY_SECONDS
@@ -174,6 +204,21 @@ class NativeRuntime:
             except (ClientError, OSError, ValueError, KeyError, TypeError, RuntimeError) as error:
                 LOGGER.debug("Find My contact discovery will retry (%s)", type(error).__name__)
             else:
+                if generation != address_book_generation:
+                    address_book, next_refresh = {}, 0
+                    address_book_generation = generation
+                if password and monotonic() >= next_refresh:
+                    index, error = await self._read_address_book(password, region)
+                    if error:
+                        LOGGER.warning("iCloud Contacts could not refresh (%s)", error)
+                    else:
+                        address_book = index
+                    next_refresh = monotonic() + ADDRESS_BOOK_REFRESH_SECONDS
+                if address_book:
+                    contacts = tuple(
+                        replace(contact, name=match_name(contact.handles, address_book, region) or contact.name)
+                        for contact in contacts
+                    )
                 async with self.entry_lock:
                     if generation == account_generation():
                         self.contacts = contacts

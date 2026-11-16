@@ -31,11 +31,13 @@ async def async_setup_entry(hass, entry):
 
     if entry.data.get("kind") == "devices":
         from .devices import DevicesCoordinator
+        from .groups import async_setup_groups
 
+        await async_setup_groups(hass, entry)
         entry.runtime_data = DevicesCoordinator(hass, entry)
         await entry.runtime_data.async_refresh()
     await hass.config_entries.async_forward_entry_setups(entry, _platforms(entry))
-    await runtime.async_entry_changed(entry.entry_id, dict(entry.data))
+    await runtime.async_entry_changed(entry.entry_id, dict(entry.data), entry.options)
     await setup_authorization_monitor(hass, entry)
     return True
 

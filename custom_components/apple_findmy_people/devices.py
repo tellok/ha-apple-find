@@ -58,7 +58,7 @@ class DevicesCoordinator(DataUpdateCoordinator[dict[str, NativeDevice]]):
             raise UpdateFailed("Native device snapshot unavailable") from None
 
     @callback
-    def async_discover(self, entry, async_add_entities, build_entity):
+    def async_discover(self, entry, async_add_entities, build_entity, *, subentry_id):
         registered = set()
 
         @callback
@@ -69,7 +69,7 @@ class DevicesCoordinator(DataUpdateCoordinator[dict[str, NativeDevice]]):
                     registered.add(target)
                     entities.append(entity)
             if entities:
-                async_add_entities(entities)
+                async_add_entities(entities, config_subentry_id=subentry_id)
 
         entry.async_on_unload(self.async_add_listener(discover))
         discover()

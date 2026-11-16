@@ -1,6 +1,13 @@
 {
   "config": {
     "step": {
+      "icloud_contacts": {
+        "title": "匹配 iCloud 通讯录姓名",
+        "description": "使用同一 Apple 账户生成的 App 专用密码。集成只读取通讯录并按邮箱或手机号匹配姓名。留空可关闭匹配。\n\n[如何创建 App 专用密码]({password_guide_url}#中文指南)",
+        "data": {
+          "contacts_password": "iCloud 通讯录 App 专用密码"
+        }
+      },
       "apple_login": {
         "title": "登录 Apple 账户",
         "description": "使用 Apple 账户密码登录 HA 上的原生查找采集器。",
@@ -19,6 +26,8 @@
       }
     },
     "error": {
+      "contacts_invalid_auth": "Apple 拒绝了这次通讯录授权，请检查 App 专用密码。",
+      "contacts_unavailable": "无法读取 iCloud 通讯录，请稍后重试。",
       "invalid_auth": "Apple 未接受登录信息。",
       "authorization_failed": "Apple 授权未完成，请检查登录信息后重试。",
       "enrollment_failed": "查找身份注册失败，请重试。",
@@ -28,9 +37,39 @@
       "code_format": "请输入六位数字。",
       "session_expired": "验证会话已过期，请重新登录。"
     },
+    "create_entry": {
+      "contacts_matching_saved": "已保存 iCloud 通讯录授权。Apple Find 会在后台匹配联系人姓名，列表可能需要稍等一会儿才会自动更新。"
+    },
     "abort": {
       "already_configured": "Apple Find 已配置。",
       "session_expired": "验证会话已过期，请重新登录。"
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "已保存 iCloud 通讯录授权。Apple Find 会在后台匹配联系人姓名，列表可能需要稍等一会儿才会自动更新。"
+    },
+    "step": {
+      "init": {
+        "title": "匹配 iCloud 通讯录姓名",
+        "description": "使用同一 Apple 账户生成的 App 专用密码。集成只读取通讯录并按邮箱或手机号匹配姓名。留空可关闭匹配。\n\n[如何创建 App 专用密码]({password_guide_url}#中文指南)",
+        "data": {
+          "contacts_password": "iCloud 通讯录 App 专用密码"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple 拒绝了这次通讯录授权，请检查 App 专用密码。",
+      "contacts_unavailable": "无法读取 iCloud 通讯录，请稍后重试。"
+    }
+  },
+  "common": {
+    "contacts": "联系人",
+    "devices": "设备"
+  },
+  "device": {
+    "me": {
+      "name": "我"
     }
   },
   "entity": {

@@ -1,4 +1,7 @@
 findmy==0.10.2
 pyicloud==2026.10.0
 cryptography>=42.0.0
+defusedxml==0.7.1
+phonenumbers==9.0.43
+vobject==0.9.9
 pytest>=8.0

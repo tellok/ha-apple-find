@@ -1,6 +1,13 @@
 {
   "config": {
     "step": {
+      "icloud_contacts": {
+        "title": "Match names from iCloud Contacts",
+        "description": "Use an app-specific password from the same Apple Account. Apple Find reads the address book and matches names by email address or phone number. Leave this blank to turn off matching.\n\n[How to create an app-specific password]({password_guide_url})",
+        "data": {
+          "contacts_password": "iCloud Contacts app-specific password"
+        }
+      },
       "apple_login": {
         "title": "登录 Apple 账户",
         "description": "使用 Apple 账户密码登录 HA 上的原生查找采集器。",
@@ -19,6 +26,8 @@
       }
     },
     "error": {
+      "contacts_invalid_auth": "Apple rejected access to Contacts. Check the app-specific password.",
+      "contacts_unavailable": "Could not read iCloud Contacts. Try again.",
       "invalid_auth": "Apple 未接受登录信息。",
       "authorization_failed": "Apple 授权未完成，请检查登录信息后重试。",
       "enrollment_failed": "查找身份注册失败，请重试。",
@@ -28,9 +37,39 @@
       "code_format": "请输入六位数字。",
       "session_expired": "验证会话已过期，请重新登录。"
     },
+    "create_entry": {
+      "contacts_matching_saved": "iCloud Contacts authorization was saved. Apple Find matches names in the background, so it may take a little while for the contact list to update automatically."
+    },
     "abort": {
       "already_configured": "Apple Find is already configured.",
       "session_expired": "验证会话已过期，请重新登录。"
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "iCloud Contacts authorization was saved. Apple Find matches names in the background, so it may take a little while for the contact list to update automatically."
+    },
+    "step": {
+      "init": {
+        "title": "Match names from iCloud Contacts",
+        "description": "Use an app-specific password from the same Apple Account. Apple Find reads the address book and matches names by email address or phone number. Leave this blank to turn off matching.\n\n[How to create an app-specific password]({password_guide_url})",
+        "data": {
+          "contacts_password": "iCloud Contacts app-specific password"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple rejected access to Contacts. Check the app-specific password.",
+      "contacts_unavailable": "Could not read iCloud Contacts. Try again."
+    }
+  },
+  "common": {
+    "contacts": "Contacts",
+    "devices": "Devices"
+  },
+  "device": {
+    "me": {
+      "name": "Me"
     }
   },
   "entity": {

@@ -10,7 +10,10 @@
   ],
   "requirements": [
     "findmy==0.10.2",
-    "unicorn==2.1.4"
+    "unicorn==2.1.4",
+    "defusedxml==0.7.1",
+    "phonenumbers==9.0.43",
+    "vobject==0.9.9"
   ],
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/tellok/ha-apple-find/issues",
