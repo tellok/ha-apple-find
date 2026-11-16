@@ -2,8 +2,8 @@
   "config": {
     "step": {
       "icloud_contacts": {
-        "title": "匹配 iCloud 通讯录姓名",
-        "description": "使用同一 Apple 账户生成的 App 专用密码。集成只读取通讯录并按邮箱或手机号匹配姓名。留空可关闭匹配。\n\n[如何创建 App 专用密码]({password_guide_url}#中文指南)",
+        "title": "从 iCloud 通讯录填充联系人姓名",
+        "description": "在 Home Assistant 的 Apple Find 联系人列表中显示你保存在 iCloud 通讯录里的姓名。Apple Find 通过共享邮箱或手机号查找对应的联系人，找不到姓名时继续显示邮箱或手机号。要启用此功能，请输入同一 Apple 账户生成的 App 专用密码。留空可关闭。\n\n[如何创建 App 专用密码]({password_guide_url}#中文指南)",
         "data": {
           "contacts_password": "iCloud 通讯录 App 专用密码"
         }
@@ -51,8 +51,8 @@
     },
     "step": {
       "init": {
-        "title": "匹配 iCloud 通讯录姓名",
-        "description": "使用同一 Apple 账户生成的 App 专用密码。集成只读取通讯录并按邮箱或手机号匹配姓名。留空可关闭匹配。\n\n[如何创建 App 专用密码]({password_guide_url}#中文指南)",
+        "title": "从 iCloud 通讯录填充联系人姓名",
+        "description": "在 Home Assistant 的 Apple Find 联系人列表中显示你保存在 iCloud 通讯录里的姓名。Apple Find 通过共享邮箱或手机号查找对应的联系人，找不到姓名时继续显示邮箱或手机号。要启用此功能，请输入同一 Apple 账户生成的 App 专用密码。留空可关闭。\n\n[如何创建 App 专用密码]({password_guide_url}#中文指南)",
         "data": {
           "contacts_password": "iCloud 通讯录 App 专用密码"
         }

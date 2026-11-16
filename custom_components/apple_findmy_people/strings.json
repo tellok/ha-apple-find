@@ -2,8 +2,8 @@
   "config": {
     "step": {
       "icloud_contacts": {
-        "title": "Match names from iCloud Contacts",
-        "description": "Use an app-specific password from the same Apple Account. Apple Find reads the address book and matches names by email address or phone number. Leave this blank to turn off matching.\n\n[How to create an app-specific password]({password_guide_url})",
+        "title": "Fill in names from iCloud Contacts",
+        "description": "Show the names saved in your iCloud Contacts in the Apple Find contact list in Home Assistant. Apple Find looks up each contact by their sharing email address or phone number. If no name is found, it keeps showing the email address or phone number. To enable this, enter an app-specific password from the same Apple Account. Leave the field blank to turn it off.\n\n[How to create an app-specific password]({password_guide_url})",
         "data": {
           "contacts_password": "iCloud Contacts app-specific password"
         }
@@ -51,8 +51,8 @@
     },
     "step": {
       "init": {
-        "title": "Match names from iCloud Contacts",
-        "description": "Use an app-specific password from the same Apple Account. Apple Find reads the address book and matches names by email address or phone number. Leave this blank to turn off matching.\n\n[How to create an app-specific password]({password_guide_url})",
+        "title": "Fill in names from iCloud Contacts",
+        "description": "Show the names saved in your iCloud Contacts in the Apple Find contact list in Home Assistant. Apple Find looks up each contact by their sharing email address or phone number. If no name is found, it keeps showing the email address or phone number. To enable this, enter an app-specific password from the same Apple Account. Leave the field blank to turn it off.\n\n[How to create an app-specific password]({password_guide_url})",
         "data": {
           "contacts_password": "iCloud Contacts app-specific password"
         }
