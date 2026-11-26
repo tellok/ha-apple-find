@@ -1,6 +1,6 @@
 {
   "name": "ha-apple-find",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "private": true,
   "devDependencies": {
     "@changesets/cli": "3.0.3",
