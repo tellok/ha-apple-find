@@ -46,7 +46,8 @@ class EmulatedMacAnisette(BaseAnisetteProvider):
 
     @property
     def client(self):
-        return self.identity["client_info"]
+        # GrandSlam rejects the macOS label stored by older installations.
+        return self.identity["client_info"].replace("> <macOS;", "> <Mac OS X;", 1)
 
     @property
     def otp(self):
@@ -76,7 +77,8 @@ class EmulatedMacAnisette(BaseAnisetteProvider):
             if not with_client_info:
                 result.pop("X-MMe-Client-Info", None)
             else:
-                result["X-Mme-Client-Info"] = result.pop("X-MMe-Client-Info")
+                result.pop("X-MMe-Client-Info", None)
+                result["X-Mme-Client-Info"] = self.client
                 result["X-Apple-App-Info"] = "com.apple.gs.xcode.auth"
                 result["X-Xcode-Version"] = "11.2 (11B41)"
             return result

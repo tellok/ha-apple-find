@@ -36,11 +36,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from adi_run import CoreADI  # noqa: E402
-from gsa import GSA, Device, GSAError  # noqa: E402
+from gsa import DEFAULT_CLIENT_INFO, GSA, Device, GSAError  # noqa: E402
 
 DS_ID = -2  # Apple's "no account" pseudo-DSID, same one akd uses locally.
 STORE_DIR = "/Users/Shared/adi"
-DEFAULT_CLIENT_INFO = "<MacBookPro13,2> <macOS;13.1;22C65> <com.apple.AuthKit/1 (com.apple.akd/1.0)>"
 
 # A Mac's `X-Mme-Device-Id` is its **provisioning UDID**, which a live Mac reports as 8 hex,
 # a dash, and 16 hex (`system_profiler SPHardwareDataType`, 25 characters) -- and which is

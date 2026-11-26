@@ -1,11 +1,45 @@
 import asyncio
 import base64
+import json
 import pytest
 from types import SimpleNamespace
 
 from findmy import AsyncAppleAccount, LocalAnisetteProvider, LoginState
 
+from custom_components.apple_find.backend import emulated_anisette
+
 import scripts.apple_probe as probe
+
+
+@pytest.mark.parametrize("os_label", ["macOS", "Mac OS X"])
+def test_emulated_adi_sends_compatible_client_info_without_rewriting_identity(
+    monkeypatch, tmp_path, os_label,
+):
+    client = f"<MacBookPro13,2> <{os_label};13.1;22C65> <com.apple.AuthKit/1 (com.apple.akd/1.0)>"
+    identity = {"device_id": "test-device", "client_info": client}
+    identity_path = tmp_path / "identity.json"
+    identity_path.write_text(json.dumps(identity))
+
+    async def headers(*args):
+        return json.dumps({
+            "X-Mme-Device-Id": identity["device_id"],
+            "X-MMe-Client-Info": client,
+            "X-Apple-Locale": "en_US",
+        })
+
+    monkeypatch.setattr(emulated_anisette, "_run", headers)
+    provider = emulated_anisette.EmulatedMacAnisette(tmp_path, tmp_path / "mac_anisette.py")
+
+    async def check_headers():
+        expected = client.replace("> <macOS;", "> <Mac OS X;")
+        assert provider.client == expected
+        result = await provider.get_headers("user", "device", with_client_info=True)
+        assert result["X-Mme-Client-Info"] == expected
+        result = await provider.get_headers("user", "device")
+        assert all(key.lower() != "x-mme-client-info" for key in result)
+
+    asyncio.run(check_headers())
+    assert json.loads(identity_path.read_text()) == identity
 
 
 def test_trusted_challenge_requests_a_new_prompt_before_reading_a_code(monkeypatch):
