@@ -90,27 +90,26 @@ def test_application_ack_rejects_unselected_sender(monkeypatch):
         asyncio.run(receiver.acknowledge_verified({"sP": "mailto:other@example.com"}, {"identities": []}, "com.apple.private.alloy.fmd"))
 
 
-def test_incoming_courier_topic_and_selected_device_alias(monkeypatch):
+def test_receiver_signals_searchparty_topic_and_queues_selected_key(monkeypatch, tmp_path):
     module(monkeypatch)
     import ids_receiver
     import plistlib
 
-    receiver = ids_receiver.Receiver.__new__(ids_receiver.Receiver)
-    receiver.target_uri = "mailto:target@example.invalid"
+    monkeypatch.setattr(ids_receiver, "PRIVATE", tmp_path)
+    (tmp_path / "apns-identity.json").write_text('{"token":"YQ=="}')
+    (tmp_path / "ids-registration.json").write_text("{}")
+    events = []
+    receiver = ids_receiver.Receiver(None, "mailto:target@example.invalid", "mailto:me@example.invalid",
+                                     on_searchparty_notification=lambda: events.append("hint"))
     receiver.selected_push_tokens = {b"sender-push-token"}
-    receiver.push = {"token": "YQ=="}
-    receiver.reader = None
-    receiver.pending = {}
-    receiver.notifications = asyncio.Queue()
-    receiver.unsolicited = {}
-    receiver.counters = dict.fromkeys(
-        ("notifications", "pair_ec_messages", "selected_sender", "selected_token", "selected_pair_ec"), 0,
-    )
-    topic = next(digest for digest, name in ids_receiver.TOPICS_BY_HASH.items()
-                 if name == "com.apple.private.alloy.fmd")
+    topics = {name: digest for digest, name in ids_receiver.TOPICS_BY_HASH.items()}
+    topic = topics["com.apple.private.alloy.fmd"]
     payload = {"c": 242, "E": "pair-ec", "sP": "tel:+12345678901", "t": b"sender-push-token"}
-    frames = iter([(0x0A, [(1, b"receiver-token"), (2, topic),
-                          (3, plistlib.dumps(payload)), (4, b"msg1")])])
+    frames = iter([
+        (0x0A, [(2, topics["com.apple.private.ids"]), (3, plistlib.dumps({"c": 10})), (4, b"msg1")]),
+        (0x0A, [(2, topics["com.apple.icloud.searchparty"]), (3, b"opaque"), (4, b"msg2")]),
+        (0x0A, [(2, topic), (3, plistlib.dumps(payload)), (4, b"msg3")]),
+    ])
 
     async def read_frame(_):
         result = next(frames, None)
@@ -119,16 +118,19 @@ def test_incoming_courier_topic_and_selected_device_alias(monkeypatch):
         return result
 
     async def drain():
-        pass
+        events.append("ack")
 
     receiver.writer = SimpleNamespace(write=lambda _: None, drain=drain)
     monkeypatch.setattr(ids_receiver, "read_frame", read_frame)
     with pytest.raises(asyncio.CancelledError):
         asyncio.run(receiver.read_loop())
     assert receiver.notifications.get_nowait() == (topic, payload)
+    assert receiver.notifications.empty()
+    assert events == ["ack", "ack", "hint", "ack"]
+    assert receiver.counters["undecoded_notifications"] == 0
     assert receiver.counters["selected_sender"] == 0
     assert receiver.counters["selected_token"] == 1
-    assert receiver.unsolicited == {"com.apple.private.alloy.fmd:242": 1}
+    assert receiver.unsolicited == {"com.apple.private.ids:10": 1, "com.apple.private.alloy.fmd:242": 1}
 
 
 def test_courier_disconnect_interrupts_key_wait(monkeypatch):

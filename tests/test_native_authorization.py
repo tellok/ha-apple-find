@@ -2,6 +2,21 @@
 import asyncio
 import json
 
+import pytest
+
+
+def test_failure_origin_identifies_worker_frame_without_private_path(tmp_path):
+    from custom_components.apple_find.backend.environment import failure_origin
+    from custom_components.apple_find.backend.native_authorization import account_dsid
+
+    not_a_directory = tmp_path / "synthetic-private-account"
+    not_a_directory.touch()
+    with pytest.raises(NotADirectoryError) as failure:
+        account_dsid(not_a_directory)
+    origin = failure_origin(ExceptionGroup("private worker detail", [failure.value]))
+    assert origin.startswith("NotADirectoryError at custom_components.apple_find.backend.native_authorization.account_dsid:")
+    assert origin.rsplit(":", 1)[1].isdecimal()
+
 
 def test_challenge_keeps_live_credentials_until_verified(monkeypatch, tmp_path):
     monkeypatch.setenv("FINDMY_STATE_DIR", str(tmp_path))

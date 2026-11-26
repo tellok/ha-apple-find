@@ -147,31 +147,48 @@ async def run(interval, *, provider=None):
     http = VerifiedHttpSession(PROXY, persist_cookies=False)
     try:
         previous = json.loads(OUTPUT.read_text())["devices"] if OUTPUT.is_file() else []
+        failures = 0
         while True:
             started = time.monotonic()
             generation = account_generation()
             try:
                 devices = await fetch_devices(provider, http)
+                fetched = time.monotonic()
                 snapshot = device_snapshot(devices, previous, datetime.now(timezone.utc))
                 save_private(OUTPUT, snapshot)
+                prior_stamps = {
+                    row["target_id"]: row["position"].get("timestamp")
+                    for row in previous if isinstance(row.get("position"), dict)
+                }
                 previous = snapshot["devices"]
+                located = [row for row in previous if "position" in row]
                 mark_reauth("devices", generation, required=False)
                 log_diagnostic(json.dumps({
                     "stage": "device_poll", "listed": len(devices), "discovered": len(previous),
-                    "located": sum("position" in row for row in previous),
+                    "located": len(located),
+                    "report_time_changed": sum(prior_stamps.get(row["target_id"]) != row["position"]["timestamp"]
+                                               for row in located),
                     "play_sound_available": sum(row.get("play_sound") is True for row in previous),
+                    "fetch_ms": round((fetched - started) * 1000),
+                    "elapsed_ms": round((time.monotonic() - started) * 1000),
                 }), flush=True)
+                if failures:
+                    log_diagnostic(json.dumps({"stage": "device_poll", "result": "recovered",
+                                               "previous_failures": failures}), level=logging.INFO)
+                    failures = 0
                 delay = interval
             except (AppleRequestError, ClientError, OSError, ValueError, KeyError, TypeError, RuntimeError) as error:
                 if interval is None:
                     raise
+                failures += 1
                 status = getattr(error, "status", None)
                 if status == 401:
                     mark_reauth("devices", generation, required=True)
                 delay = max(interval, 1800 if status in (401, 429) else 300)
                 log_diagnostic(json.dumps({
                     "stage": "device_poll", "error_type": type(error).__name__,
-                    "http_status": status, "retry_seconds": delay,
+                    "http_status": status, "retry_seconds": delay, "consecutive_failures": failures,
+                    "elapsed_ms": round((time.monotonic() - started) * 1000),
                 }), flush=True, level=logging.DEBUG if status == 401 else logging.WARNING)
             if interval is None:
                 return

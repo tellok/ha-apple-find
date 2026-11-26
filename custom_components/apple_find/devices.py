@@ -39,6 +39,7 @@ class DevicesCoordinator(DataUpdateCoordinator[dict[str, NativeDevice]]):
             raise ValueError("Unsupported device snapshot")
         now = dt_util.utcnow()
         devices = {}
+        rejected = 0
         for row in snapshot["devices"]:
             target = row["target_id"]
             position = None
@@ -46,9 +47,12 @@ class DevicesCoordinator(DataUpdateCoordinator[dict[str, NativeDevice]]):
                 try:
                     position = Position.from_snapshot(report, target_id=target, now=now, max_age=900)
                 except (TypeError, ValueError, KeyError):
-                    pass
+                    rejected += 1
             devices[target] = NativeDevice(row["name"], position, row.get("play_sound") is True,
                                            row.get("discovery_key"))
+        LOGGER.debug("Apple Find device snapshot read (devices: %d, with usable location: %d, "
+                     "rejected locations: %d)", len(devices),
+                     sum(device.position is not None for device in devices.values()), rejected)
         return devices
 
     async def _async_update_data(self):

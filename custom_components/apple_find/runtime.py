@@ -15,7 +15,7 @@ from . import DOMAIN, workspace_path
 from .backend import environment as backend_environment
 
 LOGGER = logging.getLogger(__name__)
-PEOPLE_POLL_SECONDS = 60
+PEOPLE_POLL_SECONDS = 30
 DEVICE_POLL_SECONDS = 120
 CONTACT_DISCOVERY_SECONDS = 300
 ADDRESS_BOOK_REFRESH_SECONDS = 1800
@@ -54,14 +54,16 @@ class NativeRuntime:
         try:
             asyncio.run(self._main())
         except Exception as error:
-            self.hass.loop.call_soon_threadsafe(self._failed, type(error).__name__)
+            self.hass.loop.call_soon_threadsafe(
+                self._failed, type(error).__name__, backend_environment.failure_origin(error)
+            )
 
-    def _failed(self, error_type):
+    def _failed(self, error_type, origin):
         if not self.ready.done():
-            LOGGER.warning("Apple Find runtime setup failed (%s)", error_type)
+            LOGGER.warning("Apple Find runtime setup failed (%s)", origin)
             self.ready.set_exception(RuntimeError(f"Find My runtime setup failed ({error_type})"))
         else:
-            LOGGER.error("Find My runtime stopped (%s)", error_type)
+            LOGGER.error("Find My runtime stopped (%s)", origin)
 
     async def _main(self):
         backend_environment.environment = backend_environment.Environment.for_core(self.workspace)
@@ -93,7 +95,7 @@ class NativeRuntime:
         await self.authorization.discard()
         if self.provider is not None:
             await self.provider.close()
-        LOGGER.debug("Apple Find runtime stopped")
+        LOGGER.info("Apple Find runtime shut down")
 
     async def async_stop(self, _event):
         try:
@@ -196,9 +198,12 @@ class NativeRuntime:
         address_book = {}
         address_book_generation = None
         next_refresh = 0
+        last_failure = None
         while True:
             generation = account_generation()
             delay = CONTACT_DISCOVERY_SECONDS
+            started = monotonic()
+            failure = None
             try:
                 contacts, own_device, position_ttl = await self.native_people.discover_contacts(self.provider)
             except AppleRequestError as error:
@@ -206,10 +211,12 @@ class NativeRuntime:
                     mark_reauth("contacts", generation, required=True)
                 if error.status == 429:
                     delay = 2700
-                LOGGER.debug("Find My contact discovery rejected (status: %s, retry: %ss)", error.status, delay)
+                failure = f"Apple status {error.status}"
             except (ClientError, OSError, ValueError, KeyError, TypeError, RuntimeError) as error:
-                LOGGER.debug("Find My contact discovery will retry (%s)", type(error).__name__)
+                failure = backend_environment.failure_origin(error)
             else:
+                if last_failure is not None:
+                    LOGGER.info("Find My contact discovery recovered")
                 if generation != address_book_generation:
                     address_book, next_refresh = {}, 0
                     address_book_generation = generation
@@ -231,8 +238,8 @@ class NativeRuntime:
                     )
                 LOGGER.debug(
                     "Find My contact discovery completed (contacts: %d, names matched: %d, "
-                    "own location device selected: %s, position TTL: %ss)",
-                    len(contacts), matched, own_device is not None, position_ttl,
+                    "own location device selected: %s, position TTL: %ss, elapsed: %.2fs)",
+                    len(contacts), matched, own_device is not None, position_ttl, monotonic() - started,
                 )
                 async with self.entry_lock:
                     if generation == account_generation():
@@ -241,7 +248,15 @@ class NativeRuntime:
                         self.contact_position_ttl = position_ttl
                         self.contact_generation = generation
                         await self._sync_people()
+                    else:
+                        LOGGER.debug("Discarded contact discovery result after Apple session changed")
                 mark_reauth("contacts", generation, required=False)
+            if failure is not None:
+                LOGGER.log(
+                    logging.WARNING if failure != last_failure else logging.DEBUG,
+                    "Find My contact discovery failed (%s), retry in %ss", failure, delay,
+                )
+            last_failure = failure
             for remaining in range(0, delay, 15):
                 await asyncio.sleep(min(15, delay - remaining))
                 if account_generation() != generation:
@@ -267,7 +282,8 @@ class NativeRuntime:
             try:
                 await collect()
             except Exception as error:
-                LOGGER.warning("Find My %s client will retry (%s)", name, type(error).__name__)
+                LOGGER.warning("Find My %s client stopped unexpectedly (%s), retry in 60s",
+                               name, backend_environment.failure_origin(error))
             await asyncio.sleep(60)
 
     async def _collect_people(self, entries):
@@ -280,7 +296,8 @@ class NativeRuntime:
             ))
             for handle, path, interval, relationship_id, max_age in entries
         ]
-        LOGGER.debug("Find My People monitoring %d shares", len(targets))
+        LOGGER.info("Find My People monitoring %d shares (poll intervals %s seconds)", len(targets),
+                    sorted({target.args.poll_interval for target in targets}))
         await self.people_keys.run_household(settings, targets)
 
     async def async_play_sound(self, target):
@@ -326,6 +343,7 @@ class NativeRuntime:
     async def _authorize(self, request):
         task = asyncio.current_task()
         action = request.get("action")
+        started = monotonic()
         self.authorization_tasks.add(task)
         try:
             if self.provider is None:
@@ -343,15 +361,14 @@ class NativeRuntime:
             result = await self.authorization.handle(request)
             if action in ("login", "verify", "resend"):
                 status = result["status"]
+                LOGGER.debug("Apple Find %s completed with %s in %.2fs", action, status, monotonic() - started)
                 if status == "authorized":
                     LOGGER.info("Apple Find authorization completed")
-                elif status in ("verification_required", "invalid_code"):
-                    LOGGER.debug("Apple Find authorization: %s", status)
-                else:
+                elif status not in ("verification_required", "invalid_code"):
                     LOGGER.warning("Apple Find authorization failed (%s)", status)
             return result
         except Exception as error:
-            LOGGER.warning("Find My authorization failed (%s)", type(error).__name__)
+            LOGGER.warning("Find My authorization failed (%s)", backend_environment.failure_origin(error))
             return {"status": "authorization_failed"}
         finally:
             self.authorization_tasks.discard(task)
