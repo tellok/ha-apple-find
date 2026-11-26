@@ -5,7 +5,7 @@
 Apple Find is a custom integration for Home Assistant Core. Its People and Devices clients share one Apple session, provisioned CoreADI state and APNs identity on the HA host. The People client receives contact share keys via Apple push. A SearchParty notification prompts it to check for new location reports from existing shares. The Devices client polls Apple's native device service and discovers trackers that provide usable locations.
 
 > [!TIP]
-> Replay the location history of your Apple Find contacts and devices on a dashboard map and timeline with [Location History Card](https://github.com/tellok/ha-location-history-card).
+> See where your Apple Find contacts and devices have been with [Location History Card](https://github.com/tellok/ha-location-history-card). Scrub a shared timeline to compare their tracks, or select a time range to replay on the map.
 
 ## Status
 
