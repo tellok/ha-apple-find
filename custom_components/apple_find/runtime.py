@@ -15,7 +15,7 @@ from . import DOMAIN, workspace_path
 from .backend import environment as backend_environment
 
 LOGGER = logging.getLogger(__name__)
-PEOPLE_POLL_SECONDS = 30
+PEOPLE_POLL_SECONDS = 15
 DEVICE_POLL_SECONDS = 120
 CONTACT_DISCOVERY_SECONDS = 300
 ADDRESS_BOOK_REFRESH_SECONDS = 1800
