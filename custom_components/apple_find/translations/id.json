@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Tampilkan nama dari Kontak iCloud",
+        "description": "Tampilkan nama dari Kontak iCloud Anda di daftar kontak. Apple Find mencocokkan setiap orang berdasarkan alamat email atau nomor telepon yang mereka gunakan untuk berbagi lokasi. Jika tidak ada nama yang ditemukan, daftar akan menampilkan alamat email atau nomor telepon. Untuk mengaktifkan pencocokan nama, masukkan kata sandi khusus aplikasi yang dibuat untuk Akun Apple yang sama. Biarkan bidang ini kosong untuk mematikannya.\n\n[Buat kata sandi khusus aplikasi]({password_guide_url})",
+        "data": {
+          "contacts_password": "Kata sandi khusus aplikasi"
+        }
+      },
+      "apple_login": {
+        "title": "Masuk ke Akun Apple Anda",
+        "description": "Masukkan alamat email atau nomor telepon untuk Akun Apple Anda dan kata sandi akun Anda.",
+        "data": {
+          "username": "Alamat email atau nomor telepon Akun Apple",
+          "password": "Kata sandi Akun Apple"
+        }
+      },
+      "apple_verification": {
+        "title": "Otentikasi dua faktor Apple",
+        "description": "Ketuk Izinkan di perangkat Apple tepercaya, lalu masukkan kode verifikasi enam digit yang ditampilkan di sana. Pilih Kirim ulang kode verifikasi untuk meminta kode baru.",
+        "data": {
+          "code": "Kode verifikasi enam digit",
+          "resend": "Kirim ulang kode verifikasi"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple menolak akses ke Kontak. Periksa kata sandi khusus aplikasi.",
+      "contacts_unavailable": "Tidak dapat membaca Kontak iCloud. Coba lagi.",
+      "invalid_auth": "Apple tidak menerima detail masuk Anda.",
+      "authorization_failed": "Tidak dapat menyelesaikan otorisasi Apple. Periksa detail masuk Anda dan coba lagi.",
+      "enrollment_failed": "Tidak dapat menyelesaikan pendaftaran Apple Find. Coba lagi.",
+      "collector_unavailable": "Home Assistant Core tidak dapat memulai otorisasi Akun Apple.",
+      "account_mismatch": "Gunakan Akun Apple yang sudah terhubung dengan instalasi Apple Find ini.",
+      "invalid_code": "Apple tidak menerima kode verifikasi.",
+      "code_format": "Masukkan kode enam digit.",
+      "session_expired": "Sesi verifikasi telah berakhir. Masuk lagi."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Otorisasi Kontak iCloud telah disimpan. Apple Find mencocokkan nama di latar belakang, jadi mungkin perlu beberapa saat agar daftar kontak diperbarui secara otomatis."
+    },
+    "abort": {
+      "already_configured": "Apple Find sudah dikonfigurasi.",
+      "session_expired": "Sesi verifikasi telah berakhir. Masuk lagi.",
+      "reauth_successful": "Anda telah berhasil masuk.",
+      "reconfigure_successful": "Anda telah berhasil masuk."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Otorisasi Kontak iCloud telah disimpan. Apple Find mencocokkan nama di latar belakang, jadi mungkin perlu beberapa saat agar daftar kontak diperbarui secara otomatis."
+    },
+    "step": {
+      "init": {
+        "title": "Tampilkan nama dari Kontak iCloud",
+        "description": "Tampilkan nama dari Kontak iCloud Anda di daftar kontak. Apple Find mencocokkan setiap orang berdasarkan alamat email atau nomor telepon yang mereka gunakan untuk berbagi lokasi. Jika tidak ada nama yang ditemukan, daftar akan menampilkan alamat email atau nomor telepon. Untuk mengaktifkan pencocokan nama, masukkan kata sandi khusus aplikasi yang dibuat untuk Akun Apple yang sama. Biarkan bidang ini kosong untuk mematikannya.\n\n[Buat kata sandi khusus aplikasi]({password_guide_url})",
+        "data": {
+          "contacts_password": "Kata sandi khusus aplikasi"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple menolak akses ke Kontak. Periksa kata sandi khusus aplikasi.",
+      "contacts_unavailable": "Tidak dapat membaca Kontak iCloud. Coba lagi."
+    }
+  },
+  "common": {
+    "contacts": "Kontak",
+    "devices": "Perangkat",
+    "reauth_notification_title": "Masuk ke Apple Find lagi",
+    "reauth_notification_message": "Apple mengharuskan Anda masuk lagi. Ikuti petunjuk masuk di Home Assistant.\n\n[Perbaikan](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Saya"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Mainkan suara"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Saya"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple saat ini tidak menawarkan opsi untuk memutar suara di perangkat ini."
+    },
+    "sound_reauth": {
+      "message": "Apple mengharuskan Anda masuk lagi. Buka Perbaikan di Asisten Rumah."
+    },
+    "sound_rejected": {
+      "message": "Apple menolak permintaan untuk memutar suara."
+    },
+    "sound_request_failed": {
+      "message": "Tidak dapat memastikan apakah Apple menerima permintaan untuk memutar suara."
+    }
+  }
+}

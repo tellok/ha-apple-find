@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Name us de iCloud-Kontäkt übernäh",
+        "description": "Zeigt d Name us dine iCloud-Kontäkt i de Kontaktlischte vo Apple Find i Home Assistant. Apple Find suecht jede Kontakt über d E-Mail-Adrässe oder d Telefonnummere, wo die Person zum Teile vom Standort brucht. Wänn kei Name gfunde wird, zeigt Apple Find wiiterhin d E-Mail-Adrässe oder d Telefonnummere. Zum Ischalte bruchsch es appspezifischs Passwort vom gliiche Apple-Account. Zum Usschalte lahsch s Fäld läär.\n\n[Es appspezifischs Passwort erstelle]({password_guide_url})",
+        "data": {
+          "contacts_password": "Appspezifischs Passwort für iCloud-Kontäkt"
+        }
+      },
+      "apple_login": {
+        "title": "Bi dim Apple-Account aamälde",
+        "description": "Gib d E-Mail-Adrässe oder d Telefonnummere vo dim Apple-Account und s Passwort für de Account ii.",
+        "data": {
+          "username": "E-Mail-Adrässe oder Telefonnummere vom Apple-Account",
+          "password": "Passwort vom Apple-Account"
+        }
+      },
+      "apple_verification": {
+        "title": "Zwei-Faktor-Authentifizierig vo Apple",
+        "description": "Tipp uf dim vertrauenswürdige Apple-Grät uf Erlauben und gib de sächsstellig Code ii, wo det aazeigt wird. Wähl Bestätigungscode nomal schicke, zum en neue Code aazfordere.",
+        "data": {
+          "code": "Sächsstellige Bestätigungscode",
+          "resend": "Bestätigungscode nomal schicke"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple hät de Zugriff uf d Kontäkt verweigeret. Prüef s appspezifische Passwort.",
+      "contacts_unavailable": "D iCloud-Kontäkt händ nöd chönne gläse werde. Versuech s nomal.",
+      "invalid_auth": "Apple hät dini Aamäldedate nöd akzeptiert.",
+      "authorization_failed": "D Autorisierig bi Apple isch fehlgschlage. Prüef dini Aamäldedate und versuech s nomal.",
+      "enrollment_failed": "Apple Find hät nöd chönne registriert werde. Versuech s nomal.",
+      "collector_unavailable": "Home Assistant Core hät d Autorisierig bi Apple nöd chönne starte.",
+      "account_mismatch": "Bruch de Apple-Account, wo scho mit dere Apple Find-Installation verbunde isch.",
+      "invalid_code": "Apple hät de Bestätigungscode nöd akzeptiert.",
+      "code_format": "Gib en Code mit sächs Ziffere ii.",
+      "session_expired": "D Bestätigungssitzig isch abgloffe. Mäld di nomal aa."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "De Zugriff uf d iCloud-Kontäkt isch gspeicheret. Apple Find ordnet d Name im Hintergrund zue. Es cha drum es Wiili duure, bis d Kontaktlischte automatisch aktualisiert wird."
+    },
+    "abort": {
+      "already_configured": "Apple Find isch scho igrichtet.",
+      "session_expired": "D Bestätigungssitzig isch abgloffe. Mäld di nomal aa.",
+      "reauth_successful": "Du bisch bi Apple Find aagmäldet.",
+      "reconfigure_successful": "Du bisch bi Apple Find aagmäldet."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "De Zugriff uf d iCloud-Kontäkt isch gspeicheret. Apple Find ordnet d Name im Hintergrund zue. Es cha drum es Wiili duure, bis d Kontaktlischte automatisch aktualisiert wird."
+    },
+    "step": {
+      "init": {
+        "title": "Name us de iCloud-Kontäkt übernäh",
+        "description": "Zeigt d Name us dine iCloud-Kontäkt i de Kontaktlischte vo Apple Find i Home Assistant. Apple Find suecht jede Kontakt über d E-Mail-Adrässe oder d Telefonnummere, wo die Person zum Teile vom Standort brucht. Wänn kei Name gfunde wird, zeigt Apple Find wiiterhin d E-Mail-Adrässe oder d Telefonnummere. Zum Ischalte bruchsch es appspezifischs Passwort vom gliiche Apple-Account. Zum Usschalte lahsch s Fäld läär.\n\n[Es appspezifischs Passwort erstelle]({password_guide_url})",
+        "data": {
+          "contacts_password": "Appspezifischs Passwort für iCloud-Kontäkt"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple hät de Zugriff uf d Kontäkt verweigeret. Prüef s appspezifische Passwort.",
+      "contacts_unavailable": "D iCloud-Kontäkt händ nöd chönne gläse werde. Versuech s nomal."
+    }
+  },
+  "common": {
+    "contacts": "Kontäkt",
+    "devices": "Grät",
+    "reauth_notification_title": "Mäld di nomal bi Apple Find aa",
+    "reauth_notification_message": "Apple verlangt, dass du di nomal aamäldisch. Mach [Reparature](/config/repairs) uf und folg de Schritt zum Aamälde."
+  },
+  "device": {
+    "me": {
+      "name": "Ich"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Ton abspiele"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Ich"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple bietet im Momänt kei Möglichkeite aa, uf dem Grät en Ton abzspiele."
+    },
+    "sound_reauth": {
+      "message": "Apple verlangt e neui Aamäldig. Mäld di unter Reparature i Home Assistant nomal aa."
+    },
+    "sound_rejected": {
+      "message": "Apple hät d Aafrag zum Abspiele vom Ton abglehnt."
+    },
+    "sound_request_failed": {
+      "message": "Es isch nöd klar, ob Apple d Aafrag zum Abspiele vom Ton übercho hät."
+    }
+  }
+}

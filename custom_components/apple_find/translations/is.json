@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Sýna nöfn úr iCloud tengiliðum",
+        "description": "Sýndu nöfn úr iCloud tengiliðunum þínum á tengiliðalistanum. Apple Find passar við hvern einstakling með netfanginu eða símanúmerinu sem þeir nota til að deila staðsetningu sinni. Ef ekkert nafn finnst sýnir listinn netfangið eða símanúmerið. Til að kveikja á nafnasamsvörun skaltu slá inn app-sérstakt lykilorð sem er búið til fyrir sama Apple reikning. Skildu þennan reit eftir auðan til að slökkva á honum.\n\n[Búðu til forritssérstakt lykilorð]({password_guide_url})",
+        "data": {
+          "contacts_password": "Appsértækt lykilorð"
+        }
+      },
+      "apple_login": {
+        "title": "Skráðu þig inn á Apple reikninginn þinn",
+        "description": "Sláðu inn netfangið eða símanúmerið fyrir Apple reikninginn þinn og lykilorð reikningsins.",
+        "data": {
+          "username": "Apple reikningsnetfang eða símanúmer",
+          "password": "Lykilorð Apple reiknings"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple tveggja þátta auðkenning",
+        "description": "Pikkaðu á Leyfa á traustu Apple tæki, sláðu síðan inn sex stafa staðfestingarkóðann sem sýndur er þar. Veldu Endursenda staðfestingarkóða til að biðja um nýjan kóða.",
+        "data": {
+          "code": "Sex stafa staðfestingarkóði",
+          "resend": "Sendu staðfestingarkóða aftur"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple hafnaði aðgangi að tengiliðum. Athugaðu forritssértæka lykilorðið.",
+      "contacts_unavailable": "Gat ekki lesið iCloud tengiliði. Reyndu aftur.",
+      "invalid_auth": "Apple samþykkti ekki innskráningarupplýsingarnar þínar.",
+      "authorization_failed": "Ekki tókst að ljúka við Apple heimild. Athugaðu innskráningarupplýsingarnar þínar og reyndu aftur.",
+      "enrollment_failed": "Gat ekki klárað skráningu Apple Find. Reyndu aftur.",
+      "collector_unavailable": "Home Assistant Core gat ekki ræst Apple reikningsheimild.",
+      "account_mismatch": "Notaðu Apple reikninginn sem er þegar tengdur þessari Apple Find uppsetningu.",
+      "invalid_code": "Apple samþykkti ekki staðfestingarkóðann.",
+      "code_format": "Sláðu inn sex stafa kóða.",
+      "session_expired": "Staðfestingarlotan rann út. Skráðu þig inn aftur."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "iCloud tengiliðaheimild var vistuð. Apple Find passar við nöfn í bakgrunni, svo það gæti tekið smá stund fyrir tengiliðalistann að uppfærast sjálfkrafa."
+    },
+    "abort": {
+      "already_configured": "Apple Find er þegar stillt.",
+      "session_expired": "Staðfestingarlotan rann út. Skráðu þig inn aftur.",
+      "reauth_successful": "Þú hefur skráð þig inn.",
+      "reconfigure_successful": "Þú hefur skráð þig inn."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "iCloud tengiliðaheimild var vistuð. Apple Find passar við nöfn í bakgrunni, svo það gæti tekið smá stund fyrir tengiliðalistann að uppfærast sjálfkrafa."
+    },
+    "step": {
+      "init": {
+        "title": "Sýna nöfn úr iCloud tengiliðum",
+        "description": "Sýndu nöfn úr iCloud tengiliðunum þínum á tengiliðalistanum. Apple Find passar við hvern einstakling með netfanginu eða símanúmerinu sem þeir nota til að deila staðsetningu sinni. Ef ekkert nafn finnst sýnir listinn netfangið eða símanúmerið. Til að kveikja á nafnasamsvörun skaltu slá inn app-sérstakt lykilorð sem er búið til fyrir sama Apple reikning. Skildu þennan reit eftir auðan til að slökkva á honum.\n\n[Búðu til forritssérstakt lykilorð]({password_guide_url})",
+        "data": {
+          "contacts_password": "Appsértækt lykilorð"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple hafnaði aðgangi að tengiliðum. Athugaðu forritssértæka lykilorðið.",
+      "contacts_unavailable": "Gat ekki lesið iCloud tengiliði. Reyndu aftur."
+    }
+  },
+  "common": {
+    "contacts": "Tengiliðir",
+    "devices": "Tæki",
+    "reauth_notification_title": "Skráðu þig aftur inn á Apple Find",
+    "reauth_notification_message": "Apple krefst þess að þú skráir þig inn aftur. Fylgdu innskráningarleiðbeiningunum í Home Assistant.\n\n[Lagfæringar](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Ég"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Spilaðu hljóð"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Ég"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple býður ekki upp á þann möguleika að spila hljóð í þessu tæki sem stendur."
+    },
+    "sound_reauth": {
+      "message": "Apple krefst þess að þú skráir þig inn aftur. Farðu í Viðgerðir í Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple hafnaði beiðninni um að spila hljóð."
+    },
+    "sound_request_failed": {
+      "message": "Gat ekki staðfest hvort Apple hafi fengið beiðnina um að spila hljóð."
+    }
+  }
+}

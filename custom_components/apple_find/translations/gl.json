@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Mostrar os nomes dos contactos de iCloud",
+        "description": "Mostra os nomes dos teus contactos de iCloud na lista de contactos. Apple Find fai coincidir cada persoa polo enderezo de correo electrónico ou número de teléfono que utiliza para compartir a súa localización. Se non se atopa ningún nome, a lista mostra o enderezo de correo electrónico ou o número de teléfono. Para activar a coincidencia de nomes, introduce un contrasinal específico da aplicación xerado para a mesma conta de Apple. Deixa este campo en branco para desactivalo.\n\n[Crea un contrasinal específico para a aplicación]({password_guide_url})",
+        "data": {
+          "contacts_password": "Contrasinal específico da aplicación"
+        }
+      },
+      "apple_login": {
+        "title": "Inicia sesión na túa conta de Apple",
+        "description": "Introduce o enderezo de correo electrónico ou o número de teléfono da túa conta de Apple e o contrasinal da túa conta.",
+        "data": {
+          "username": "Enderezo de correo electrónico ou número de teléfono da conta de Apple",
+          "password": "Contrasinal da conta de Apple"
+        }
+      },
+      "apple_verification": {
+        "title": "Autenticación de dous factores de Apple",
+        "description": "Toca Permitir nun dispositivo Apple de confianza e, a continuación, introduce o código de verificación de seis díxitos que aparece alí. Seleccione Reenviar o código de verificación para solicitar un novo código.",
+        "data": {
+          "code": "Código de verificación de seis díxitos",
+          "resend": "Reenviar o código de verificación"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple rexeitou o acceso a Contactos. Comprobe o contrasinal específico da aplicación.",
+      "contacts_unavailable": "Non se puido ler os contactos de iCloud. Téntao de novo.",
+      "invalid_auth": "Apple non aceptou os teus detalles de inicio de sesión.",
+      "authorization_failed": "Non se puido completar a autorización de Apple. Comproba os teus detalles de inicio de sesión e téntao de novo.",
+      "enrollment_failed": "Non se puido rematar de rexistrar Apple Find. Téntao de novo.",
+      "collector_unavailable": "Home Assistant Core non puido iniciar a autorización da conta de Apple.",
+      "account_mismatch": "Usa a conta de Apple que xa está conectada a esta instalación de Apple Find.",
+      "invalid_code": "Apple non aceptou o código de verificación.",
+      "code_format": "Introduza un código de seis díxitos.",
+      "session_expired": "A sesión de verificación caducou. Inicia sesión de novo."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Gardouse a autorización de Contactos de iCloud. Apple Find coincide cos nomes en segundo plano, polo que a lista de contactos pode tardar un pouco en actualizarse automaticamente."
+    },
+    "abort": {
+      "already_configured": "Apple Find xa está configurado.",
+      "session_expired": "A sesión de verificación caducou. Inicia sesión de novo.",
+      "reauth_successful": "Iniciaches sesión correctamente.",
+      "reconfigure_successful": "Iniciaches sesión correctamente."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Gardouse a autorización de Contactos de iCloud. Apple Find coincide cos nomes en segundo plano, polo que a lista de contactos pode tardar un pouco en actualizarse automaticamente."
+    },
+    "step": {
+      "init": {
+        "title": "Mostrar os nomes dos contactos de iCloud",
+        "description": "Mostra os nomes dos teus contactos de iCloud na lista de contactos. Apple Find fai coincidir cada persoa polo enderezo de correo electrónico ou número de teléfono que utiliza para compartir a súa localización. Se non se atopa ningún nome, a lista mostra o enderezo de correo electrónico ou o número de teléfono. Para activar a coincidencia de nomes, introduce un contrasinal específico da aplicación xerado para a mesma conta de Apple. Deixa este campo en branco para desactivalo.\n\n[Crea un contrasinal específico para a aplicación]({password_guide_url})",
+        "data": {
+          "contacts_password": "Contrasinal específico da aplicación"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple rexeitou o acceso a Contactos. Comprobe o contrasinal específico da aplicación.",
+      "contacts_unavailable": "Non se puido ler os contactos de iCloud. Téntao de novo."
+    }
+  },
+  "common": {
+    "contacts": "Contactos",
+    "devices": "Dispositivos",
+    "reauth_notification_title": "Inicia sesión de novo en Apple Find",
+    "reauth_notification_message": "Apple esixe que inicies sesión de novo. Sigue as indicacións de inicio de sesión en Home Assistant.\n\n[Reparacións](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Eu"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Reproducir un son"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Eu"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple non ofrece actualmente a opción de reproducir un son neste dispositivo."
+    },
+    "sound_reauth": {
+      "message": "Apple esixe que inicies sesión de novo. Vaia a Reparacións en Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple rexeitou a solicitude de reproducir un son."
+    },
+    "sound_request_failed": {
+      "message": "Non se puido confirmar se Apple recibiu a solicitude para reproducir un son."
+    }
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Mostra els noms dels contactes d'iCloud",
+        "description": "Mostra els noms dels teus contactes d'iCloud a la llista de contactes. Apple Find coincideix amb cada persona per l'adreça de correu electrònic o el número de telèfon que utilitzen per compartir la seva ubicació. Si no es troba cap nom, la llista mostra l'adreça de correu electrònic o el número de telèfon. Per activar la concordança de noms, introduïu una contrasenya específica de l'aplicació generada per al mateix compte d'Apple. Deixeu aquest camp en blanc per desactivar-lo.\n\n[Creeu una contrasenya específica de l'aplicació]({password_guide_url})",
+        "data": {
+          "contacts_password": "Contrasenya específica de l'aplicació"
+        }
+      },
+      "apple_login": {
+        "title": "Inicieu la sessió al vostre compte d'Apple",
+        "description": "Introduïu l'adreça de correu electrònic o el número de telèfon del vostre compte d'Apple i la contrasenya del vostre compte.",
+        "data": {
+          "username": "Adreça de correu electrònic o número de telèfon del compte d'Apple",
+          "password": "Contrasenya del compte d'Apple"
+        }
+      },
+      "apple_verification": {
+        "title": "Autenticació de dos factors d'Apple",
+        "description": "Toqueu Permetre en un dispositiu Apple de confiança i, a continuació, introduïu el codi de verificació de sis dígits que s'hi mostra. Seleccioneu Torna a enviar el codi de verificació per sol·licitar un codi nou.",
+        "data": {
+          "code": "Codi de verificació de sis dígits",
+          "resend": "Torna a enviar el codi de verificació"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple va rebutjar l'accés a Contactes. Comproveu la contrasenya específica de l'aplicació.",
+      "contacts_unavailable": "No s'han pogut llegir els contactes d'iCloud. Torna-ho a provar.",
+      "invalid_auth": "Apple no va acceptar les vostres dades d'inici de sessió.",
+      "authorization_failed": "No s'ha pogut completar l'autorització d'Apple. Comproveu les vostres dades d'inici de sessió i torneu-ho a provar.",
+      "enrollment_failed": "No s'ha pogut acabar de registrar Apple Find. Torna-ho a provar.",
+      "collector_unavailable": "Home Assistant Core no ha pogut iniciar l'autorització del compte d'Apple.",
+      "account_mismatch": "Utilitzeu el compte d'Apple que ja està connectat a aquesta instal·lació d'Apple Find.",
+      "invalid_code": "Apple no va acceptar el codi de verificació.",
+      "code_format": "Introduïu un codi de sis dígits.",
+      "session_expired": "La sessió de verificació ha caducat. Torna a iniciar la sessió."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "S'ha desat l'autorització dels contactes d'iCloud. Apple Find coincideix amb els noms en segon pla, de manera que la llista de contactes pot trigar una mica a actualitzar-se automàticament."
+    },
+    "abort": {
+      "already_configured": "Apple Find ja està configurat.",
+      "session_expired": "La sessió de verificació ha caducat. Torna a iniciar la sessió.",
+      "reauth_successful": "Heu iniciat la sessió correctament.",
+      "reconfigure_successful": "Heu iniciat la sessió correctament."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "S'ha desat l'autorització dels contactes d'iCloud. Apple Find coincideix amb els noms en segon pla, de manera que la llista de contactes pot trigar una mica a actualitzar-se automàticament."
+    },
+    "step": {
+      "init": {
+        "title": "Mostra els noms dels contactes d'iCloud",
+        "description": "Mostra els noms dels teus contactes d'iCloud a la llista de contactes. Apple Find coincideix amb cada persona per l'adreça de correu electrònic o el número de telèfon que utilitzen per compartir la seva ubicació. Si no es troba cap nom, la llista mostra l'adreça de correu electrònic o el número de telèfon. Per activar la concordança de noms, introduïu una contrasenya específica de l'aplicació generada per al mateix compte d'Apple. Deixeu aquest camp en blanc per desactivar-lo.\n\n[Creeu una contrasenya específica de l'aplicació]({password_guide_url})",
+        "data": {
+          "contacts_password": "Contrasenya específica de l'aplicació"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple va rebutjar l'accés a Contactes. Comproveu la contrasenya específica de l'aplicació.",
+      "contacts_unavailable": "No s'han pogut llegir els contactes d'iCloud. Torna-ho a provar."
+    }
+  },
+  "common": {
+    "contacts": "Contactes",
+    "devices": "Dispositius",
+    "reauth_notification_title": "Torna a iniciar la sessió a Apple Find",
+    "reauth_notification_message": "Apple requereix que torneu a iniciar la sessió. Seguiu les instruccions d'inici de sessió a Home Assistant.\n\n[Reparacions](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Jo"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Reprodueix un so"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Jo"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple no ofereix actualment l'opció de reproduir un so en aquest dispositiu."
+    },
+    "sound_reauth": {
+      "message": "Apple requereix que torneu a iniciar la sessió. Vés a Reparacions a Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple va rebutjar la sol·licitud per reproduir un so."
+    },
+    "sound_request_failed": {
+      "message": "No s'ha pogut confirmar si Apple va rebre la sol·licitud per reproduir un so."
+    }
+  }
+}

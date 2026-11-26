@@ -10,10 +10,10 @@
       },
       "apple_login": {
         "title": "登录 Apple 账户",
-        "description": "使用 Apple 账户密码登录 HA 上的原生查找采集器。",
+        "description": "输入 Apple 账户的电子邮件地址或电话号码，以及账户密码。",
         "data": {
-          "username": "Apple 账户",
-          "password": "密码"
+          "username": "Apple 账户的电子邮件地址或电话号码",
+          "password": "Apple 账户密码"
         }
       },
       "apple_verification": {
@@ -42,7 +42,9 @@
     },
     "abort": {
       "already_configured": "Apple Find 已配置。",
-      "session_expired": "验证会话已过期，请重新登录。"
+      "session_expired": "验证会话已过期，请重新登录。",
+      "reauth_successful": "已登录 Apple Find。",
+      "reconfigure_successful": "已登录 Apple Find。"
     }
   },
   "options": {
@@ -65,7 +67,9 @@
   },
   "common": {
     "contacts": "联系人",
-    "devices": "设备"
+    "devices": "设备",
+    "reauth_notification_title": "Apple Find 需要重新验证",
+    "reauth_notification_message": "Apple 要求重新验证「查找」账号。请在 [修复面板](/config/repairs) 打开重新验证流程。"
   },
   "device": {
     "me": {

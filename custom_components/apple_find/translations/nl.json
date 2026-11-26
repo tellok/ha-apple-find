@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Namen uit iCloud-contacten invullen",
+        "description": "Toon de namen uit je iCloud-contacten in de contactenlijst van Apple Find in Home Assistant. Apple Find zoekt elk contact op aan de hand van het e-mailadres of telefoonnummer waarmee diegene een locatie deelt. Als er geen naam wordt gevonden, blijft het e-mailadres of telefoonnummer zichtbaar. Voer een app-specifiek wachtwoord voor dezelfde Apple Account in om deze functie in te schakelen. Laat het veld leeg om de functie uit te schakelen.\n\n[Een app-specifiek wachtwoord aanmaken]({password_guide_url})",
+        "data": {
+          "contacts_password": "App-specifiek wachtwoord voor iCloud-contacten"
+        }
+      },
+      "apple_login": {
+        "title": "Log in bij je Apple Account",
+        "description": "Voer het e-mailadres of telefoonnummer van je Apple Account en het bijbehorende wachtwoord in.",
+        "data": {
+          "username": "E-mailadres of telefoonnummer van je Apple Account",
+          "password": "Wachtwoord van je Apple Account"
+        }
+      },
+      "apple_verification": {
+        "title": "Twee-factor-authenticatie van Apple",
+        "description": "Tik op 'Sta toe' op een vertrouwd Apple apparaat en voer de zescijferige verificatiecode in die daar verschijnt. Kies 'Verificatiecode opnieuw versturen' om een nieuwe code aan te vragen.",
+        "data": {
+          "code": "Zescijferige verificatiecode",
+          "resend": "Verificatiecode opnieuw versturen"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple heeft de toegang tot je contacten geweigerd. Controleer het app-specifieke wachtwoord.",
+      "contacts_unavailable": "De iCloud-contacten konden niet worden opgehaald. Probeer het opnieuw.",
+      "invalid_auth": "Apple heeft je inloggegevens niet geaccepteerd.",
+      "authorization_failed": "De autorisatie bij Apple kon niet worden voltooid. Controleer je inloggegevens en probeer het opnieuw.",
+      "enrollment_failed": "Apple Find kon niet bij Zoek mijn worden geregistreerd. Probeer het opnieuw.",
+      "collector_unavailable": "Home Assistant Core kon de autorisatie voor Zoek mijn niet starten.",
+      "account_mismatch": "Gebruik de Apple Account die al aan deze Apple Find-installatie is gekoppeld.",
+      "invalid_code": "Apple heeft de verificatiecode niet geaccepteerd.",
+      "code_format": "Voer een code van zes cijfers in.",
+      "session_expired": "De verificatiesessie is verlopen. Log opnieuw in."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "De autorisatie voor iCloud-contacten is opgeslagen. Apple Find koppelt de namen op de achtergrond. Het kan even duren voordat de contactenlijst automatisch wordt bijgewerkt."
+    },
+    "abort": {
+      "already_configured": "Apple Find is al geconfigureerd.",
+      "session_expired": "De verificatiesessie is verlopen. Log opnieuw in.",
+      "reauth_successful": "Je bent ingelogd bij Apple Find.",
+      "reconfigure_successful": "Je bent ingelogd bij Apple Find."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "De autorisatie voor iCloud-contacten is opgeslagen. Apple Find koppelt de namen op de achtergrond. Het kan even duren voordat de contactenlijst automatisch wordt bijgewerkt."
+    },
+    "step": {
+      "init": {
+        "title": "Namen uit iCloud-contacten invullen",
+        "description": "Toon de namen uit je iCloud-contacten in de contactenlijst van Apple Find in Home Assistant. Apple Find zoekt elk contact op aan de hand van het e-mailadres of telefoonnummer waarmee diegene een locatie deelt. Als er geen naam wordt gevonden, blijft het e-mailadres of telefoonnummer zichtbaar. Voer een app-specifiek wachtwoord voor dezelfde Apple Account in om deze functie in te schakelen. Laat het veld leeg om de functie uit te schakelen.\n\n[Een app-specifiek wachtwoord aanmaken]({password_guide_url})",
+        "data": {
+          "contacts_password": "App-specifiek wachtwoord voor iCloud-contacten"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple heeft de toegang tot je contacten geweigerd. Controleer het app-specifieke wachtwoord.",
+      "contacts_unavailable": "De iCloud-contacten konden niet worden opgehaald. Probeer het opnieuw."
+    }
+  },
+  "common": {
+    "contacts": "Contacten",
+    "devices": "Apparaten",
+    "reauth_notification_title": "Log opnieuw in bij Apple Find",
+    "reauth_notification_message": "Apple vraagt je om opnieuw in te loggen bij Zoek mijn. Open [Reparaties](/config/repairs) en volg de stappen om in te loggen."
+  },
+  "device": {
+    "me": {
+      "name": "Ik"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Speel geluid af"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Ik"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple biedt momenteel geen optie om geluid af te spelen op dit apparaat."
+    },
+    "sound_reauth": {
+      "message": "Apple vraagt je om opnieuw in te loggen. Log opnieuw in via Reparaties in Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple heeft het verzoek om geluid af te spelen geweigerd."
+    },
+    "sound_request_failed": {
+      "message": "Het is niet duidelijk of Apple het verzoek om geluid af te spelen heeft ontvangen."
+    }
+  }
+}

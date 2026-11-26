@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Fyll inn namn frå iCloud-kontaktar",
+        "description": "Vis namna frå iCloud-kontaktane dine i kontaktlista til Apple Find i Home Assistant. Apple Find slår opp kvar kontakt ved hjelp av e-postadressa eller telefonnummeret dei deler posisjonen sin med. Dersom det ikkje finst noko namn, blir e-postadressa eller telefonnummeret vist. Skriv inn eit appspesifikt passord for den same Apple-kontoen for å slå på funksjonen. La feltet stå tomt for å slå han av.\n\n[Slik opprettar du eit appspesifikt passord]({password_guide_url})",
+        "data": {
+          "contacts_password": "Appspesifikt passord for iCloud-kontaktar"
+        }
+      },
+      "apple_login": {
+        "title": "Logg inn på Apple-kontoen din",
+        "description": "Skriv inn e-postadressa eller telefonnummeret til Apple-kontoen din og passordet for kontoen.",
+        "data": {
+          "username": "E-postadresse eller telefonnummer til Apple-kontoen",
+          "password": "Passord for Apple-kontoen"
+        }
+      },
+      "apple_verification": {
+        "title": "Tofaktorautentisering for Apple",
+        "description": "Trykk på Tillat på ei godkjend Apple-eining, og skriv inn den sekssifra stadfestingskoden som blir vist. Vel Send stadfestingskoden på nytt for å be om ein ny kode.",
+        "data": {
+          "code": "Sekssifra stadfestingskode",
+          "resend": "Send stadfestingskoden på nytt"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple avviste tilgangen til kontaktane. Kontroller det appspesifikke passordet.",
+      "contacts_unavailable": "Kunne ikkje lese iCloud-kontaktane. Prøv igjen.",
+      "invalid_auth": "Apple godtok ikkje innloggingsopplysningane.",
+      "authorization_failed": "Kunne ikkje fullføre autoriseringa hos Apple. Kontroller innloggingsopplysningane og prøv igjen.",
+      "enrollment_failed": "Kunne ikkje registrere Apple Find. Prøv igjen.",
+      "collector_unavailable": "Home Assistant Core kunne ikkje starte autoriseringa hos Apple.",
+      "account_mismatch": "Bruk Apple-kontoen som allereie er knytt til denne Apple Find-installasjonen.",
+      "invalid_code": "Apple godtok ikkje stadfestingskoden.",
+      "code_format": "Skriv inn ein kode med seks siffer.",
+      "session_expired": "Økta for stadfesting har gått ut. Logg inn igjen."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Tilgangen til iCloud-kontaktane er lagra. Apple Find koplar namna til kontaktane i bakgrunnen, så det kan ta litt tid før kontaktlista blir oppdatert automatisk."
+    },
+    "abort": {
+      "already_configured": "Apple Find er allereie konfigurert.",
+      "session_expired": "Økta for stadfesting har gått ut. Logg inn igjen.",
+      "reauth_successful": "Du er logga inn på Apple Find.",
+      "reconfigure_successful": "Du er logga inn på Apple Find."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Tilgangen til iCloud-kontaktane er lagra. Apple Find koplar namna til kontaktane i bakgrunnen, så det kan ta litt tid før kontaktlista blir oppdatert automatisk."
+    },
+    "step": {
+      "init": {
+        "title": "Fyll inn namn frå iCloud-kontaktar",
+        "description": "Vis namna frå iCloud-kontaktane dine i kontaktlista til Apple Find i Home Assistant. Apple Find slår opp kvar kontakt ved hjelp av e-postadressa eller telefonnummeret dei deler posisjonen sin med. Dersom det ikkje finst noko namn, blir e-postadressa eller telefonnummeret vist. Skriv inn eit appspesifikt passord for den same Apple-kontoen for å slå på funksjonen. La feltet stå tomt for å slå han av.\n\n[Slik opprettar du eit appspesifikt passord]({password_guide_url})",
+        "data": {
+          "contacts_password": "Appspesifikt passord for iCloud-kontaktar"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple avviste tilgangen til kontaktane. Kontroller det appspesifikke passordet.",
+      "contacts_unavailable": "Kunne ikkje lese iCloud-kontaktane. Prøv igjen."
+    }
+  },
+  "common": {
+    "contacts": "Kontaktar",
+    "devices": "Einingar",
+    "reauth_notification_title": "Logg inn på Apple Find igjen",
+    "reauth_notification_message": "Apple krev at du loggar inn på nytt. Opne [Reparasjonar](/config/repairs) og følg stega for å logge inn."
+  },
+  "device": {
+    "me": {
+      "name": "Eg"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Spel av lyd"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Eg"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple tilbyr ikkje høve til å spele av lyd på denne eininga akkurat no."
+    },
+    "sound_reauth": {
+      "message": "Apple krev ny innlogging. Logg inn på nytt frå Reparasjonar i Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple avviste førespurnaden om å spele av lyd."
+    },
+    "sound_request_failed": {
+      "message": "Kunne ikkje stadfeste om Apple fekk førespurnaden om å spele av lyd."
+    }
+  }
+}

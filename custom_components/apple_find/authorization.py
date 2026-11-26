@@ -6,6 +6,7 @@ import voluptuous as vol
 from homeassistant.components import persistent_notification
 from homeassistant.helpers.event import async_track_time_interval
 from homeassistant.helpers.selector import TextSelector, TextSelectorConfig, TextSelectorType
+from homeassistant.helpers.translation import async_get_translations
 
 from . import DOMAIN, workspace_path
 from .runtime import async_get_runtime
@@ -48,10 +49,11 @@ async def setup_authorization_monitor(hass, entry):
         if primary is not entry:
             return
         if await hass.async_add_executor_job(authorization_required, state_path(hass)):
+            translations = await async_get_translations(hass, hass.config.language, "common", [DOMAIN])
             persistent_notification.async_create(
                 hass,
-                "Apple 要求重新验证「查找」账号。请在 [修复面板](/config/repairs) 打开重新验证流程。",
-                title="Apple Find 需要重新验证",
+                translations[f"component.{DOMAIN}.common.reauth_notification_message"],
+                title=translations[f"component.{DOMAIN}.common.reauth_notification_title"],
                 notification_id=NOTIFICATION,
             )
             entry.async_start_reauth(hass)

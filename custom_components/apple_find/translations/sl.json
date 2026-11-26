@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Pokaži imena iz stikov iCloud",
+        "description": "Pokažite imena iz svojih iCloud Contacts na seznamu stikov. Apple Find vsako osebo ujema z e-poštnim naslovom ali telefonsko številko, ki jo uporablja za skupno rabo svoje lokacije. Če ni mogoče najti imena, je na seznamu prikazan e-poštni naslov ali telefonska številka. Če želite vklopiti ujemanje imen, vnesite geslo za aplikacijo, ustvarjeno za isti račun Apple. Če ga želite izklopiti, pustite to polje prazno.\n\n[Ustvarite geslo za aplikacijo]({password_guide_url})",
+        "data": {
+          "contacts_password": "Geslo za določeno aplikacijo"
+        }
+      },
+      "apple_login": {
+        "title": "Prijavite se v svoj račun Apple",
+        "description": "Vnesite e-poštni naslov ali telefonsko številko za svoj Apple Account in geslo za svoj račun.",
+        "data": {
+          "username": "E-poštni naslov ali telefonska številka računa Apple",
+          "password": "Geslo računa Apple"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple dvostopenjska avtentikacija",
+        "description": "Tapnite Dovoli na zaupanja vredni napravi Apple in nato vnesite tam prikazano šestmestno potrditveno kodo. Izberite Ponovno pošlji potrditveno kodo, da zahtevate novo kodo.",
+        "data": {
+          "code": "Šestmestna koda za preverjanje",
+          "resend": "Ponovno pošlji kodo za preverjanje"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple je zavrnil dostop do stikov. Preverite geslo za aplikacijo.",
+      "contacts_unavailable": "Stikov iCloud ni bilo mogoče prebrati. poskusi ponovno",
+      "invalid_auth": "Apple ni sprejel vaših prijavnih podatkov.",
+      "authorization_failed": "Apple avtorizacije ni bilo mogoče dokončati. Preverite podatke za prijavo in poskusite znova.",
+      "enrollment_failed": "Ni bilo mogoče dokončati registracije Apple Find. poskusi ponovno",
+      "collector_unavailable": "Home Assistant Core ni mogel začeti avtorizacije računa Apple.",
+      "account_mismatch": "Uporabite Apple Account, ki je že povezan s to namestitvijo Apple Find.",
+      "invalid_code": "Apple ni sprejel potrditvene kode.",
+      "code_format": "Vnesite šestmestno kodo.",
+      "session_expired": "Seja preverjanja je potekla. Ponovno se prijavite."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Pooblastilo iCloud Contacts je bilo shranjeno. Apple Find ujema imena v ozadju, zato lahko traja nekaj časa, da se seznam stikov samodejno posodobi."
+    },
+    "abort": {
+      "already_configured": "Apple Find je že konfiguriran.",
+      "session_expired": "Seja preverjanja je potekla. Ponovno se prijavite.",
+      "reauth_successful": "Uspešno ste se prijavili.",
+      "reconfigure_successful": "Uspešno ste se prijavili."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Pooblastilo iCloud Contacts je bilo shranjeno. Apple Find ujema imena v ozadju, zato lahko traja nekaj časa, da se seznam stikov samodejno posodobi."
+    },
+    "step": {
+      "init": {
+        "title": "Pokaži imena iz stikov iCloud",
+        "description": "Pokažite imena iz svojih iCloud Contacts na seznamu stikov. Apple Find vsako osebo ujema z e-poštnim naslovom ali telefonsko številko, ki jo uporablja za skupno rabo svoje lokacije. Če ni mogoče najti imena, je na seznamu prikazan e-poštni naslov ali telefonska številka. Če želite vklopiti ujemanje imen, vnesite geslo za aplikacijo, ustvarjeno za isti račun Apple. Če ga želite izklopiti, pustite to polje prazno.\n\n[Ustvarite geslo za aplikacijo]({password_guide_url})",
+        "data": {
+          "contacts_password": "Geslo za določeno aplikacijo"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple je zavrnil dostop do stikov. Preverite geslo za aplikacijo.",
+      "contacts_unavailable": "Stikov iCloud ni bilo mogoče prebrati. poskusi ponovno"
+    }
+  },
+  "common": {
+    "contacts": "Kontakti",
+    "devices": "Naprave",
+    "reauth_notification_title": "Znova se prijavite v Apple Find",
+    "reauth_notification_message": "Apple zahteva, da se znova prijavite. Sledite pozivom za prijavo v Home Assistant.\n\n[Popravila](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Jaz"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Predvajaj zvok"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Jaz"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple trenutno ne ponuja možnosti predvajanja zvoka na tej napravi."
+    },
+    "sound_reauth": {
+      "message": "Apple zahteva, da se znova prijavite. Pojdite na Popravila v Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple je zavrnil zahtevo za predvajanje zvoka."
+    },
+    "sound_request_failed": {
+      "message": "Ni bilo mogoče potrditi, ali je Apple prejel zahtevo za predvajanje zvoka."
+    }
+  }
+}

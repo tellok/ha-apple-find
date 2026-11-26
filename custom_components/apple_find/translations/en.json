@@ -9,40 +9,42 @@
         }
       },
       "apple_login": {
-        "title": "登录 Apple 账户",
-        "description": "使用 Apple 账户密码登录 HA 上的原生查找采集器。",
+        "title": "Sign in to your Apple Account",
+        "description": "Enter the email address or phone number for your Apple Account and your account password.",
         "data": {
-          "username": "Apple 账户",
-          "password": "密码"
+          "username": "Apple Account email address or phone number",
+          "password": "Apple Account password"
         }
       },
       "apple_verification": {
-        "title": "Apple 双重认证",
-        "description": "在受信任设备上点「允许」，然后输入这次显示的六位验证码。需要新验证码时，可勾选重新发送。",
+        "title": "Apple two-factor authentication",
+        "description": "Tap Allow on a trusted Apple device, then enter the six-digit verification code shown there. Select Resend verification code to request a new code.",
         "data": {
-          "code": "六位验证码",
-          "resend": "重新发送验证码"
+          "code": "Six-digit verification code",
+          "resend": "Resend verification code"
         }
       }
     },
     "error": {
       "contacts_invalid_auth": "Apple rejected access to Contacts. Check the app-specific password.",
       "contacts_unavailable": "Could not read iCloud Contacts. Try again.",
-      "invalid_auth": "Apple 未接受登录信息。",
-      "authorization_failed": "Apple 授权未完成，请检查登录信息后重试。",
-      "enrollment_failed": "查找身份注册失败，请重试。",
+      "invalid_auth": "Apple did not accept your sign-in details.",
+      "authorization_failed": "Could not complete Apple authorization. Check your sign-in details and try again.",
+      "enrollment_failed": "Could not register Apple Find with Find My. Try again.",
       "collector_unavailable": "Home Assistant Core could not start Apple Find My authorization.",
-      "account_mismatch": "请输入与当前查找采集器相同的 Apple 账户。",
-      "invalid_code": "Apple 未接受这次验证码。",
-      "code_format": "请输入六位数字。",
-      "session_expired": "验证会话已过期，请重新登录。"
+      "account_mismatch": "Use the Apple Account that is already connected to this Apple Find installation.",
+      "invalid_code": "Apple did not accept the verification code.",
+      "code_format": "Enter a six-digit code.",
+      "session_expired": "The verification session expired. Sign in again."
     },
     "create_entry": {
       "contacts_matching_saved": "iCloud Contacts authorization was saved. Apple Find matches names in the background, so it may take a little while for the contact list to update automatically."
     },
     "abort": {
       "already_configured": "Apple Find is already configured.",
-      "session_expired": "验证会话已过期，请重新登录。"
+      "session_expired": "The verification session expired. Sign in again.",
+      "reauth_successful": "You are signed in to Apple Find.",
+      "reconfigure_successful": "You are signed in to Apple Find."
     }
   },
   "options": {
@@ -65,7 +67,9 @@
   },
   "common": {
     "contacts": "Contacts",
-    "devices": "Devices"
+    "devices": "Devices",
+    "reauth_notification_title": "Apple Find needs you to sign in again",
+    "reauth_notification_message": "Apple requires you to sign in again to Find My. Open [Repairs](/config/repairs) and follow the sign-in prompts."
   },
   "device": {
     "me": {

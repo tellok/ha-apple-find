@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Rodyti vardus iš „iCloud Contacts“.",
+        "description": "Rodyti vardus iš „iCloud“ kontaktų kontaktų sąraše. „Apple Find“ atitinka kiekvieną asmenį pagal el. pašto adresą arba telefono numerį, kuriuo jie bendrina savo vietą. Jei vardo nerasta, sąraše rodomas el. pašto adresas arba telefono numeris. Norėdami įjungti vardo atitikimą, įveskite konkrečios programos slaptažodį, sugeneruotą tai pačiai Apple paskyrai. Palikite šį lauką tuščią, kad jį išjungtumėte.\n\n[Sukurkite konkrečios programos slaptažodį]({password_guide_url})",
+        "data": {
+          "contacts_password": "Konkrečios programos slaptažodis"
+        }
+      },
+      "apple_login": {
+        "title": "Prisijunkite prie savo Apple paskyros",
+        "description": "Įveskite „Apple“ paskyros el. pašto adresą arba telefono numerį ir paskyros slaptažodį.",
+        "data": {
+          "username": "„Apple“ paskyros el. pašto adresas arba telefono numeris",
+          "password": "Apple paskyros slaptažodis"
+        }
+      },
+      "apple_verification": {
+        "title": "„Apple“ dviejų veiksnių autentifikavimas",
+        "description": "Patikimame Apple įrenginyje bakstelėkite Leisti, tada įveskite ten rodomą šešių skaitmenų patvirtinimo kodą. Norėdami paprašyti naujo kodo, pasirinkite Siųsti patvirtinimo kodą iš naujo.",
+        "data": {
+          "code": "Šešių skaitmenų patvirtinimo kodas",
+          "resend": "Iš naujo siųsti patvirtinimo kodą"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "„Apple“ atmetė prieigą prie kontaktų. Patikrinkite konkrečios programos slaptažodį.",
+      "contacts_unavailable": "Nepavyko nuskaityti „iCloud“ kontaktų. Bandykite dar kartą.",
+      "invalid_auth": "„Apple“ nepriėmė jūsų prisijungimo informacijos.",
+      "authorization_failed": "Nepavyko užbaigti „Apple“ autorizacijos. Patikrinkite prisijungimo informaciją ir bandykite dar kartą.",
+      "enrollment_failed": "Nepavyko užbaigti „Apple Find“ registracijos. Bandykite dar kartą.",
+      "collector_unavailable": "„Home Assistant Core“ nepavyko pradėti „Apple“ paskyros prieigos teisės.",
+      "account_mismatch": "Naudokite „Apple“ paskyrą, kuri jau yra prijungta prie šio „Apple Find“ diegimo.",
+      "invalid_code": "„Apple“ nepriėmė patvirtinimo kodo.",
+      "code_format": "Įveskite šešių skaitmenų kodą.",
+      "session_expired": "Patvirtinimo sesija baigėsi. Prisijunkite dar kartą."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "„iCloud Contacts“ įgaliojimas išsaugotas. „Apple Find“ atitinka vardus fone, todėl gali šiek tiek užtrukti, kol kontaktų sąrašas bus automatiškai atnaujintas."
+    },
+    "abort": {
+      "already_configured": "„Apple Find“ jau sukonfigūruotas.",
+      "session_expired": "Patvirtinimo sesija baigėsi. Prisijunkite dar kartą.",
+      "reauth_successful": "Sėkmingai prisijungėte.",
+      "reconfigure_successful": "Sėkmingai prisijungėte."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "„iCloud Contacts“ įgaliojimas išsaugotas. „Apple Find“ atitinka vardus fone, todėl gali šiek tiek užtrukti, kol kontaktų sąrašas bus automatiškai atnaujintas."
+    },
+    "step": {
+      "init": {
+        "title": "Rodyti vardus iš „iCloud Contacts“.",
+        "description": "Rodyti vardus iš „iCloud“ kontaktų kontaktų sąraše. „Apple Find“ atitinka kiekvieną asmenį pagal el. pašto adresą arba telefono numerį, kuriuo jie bendrina savo vietą. Jei vardo nerasta, sąraše rodomas el. pašto adresas arba telefono numeris. Norėdami įjungti vardo atitikimą, įveskite konkrečios programos slaptažodį, sugeneruotą tai pačiai Apple paskyrai. Palikite šį lauką tuščią, kad jį išjungtumėte.\n\n[Sukurkite konkrečios programos slaptažodį]({password_guide_url})",
+        "data": {
+          "contacts_password": "Konkrečios programos slaptažodis"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "„Apple“ atmetė prieigą prie kontaktų. Patikrinkite konkrečios programos slaptažodį.",
+      "contacts_unavailable": "Nepavyko nuskaityti „iCloud“ kontaktų. Bandykite dar kartą."
+    }
+  },
+  "common": {
+    "contacts": "Kontaktai",
+    "devices": "Prietaisai",
+    "reauth_notification_title": "Dar kartą prisijunkite prie „Apple Find“.",
+    "reauth_notification_message": "„Apple“ reikalauja vėl prisijungti. Vykdykite „Home Assistant“ prisijungimo raginimus.\n\n[Remontai](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Aš"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Leisti garsą"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Aš"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple šiuo metu nesiūlo galimybės leisti garsą šiame įrenginyje."
+    },
+    "sound_reauth": {
+      "message": "„Apple“ reikalauja vėl prisijungti. Eikite į „Home Assistant“ remontas."
+    },
+    "sound_rejected": {
+      "message": "„Apple“ atmetė prašymą leisti garsą."
+    },
+    "sound_request_failed": {
+      "message": "Nepavyko patvirtinti, ar „Apple“ gavo užklausą leisti garsą."
+    }
+  }
+}

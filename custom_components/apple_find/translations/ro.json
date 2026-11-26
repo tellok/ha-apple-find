@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Afișați numele din Contacte iCloud",
+        "description": "Afișați numele din Agenda iCloud în lista de contacte. Apple Find potrivește fiecare persoană după adresa de e-mail sau numărul de telefon pe care îl folosește pentru a-și partaja locația. Dacă nu este găsit niciun nume, lista arată adresa de e-mail sau numărul de telefon. Pentru a activa potrivirea numelor, introduceți o parolă specifică aplicației, generată pentru același cont Apple. Lăsați acest câmp necompletat pentru a-l dezactiva.\n\n[Creați o parolă specifică aplicației]({password_guide_url})",
+        "data": {
+          "contacts_password": "Parolă specifică aplicației"
+        }
+      },
+      "apple_login": {
+        "title": "Conectați-vă la contul Apple",
+        "description": "Introdu adresa de e-mail sau numărul de telefon pentru contul tău Apple și parola contului.",
+        "data": {
+          "username": "Adresa de e-mail sau numărul de telefon al Contului Apple",
+          "password": "Parola contului Apple"
+        }
+      },
+      "apple_verification": {
+        "title": "Autentificare cu doi factori Apple",
+        "description": "Atingeți Permite pe un dispozitiv Apple de încredere, apoi introduceți codul de verificare din șase cifre afișat acolo. Selectați Retrimiteți codul de verificare pentru a solicita un nou cod.",
+        "data": {
+          "code": "Cod de verificare din șase cifre",
+          "resend": "Retrimiteți codul de verificare"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple a respins accesul la Contacte. Verificați parola specifică aplicației.",
+      "contacts_unavailable": "Nu s-a putut citi Contacte iCloud. Încearcă din nou.",
+      "invalid_auth": "Apple nu a acceptat detaliile dvs. de conectare.",
+      "authorization_failed": "Nu s-a putut finaliza autorizarea Apple. Verificați detaliile de conectare și încercați din nou.",
+      "enrollment_failed": "Nu s-a putut termina înregistrarea Apple Find. Încearcă din nou.",
+      "collector_unavailable": "Home Assistant Core nu a putut porni autorizarea contului Apple.",
+      "account_mismatch": "Utilizați contul Apple care este deja conectat la această instalare Apple Find.",
+      "invalid_code": "Apple nu a acceptat codul de verificare.",
+      "code_format": "Introduceți un cod din șase cifre.",
+      "session_expired": "Sesiunea de verificare a expirat. Conectați-vă din nou."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Autorizarea iCloud Contacts a fost salvată. Apple Find se potrivește cu numele în fundal, așa că poate dura ceva timp până când lista de contacte se actualizează automat."
+    },
+    "abort": {
+      "already_configured": "Apple Find este deja configurat.",
+      "session_expired": "Sesiunea de verificare a expirat. Conectați-vă din nou.",
+      "reauth_successful": "V-ați conectat cu succes.",
+      "reconfigure_successful": "V-ați conectat cu succes."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Autorizarea iCloud Contacts a fost salvată. Apple Find se potrivește cu numele în fundal, așa că poate dura ceva timp până când lista de contacte se actualizează automat."
+    },
+    "step": {
+      "init": {
+        "title": "Afișați numele din Contacte iCloud",
+        "description": "Afișați numele din Agenda iCloud în lista de contacte. Apple Find potrivește fiecare persoană după adresa de e-mail sau numărul de telefon pe care îl folosește pentru a-și partaja locația. Dacă nu este găsit niciun nume, lista arată adresa de e-mail sau numărul de telefon. Pentru a activa potrivirea numelor, introduceți o parolă specifică aplicației, generată pentru același cont Apple. Lăsați acest câmp necompletat pentru a-l dezactiva.\n\n[Creați o parolă specifică aplicației]({password_guide_url})",
+        "data": {
+          "contacts_password": "Parolă specifică aplicației"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple a respins accesul la Contacte. Verificați parola specifică aplicației.",
+      "contacts_unavailable": "Nu s-a putut citi Contacte iCloud. Încearcă din nou."
+    }
+  },
+  "common": {
+    "contacts": "Contacte",
+    "devices": "Dispozitive",
+    "reauth_notification_title": "Conectați-vă la Apple Find din nou",
+    "reauth_notification_message": "Apple vă solicită să vă conectați din nou. Urmați instrucțiunile de conectare din Home Assistant.\n\n[Remedieri](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Eu"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Redați un sunet"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Eu"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple nu oferă momentan opțiunea de a reda un sunet pe acest dispozitiv."
+    },
+    "sound_reauth": {
+      "message": "Apple vă solicită să vă conectați din nou. Accesați Reparații în Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple a respins cererea de a reda un sunet."
+    },
+    "sound_request_failed": {
+      "message": "Nu s-a putut confirma dacă Apple a primit solicitarea de a reda un sunet."
+    }
+  }
+}

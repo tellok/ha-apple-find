@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Prikaži imena iz iCloud kontakata",
+        "description": "Prikažite imena iz vaših iCloud kontakata na listi kontakata. Apple Find odgovara svakoj osobi prema adresi e-pošte ili broju telefona koji koriste za dijeljenje svoje lokacije. Ako nije pronađeno ime, lista prikazuje adresu e-pošte ili telefonski broj. Da biste uključili podudaranje imena, unesite posebnu lozinku za aplikaciju generiranu za isti Apple račun. Ostavite ovo polje praznim da ga isključite.\n\n[Kreirajte posebnu lozinku za aplikaciju]({password_guide_url})",
+        "data": {
+          "contacts_password": "Posebna lozinka za aplikaciju"
+        }
+      },
+      "apple_login": {
+        "title": "Prijavite se na svoj Apple račun",
+        "description": "Unesite adresu e-pošte ili telefonski broj za svoj Apple račun i lozinku za svoj račun.",
+        "data": {
+          "username": "Adresa e-pošte ili telefonski broj Apple naloga",
+          "password": "Lozinka za Apple račun"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple dvofaktorska autentifikacija",
+        "description": "Dodirnite Dozvoli na pouzdanom Apple uređaju, a zatim unesite šestocifreni verifikacioni kod koji je tamo prikazan. Odaberite Ponovo pošalji verifikacioni kod da zatražite novi kod.",
+        "data": {
+          "code": "Šestocifreni verifikacioni kod",
+          "resend": "Ponovo pošalji verifikacioni kod"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple je odbio pristup Kontaktima. Provjerite posebnu lozinku za aplikaciju.",
+      "contacts_unavailable": "Nije moguće pročitati iCloud kontakte. Pokušajte ponovo.",
+      "invalid_auth": "Apple nije prihvatio vaše podatke za prijavu.",
+      "authorization_failed": "Apple autorizacija nije uspjela. Provjerite detalje za prijavu i pokušajte ponovo.",
+      "enrollment_failed": "Nije moguće završiti registraciju Apple Finda. Pokušajte ponovo.",
+      "collector_unavailable": "Home Assistant Core nije mogao pokrenuti autorizaciju Apple računa.",
+      "account_mismatch": "Koristite Apple račun koji je već povezan s ovom instalacijom Apple Finda.",
+      "invalid_code": "Apple nije prihvatio verifikacioni kod.",
+      "code_format": "Unesite šestocifreni kod.",
+      "session_expired": "Sesija verifikacije je istekla. Prijavite se ponovo."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Autorizacija iCloud kontakata je sačuvana. Apple Find odgovara imenima u pozadini, tako da može proći malo vremena da se lista kontakata automatski ažurira."
+    },
+    "abort": {
+      "already_configured": "Apple Find je već konfigurisan.",
+      "session_expired": "Sesija verifikacije je istekla. Prijavite se ponovo.",
+      "reauth_successful": "Uspješno ste se prijavili.",
+      "reconfigure_successful": "Uspješno ste se prijavili."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Autorizacija iCloud kontakata je sačuvana. Apple Find odgovara imenima u pozadini, tako da može proći malo vremena da se lista kontakata automatski ažurira."
+    },
+    "step": {
+      "init": {
+        "title": "Prikaži imena iz iCloud kontakata",
+        "description": "Prikažite imena iz vaših iCloud kontakata na listi kontakata. Apple Find odgovara svakoj osobi prema adresi e-pošte ili broju telefona koji koriste za dijeljenje svoje lokacije. Ako nije pronađeno ime, lista prikazuje adresu e-pošte ili telefonski broj. Da biste uključili podudaranje imena, unesite posebnu lozinku za aplikaciju generiranu za isti Apple račun. Ostavite ovo polje praznim da ga isključite.\n\n[Kreirajte posebnu lozinku za aplikaciju]({password_guide_url})",
+        "data": {
+          "contacts_password": "Posebna lozinka za aplikaciju"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple je odbio pristup Kontaktima. Provjerite posebnu lozinku za aplikaciju.",
+      "contacts_unavailable": "Nije moguće pročitati iCloud kontakte. Pokušajte ponovo."
+    }
+  },
+  "common": {
+    "contacts": "Kontakti",
+    "devices": "Uređaji",
+    "reauth_notification_title": "Ponovo se prijavite na Apple Find",
+    "reauth_notification_message": "Apple traži da se ponovo prijavite. Slijedite upute za prijavu u Home Assistant-u.\n\n[Popravke](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Ja"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Pusti zvuk"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Ja"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple trenutno ne nudi opciju za reprodukciju zvuka na ovom uređaju."
+    },
+    "sound_reauth": {
+      "message": "Apple traži da se ponovo prijavite. Idite na Popravke u Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple je odbio zahtjev za reprodukciju zvuka."
+    },
+    "sound_request_failed": {
+      "message": "Nije moguće potvrditi da li je Apple primio zahtjev za reprodukciju zvuka."
+    }
+  }
+}

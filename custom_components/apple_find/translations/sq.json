@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Shfaq emrat nga iCloud Contacts",
+        "description": "Shfaqni emrat nga Kontaktet tuaja iCloud në listën e kontakteve. Apple Find përputhet me çdo person me adresën e emailit ose numrin e telefonit që përdorin për të ndarë vendndodhjen e tyre. Nëse nuk gjendet asnjë emër, lista tregon adresën e emailit ose numrin e telefonit. Për të aktivizuar përputhjen e emrit, futni një fjalëkalim specifik të aplikacionit të krijuar për të njëjtën llogari Apple. Lëreni këtë fushë bosh për ta fikur.\n\n[Krijo një fjalëkalim specifik për aplikacionin]({password_guide_url})",
+        "data": {
+          "contacts_password": "Fjalëkalim specifik për aplikacionin"
+        }
+      },
+      "apple_login": {
+        "title": "Hyni në llogarinë tuaj Apple",
+        "description": "Futni adresën e emailit ose numrin e telefonit për llogarinë tuaj Apple dhe fjalëkalimin e llogarisë suaj.",
+        "data": {
+          "username": "Adresa e emailit ose numri i telefonit të llogarisë Apple",
+          "password": "Fjalëkalimi i llogarisë Apple"
+        }
+      },
+      "apple_verification": {
+        "title": "Autentifikimi me dy faktorë të Apple",
+        "description": "Prekni Allow në një pajisje të besuar Apple, më pas futni kodin gjashtëshifror të verifikimit të treguar atje. Zgjidhni Ridërgo kodin e verifikimit për të kërkuar një kod të ri.",
+        "data": {
+          "code": "Kodi i verifikimit me gjashtë shifra",
+          "resend": "Ridërgo kodin e verifikimit"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple refuzoi aksesin te Kontaktet. Kontrolloni fjalëkalimin specifik të aplikacionit.",
+      "contacts_unavailable": "Nuk mund të lexohen Kontaktet iCloud. Provo sërish.",
+      "invalid_auth": "Apple nuk i pranoi detajet tuaja të hyrjes.",
+      "authorization_failed": "Autorizimi i Apple nuk mund të plotësohej. Kontrollo detajet e identifikimit dhe provo sërish.",
+      "enrollment_failed": "Nuk mund të përfundonte regjistrimin e Apple Find. Provo sërish.",
+      "collector_unavailable": "Home Assistant Core nuk mund të niste autorizimin e llogarisë Apple.",
+      "account_mismatch": "Përdorni llogarinë Apple që është tashmë e lidhur me këtë instalim Apple Find.",
+      "invalid_code": "Apple nuk e pranoi kodin e verifikimit.",
+      "code_format": "Futni një kod gjashtëshifror.",
+      "session_expired": "Seanca e verifikimit skadoi. Hyni përsëri."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Autorizimi i iCloud Contacts u ruajt. Apple Find përputhet me emrat në sfond, kështu që mund të duhet pak kohë që lista e kontakteve të përditësohet automatikisht."
+    },
+    "abort": {
+      "already_configured": "Apple Find është konfiguruar tashmë.",
+      "session_expired": "Seanca e verifikimit skadoi. Hyni përsëri.",
+      "reauth_successful": "Jeni identifikuar me sukses.",
+      "reconfigure_successful": "Jeni identifikuar me sukses."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Autorizimi i iCloud Contacts u ruajt. Apple Find përputhet me emrat në sfond, kështu që mund të duhet pak kohë që lista e kontakteve të përditësohet automatikisht."
+    },
+    "step": {
+      "init": {
+        "title": "Shfaq emrat nga iCloud Contacts",
+        "description": "Shfaqni emrat nga Kontaktet tuaja iCloud në listën e kontakteve. Apple Find përputhet me çdo person me adresën e emailit ose numrin e telefonit që përdorin për të ndarë vendndodhjen e tyre. Nëse nuk gjendet asnjë emër, lista tregon adresën e emailit ose numrin e telefonit. Për të aktivizuar përputhjen e emrit, futni një fjalëkalim specifik të aplikacionit të krijuar për të njëjtën llogari Apple. Lëreni këtë fushë bosh për ta fikur.\n\n[Krijo një fjalëkalim specifik për aplikacionin]({password_guide_url})",
+        "data": {
+          "contacts_password": "Fjalëkalim specifik për aplikacionin"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple refuzoi aksesin te Kontaktet. Kontrolloni fjalëkalimin specifik të aplikacionit.",
+      "contacts_unavailable": "Nuk mund të lexohen Kontaktet iCloud. Provo sërish."
+    }
+  },
+  "common": {
+    "contacts": "Kontaktet",
+    "devices": "Pajisjet",
+    "reauth_notification_title": "Hyni përsëri në Apple Find",
+    "reauth_notification_message": "Apple kërkon që ju të identifikoheni përsëri. Ndiqni kërkesat e identifikimit në Home Assistant.\n\n[Riparime](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Unë"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Luaj një tingull"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Unë"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple aktualisht nuk ofron opsionin për të luajtur një tingull në këtë pajisje."
+    },
+    "sound_reauth": {
+      "message": "Apple kërkon që ju të identifikoheni përsëri. Shkoni te Riparimet në Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple refuzoi kërkesën për të luajtur një tingull."
+    },
+    "sound_request_failed": {
+      "message": "Nuk mund të konfirmohej nëse Apple mori kërkesën për të luajtur një tingull."
+    }
+  }
+}

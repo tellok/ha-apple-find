@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Näytä nimet iCloud-yhteystiedoista",
+        "description": "Näytä iCloud-yhteystiedoissasi olevat nimet yhteystietoluettelossa. Apple Find etsii jokaista henkilöä sen sähköpostiosoitteen tai puhelinnumeron perusteella, jota he käyttävät sijaintinsa jakamiseen. Jos nimeä ei löydy, luettelossa näkyy sähköpostiosoite tai puhelinnumero. Ota nimien vastaavuus käyttöön kirjoittamalla samalle Apple-tilille luotu sovelluskohtainen salasana. Jätä tämä kenttä tyhjäksi poistaaksesi sen käytöstä.\n\n[Luo sovelluskohtainen salasana]({password_guide_url})",
+        "data": {
+          "contacts_password": "Sovelluskohtainen salasana"
+        }
+      },
+      "apple_login": {
+        "title": "Kirjaudu sisään Apple-tilillesi",
+        "description": "Anna Apple-tilisi sähköpostiosoite tai puhelinnumero ja tilisi salasana.",
+        "data": {
+          "username": "Apple-tilin sähköpostiosoite tai puhelinnumero",
+          "password": "Apple-tilin salasana"
+        }
+      },
+      "apple_verification": {
+        "title": "Applen kaksivaiheinen todennus",
+        "description": "Napauta Salli luotetussa Apple-laitteessa ja anna siinä näkyvä kuusinumeroinen vahvistuskoodi. Pyydä uusi koodi valitsemalla Lähetä vahvistuskoodi uudelleen.",
+        "data": {
+          "code": "Kuusinumeroinen vahvistuskoodi",
+          "resend": "Lähetä vahvistuskoodi uudelleen"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple esti pääsyn yhteystietoihin. Tarkista sovelluskohtainen salasana.",
+      "contacts_unavailable": "iCloud-yhteystietoja ei voitu lukea. Yritä uudelleen.",
+      "invalid_auth": "Apple ei hyväksynyt kirjautumistietojasi.",
+      "authorization_failed": "Applen valtuutusta ei voitu suorittaa loppuun. Tarkista kirjautumistietosi ja yritä uudelleen.",
+      "enrollment_failed": "Apple Findin rekisteröintiä ei voitu viimeistellä. Yritä uudelleen.",
+      "collector_unavailable": "Home Assistant Core ei voinut käynnistää Apple-tilin valtuutusta.",
+      "account_mismatch": "Käytä Apple-tiliä, joka on jo yhdistetty tähän Apple Find -asennukseen.",
+      "invalid_code": "Apple ei hyväksynyt vahvistuskoodia.",
+      "code_format": "Syötä kuusinumeroinen koodi.",
+      "session_expired": "Vahvistusistunto vanheni. Kirjaudu uudelleen sisään."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "iCloud-yhteystietojen valtuutus tallennettu. Apple Find etsii nimiä taustalla, joten voi kestää hetken ennen kuin yhteystietoluettelo päivittyy automaattisesti."
+    },
+    "abort": {
+      "already_configured": "Apple Find on jo määritetty.",
+      "session_expired": "Vahvistusistunto vanheni. Kirjaudu uudelleen sisään.",
+      "reauth_successful": "Olet kirjautunut sisään onnistuneesti.",
+      "reconfigure_successful": "Olet kirjautunut sisään onnistuneesti."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "iCloud-yhteystietojen valtuutus tallennettu. Apple Find etsii nimiä taustalla, joten voi kestää hetken ennen kuin yhteystietoluettelo päivittyy automaattisesti."
+    },
+    "step": {
+      "init": {
+        "title": "Näytä nimet iCloud-yhteystiedoista",
+        "description": "Näytä iCloud-yhteystiedoissasi olevat nimet yhteystietoluettelossa. Apple Find etsii jokaista henkilöä sen sähköpostiosoitteen tai puhelinnumeron perusteella, jota he käyttävät sijaintinsa jakamiseen. Jos nimeä ei löydy, luettelossa näkyy sähköpostiosoite tai puhelinnumero. Ota nimien vastaavuus käyttöön kirjoittamalla samalle Apple-tilille luotu sovelluskohtainen salasana. Jätä tämä kenttä tyhjäksi poistaaksesi sen käytöstä.\n\n[Luo sovelluskohtainen salasana]({password_guide_url})",
+        "data": {
+          "contacts_password": "Sovelluskohtainen salasana"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple esti pääsyn yhteystietoihin. Tarkista sovelluskohtainen salasana.",
+      "contacts_unavailable": "iCloud-yhteystietoja ei voitu lukea. Yritä uudelleen."
+    }
+  },
+  "common": {
+    "contacts": "Yhteystiedot",
+    "devices": "Laitteet",
+    "reauth_notification_title": "Kirjaudu uudelleen Apple Findiin",
+    "reauth_notification_message": "Apple vaatii sinua kirjautumaan uudelleen sisään. Noudata Home Assistantin kirjautumiskehotteita.\n\n[Korjaukset](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Minä"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Toista ääni"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Minä"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple ei tällä hetkellä tarjoa mahdollisuutta toistaa ääntä tällä laitteella."
+    },
+    "sound_reauth": {
+      "message": "Apple vaatii sinua kirjautumaan uudelleen sisään. Siirry Home Assistantin korjauksiin."
+    },
+    "sound_rejected": {
+      "message": "Apple hylkäsi pyynnön toistaa ääntä."
+    },
+    "sound_request_failed": {
+      "message": "Ei voitu vahvistaa, saiko Apple pyynnön toistaa ääntä."
+    }
+  }
+}

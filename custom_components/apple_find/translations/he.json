@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "הצג שמות מאנשי קשר של iCloud",
+        "description": "הצג שמות מאנשי הקשר שלך ב-iCloud ברשימת אנשי הקשר. Apple Find תואם לכל אדם לפי כתובת הדוא\"ל או מספר הטלפון שבו הם משתמשים כדי לשתף את מיקומו. אם לא נמצא שם, הרשימה מציגה את כתובת הדוא\"ל או מספר הטלפון. כדי להפעיל את התאמת השמות, הזן סיסמה ספציפית לאפליקציה שנוצרה עבור אותו חשבון Apple. השאר שדה זה ריק כדי לכבות אותו.\n\n[צור סיסמה ספציפית לאפליקציה]({password_guide_url})",
+        "data": {
+          "contacts_password": "סיסמה ספציפית לאפליקציה"
+        }
+      },
+      "apple_login": {
+        "title": "היכנס לחשבון Apple שלך",
+        "description": "הזן את כתובת הדוא\"ל או מספר הטלפון של חשבון Apple שלך ​​ואת סיסמת החשבון שלך.",
+        "data": {
+          "username": "כתובת אימייל או מספר טלפון בחשבון Apple",
+          "password": "סיסמת חשבון אפל"
+        }
+      },
+      "apple_verification": {
+        "title": "אימות דו-גורמי של אפל",
+        "description": "הקש על אפשר במכשיר אפל מהימן, ואז הזן את קוד האימות בן שש הספרות שמוצג שם. בחר שלח שוב קוד אימות כדי לבקש קוד חדש.",
+        "data": {
+          "code": "קוד אימות בן שש ספרות",
+          "resend": "שלח שוב קוד אימות"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "אפל דחתה גישה לאנשי קשר. בדוק את הסיסמה הספציפית לאפליקציה.",
+      "contacts_unavailable": "לא ניתן היה לקרוא את אנשי הקשר של iCloud. נסה שוב.",
+      "invalid_auth": "אפל לא קיבלה את פרטי הכניסה שלך.",
+      "authorization_failed": "לא ניתן היה להשלים את הרשאת Apple. בדוק את פרטי הכניסה שלך ונסה שוב.",
+      "enrollment_failed": "לא ניתן היה לסיים את רישום Apple Find. נסה שוב.",
+      "collector_unavailable": "Home Assistant Core לא הצליח להפעיל את הרשאת חשבון Apple.",
+      "account_mismatch": "השתמש בחשבון Apple שכבר מחובר להתקנה זו של Apple Find.",
+      "invalid_code": "אפל לא קיבלה את קוד האימות.",
+      "code_format": "הזן קוד בן שש ספרות.",
+      "session_expired": "פג תוקף הפעלת האימות. היכנס שוב."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "הרשאת אנשי הקשר של iCloud נשמרה. Apple Find תואם שמות ברקע, כך שיתכן ויחלוף זמן מה עד שרשימת אנשי הקשר תתעדכן אוטומטית."
+    },
+    "abort": {
+      "already_configured": "Apple Find כבר מוגדר.",
+      "session_expired": "פג תוקף הפעלת האימות. היכנס שוב.",
+      "reauth_successful": "נכנסת בהצלחה.",
+      "reconfigure_successful": "נכנסת בהצלחה."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "הרשאת אנשי הקשר של iCloud נשמרה. Apple Find תואם שמות ברקע, כך שיתכן ויחלוף זמן מה עד שרשימת אנשי הקשר תתעדכן אוטומטית."
+    },
+    "step": {
+      "init": {
+        "title": "הצג שמות מאנשי קשר של iCloud",
+        "description": "הצג שמות מאנשי הקשר שלך ב-iCloud ברשימת אנשי הקשר. Apple Find תואם לכל אדם לפי כתובת הדוא\"ל או מספר הטלפון שבו הם משתמשים כדי לשתף את מיקומו. אם לא נמצא שם, הרשימה מציגה את כתובת הדוא\"ל או מספר הטלפון. כדי להפעיל את התאמת השמות, הזן סיסמה ספציפית לאפליקציה שנוצרה עבור אותו חשבון Apple. השאר שדה זה ריק כדי לכבות אותו.\n\n[צור סיסמה ספציפית לאפליקציה]({password_guide_url})",
+        "data": {
+          "contacts_password": "סיסמה ספציפית לאפליקציה"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "אפל דחתה גישה לאנשי קשר. בדוק את הסיסמה הספציפית לאפליקציה.",
+      "contacts_unavailable": "לא ניתן היה לקרוא את אנשי הקשר של iCloud. נסה שוב."
+    }
+  },
+  "common": {
+    "contacts": "אנשי קשר",
+    "devices": "התקנים",
+    "reauth_notification_title": "היכנס שוב ל-Apple Find",
+    "reauth_notification_message": "אפל דורשת ממך להיכנס שוב. עקוב אחר הנחיות הכניסה ב-Home Assistant.\n\n[תיקונים](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "אני"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "השמעת צליל"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "אני"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "אפל לא מציעה כרגע אפשרות להשמיע צליל במכשיר זה."
+    },
+    "sound_reauth": {
+      "message": "אפל דורשת ממך להיכנס שוב. עבור אל תיקונים ב-Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "אפל דחתה את הבקשה להשמיע צליל."
+    },
+    "sound_request_failed": {
+      "message": "לא ניתן לאשר אם אפל קיבלה את הבקשה להשמיע צליל."
+    }
+  }
+}

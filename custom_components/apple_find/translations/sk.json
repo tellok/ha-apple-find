@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Zobraziť mená z kontaktov iCloud",
+        "description": "Zobraziť mená z vašich kontaktov iCloud v zozname kontaktov. Aplikácia Apple Find priraďuje každej osobe e-mailovú adresu alebo telefónne číslo, ktoré používa na zdieľanie svojej polohy. Ak sa nenájde žiadne meno, v zozname sa zobrazí e-mailová adresa alebo telefónne číslo. Ak chcete zapnúť porovnávanie mien, zadajte heslo pre konkrétnu aplikáciu vygenerované pre rovnaký účet Apple. Ak chcete túto funkciu vypnúť, nechajte toto pole prázdne.\n\n[Vytvorte heslo pre konkrétnu aplikáciu]({password_guide_url})",
+        "data": {
+          "contacts_password": "Heslo pre konkrétnu aplikáciu"
+        }
+      },
+      "apple_login": {
+        "title": "Prihláste sa do svojho účtu Apple",
+        "description": "Zadajte e-mailovú adresu alebo telefónne číslo svojho účtu Apple a heslo účtu.",
+        "data": {
+          "username": "E-mailová adresa alebo telefónne číslo účtu Apple",
+          "password": "Heslo účtu Apple"
+        }
+      },
+      "apple_verification": {
+        "title": "Dvojfaktorové overenie Apple",
+        "description": "Klepnite na Povoliť na dôveryhodnom zariadení Apple a zadajte šesťmiestny overovací kód, ktorý sa tam zobrazuje. Ak chcete požiadať o nový kód, vyberte možnosť Znova odoslať overovací kód.",
+        "data": {
+          "code": "Šesťmiestny overovací kód",
+          "resend": "Znova odoslať overovací kód"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple odmietol prístup ku kontaktom. Skontrolujte heslo pre konkrétnu aplikáciu.",
+      "contacts_unavailable": "Nepodarilo sa prečítať kontakty iCloud. Skúste to znova.",
+      "invalid_auth": "Apple neprijal vaše prihlasovacie údaje.",
+      "authorization_failed": "Nepodarilo sa dokončiť autorizáciu Apple. Skontrolujte svoje prihlasovacie údaje a skúste to znova.",
+      "enrollment_failed": "Nepodarilo sa dokončiť registráciu Apple Find. Skúste to znova.",
+      "collector_unavailable": "Home Assistant Core nemohol spustiť autorizáciu účtu Apple.",
+      "account_mismatch": "Použite účet Apple, ktorý je už pripojený k tejto inštalácii Apple Find.",
+      "invalid_code": "Apple neprijal overovací kód.",
+      "code_format": "Zadajte šesťciferný kód.",
+      "session_expired": "Platnosť overovacej relácie vypršala. Prihláste sa znova."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Autorizácia kontaktov iCloud bola uložená. Aplikácia Apple Find zhoduje mená na pozadí, takže môže chvíľu trvať, kým sa zoznam kontaktov automaticky aktualizuje."
+    },
+    "abort": {
+      "already_configured": "Apple Find je už nakonfigurovaný.",
+      "session_expired": "Platnosť overovacej relácie vypršala. Prihláste sa znova.",
+      "reauth_successful": "Úspešne ste sa prihlásili.",
+      "reconfigure_successful": "Úspešne ste sa prihlásili."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Autorizácia kontaktov iCloud bola uložená. Aplikácia Apple Find zhoduje mená na pozadí, takže môže chvíľu trvať, kým sa zoznam kontaktov automaticky aktualizuje."
+    },
+    "step": {
+      "init": {
+        "title": "Zobraziť mená z kontaktov iCloud",
+        "description": "Zobraziť mená z vašich kontaktov iCloud v zozname kontaktov. Aplikácia Apple Find priraďuje každej osobe e-mailovú adresu alebo telefónne číslo, ktoré používa na zdieľanie svojej polohy. Ak sa nenájde žiadne meno, v zozname sa zobrazí e-mailová adresa alebo telefónne číslo. Ak chcete zapnúť porovnávanie mien, zadajte heslo pre konkrétnu aplikáciu vygenerované pre rovnaký účet Apple. Ak chcete túto funkciu vypnúť, nechajte toto pole prázdne.\n\n[Vytvorte heslo pre konkrétnu aplikáciu]({password_guide_url})",
+        "data": {
+          "contacts_password": "Heslo pre konkrétnu aplikáciu"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple odmietol prístup ku kontaktom. Skontrolujte heslo pre konkrétnu aplikáciu.",
+      "contacts_unavailable": "Nepodarilo sa prečítať kontakty iCloud. Skúste to znova."
+    }
+  },
+  "common": {
+    "contacts": "Kontakty",
+    "devices": "Zariadenia",
+    "reauth_notification_title": "Znova sa prihláste do Apple Find",
+    "reauth_notification_message": "Apple vyžaduje, aby ste sa znova prihlásili. Postupujte podľa pokynov na prihlásenie v aplikácii Home Assistant.\n\n[Opravy](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Ja"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Prehrajte zvuk"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Ja"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple momentálne neponúka možnosť prehrávania zvuku na tomto zariadení."
+    },
+    "sound_reauth": {
+      "message": "Apple vyžaduje, aby ste sa znova prihlásili. Prejdite do časti Opravy v aplikácii Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple zamietol žiadosť o prehrávanie zvuku."
+    },
+    "sound_request_failed": {
+      "message": "Nepodarilo sa potvrdiť, či spoločnosť Apple prijala žiadosť o prehratie zvuku."
+    }
+  }
+}

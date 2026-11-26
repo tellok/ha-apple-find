@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Fill in names from iCloud Contacts",
+        "description": "Show the names saved in your iCloud Contacts in the Apple Find contact list in Home Assistant. Apple Find looks up each contact by their sharing email address or phone number. If no name is found, it keeps showing the email address or phone number. To enable this, enter an app-specific password from the same Apple Account. Leave the field blank to turn it off.\n\n[How to create an app-specific password]({password_guide_url})",
+        "data": {
+          "contacts_password": "iCloud Contacts app-specific password"
+        }
+      },
+      "apple_login": {
+        "title": "Sign in to your Apple Account",
+        "description": "Enter the email address or phone number for your Apple Account and your account password.",
+        "data": {
+          "username": "Apple Account email address or phone number",
+          "password": "Apple Account password"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple two-factor authentication",
+        "description": "Tap Allow on a trusted Apple device, then enter the six-digit verification code shown there. Select Resend verification code to request a new code.",
+        "data": {
+          "code": "Six-digit verification code",
+          "resend": "Resend verification code"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple rejected access to Contacts. Check the app-specific password.",
+      "contacts_unavailable": "Could not read iCloud Contacts. Try again.",
+      "invalid_auth": "Apple did not accept your sign-in details.",
+      "authorization_failed": "Could not complete Apple authorization. Check your sign-in details and try again.",
+      "enrollment_failed": "Could not register Apple Find with Find My. Try again.",
+      "collector_unavailable": "Home Assistant Core could not start Apple Find My authorization.",
+      "account_mismatch": "Use the Apple Account that is already connected to this Apple Find installation.",
+      "invalid_code": "Apple did not accept the verification code.",
+      "code_format": "Enter a six-digit code.",
+      "session_expired": "The verification session expired. Sign in again."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "iCloud Contacts authorization was saved. Apple Find matches names in the background, so it may take a little while for the contact list to update automatically."
+    },
+    "abort": {
+      "already_configured": "Apple Find is already configured.",
+      "session_expired": "The verification session expired. Sign in again.",
+      "reauth_successful": "You are signed in to Apple Find.",
+      "reconfigure_successful": "You are signed in to Apple Find."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "iCloud Contacts authorization was saved. Apple Find matches names in the background, so it may take a little while for the contact list to update automatically."
+    },
+    "step": {
+      "init": {
+        "title": "Fill in names from iCloud Contacts",
+        "description": "Show the names saved in your iCloud Contacts in the Apple Find contact list in Home Assistant. Apple Find looks up each contact by their sharing email address or phone number. If no name is found, it keeps showing the email address or phone number. To enable this, enter an app-specific password from the same Apple Account. Leave the field blank to turn it off.\n\n[How to create an app-specific password]({password_guide_url})",
+        "data": {
+          "contacts_password": "iCloud Contacts app-specific password"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple rejected access to Contacts. Check the app-specific password.",
+      "contacts_unavailable": "Could not read iCloud Contacts. Try again."
+    }
+  },
+  "common": {
+    "contacts": "Contacts",
+    "devices": "Devices",
+    "reauth_notification_title": "Apple Find needs you to sign in again",
+    "reauth_notification_message": "Apple requires you to sign in again to Find My. Open [Repairs](/config/repairs) and follow the sign-in prompts."
+  },
+  "device": {
+    "me": {
+      "name": "Me"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Play Sound"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Me"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple does not currently offer Play Sound for this device."
+    },
+    "sound_reauth": {
+      "message": "Apple requires reauthentication. Sign in again from Home Assistant Repairs."
+    },
+    "sound_rejected": {
+      "message": "Apple rejected the Play Sound request."
+    },
+    "sound_request_failed": {
+      "message": "Could not confirm whether Apple received the Play Sound request."
+    }
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Hiển thị tên từ Danh bạ iCloud",
+        "description": "Hiển thị tên từ Danh bạ iCloud của bạn trong danh sách liên hệ. Apple Find khớp từng người theo địa chỉ email hoặc số điện thoại họ sử dụng để chia sẻ vị trí của mình. Nếu không tìm thấy tên, danh sách sẽ hiển thị địa chỉ email hoặc số điện thoại. Để bật tính năng khớp tên, hãy nhập mật khẩu dành riêng cho ứng dụng được tạo cho cùng một Tài khoản Apple. Để trống trường này để tắt nó.\n\n[Tạo mật khẩu dành riêng cho ứng dụng]({password_guide_url})",
+        "data": {
+          "contacts_password": "Mật khẩu dành riêng cho ứng dụng"
+        }
+      },
+      "apple_login": {
+        "title": "Đăng nhập vào Tài khoản Apple của bạn",
+        "description": "Nhập địa chỉ email hoặc số điện thoại cho Tài khoản Apple và mật khẩu tài khoản của bạn.",
+        "data": {
+          "username": "Địa chỉ email hoặc số điện thoại của Tài khoản Apple",
+          "password": "Mật khẩu tài khoản Apple"
+        }
+      },
+      "apple_verification": {
+        "title": "Xác thực hai yếu tố của Apple",
+        "description": "Nhấn vào Cho phép trên thiết bị Apple đáng tin cậy, sau đó nhập mã xác minh gồm sáu chữ số được hiển thị ở đó. Chọn Gửi lại mã xác minh để yêu cầu mã mới.",
+        "data": {
+          "code": "Mã xác minh gồm sáu chữ số",
+          "resend": "Gửi lại mã xác minh"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple từ chối quyền truy cập vào Danh bạ. Kiểm tra mật khẩu dành riêng cho ứng dụng.",
+      "contacts_unavailable": "Không thể đọc Danh bạ iCloud. Hãy thử lại.",
+      "invalid_auth": "Apple không chấp nhận chi tiết đăng nhập của bạn.",
+      "authorization_failed": "Không thể hoàn tất ủy quyền của Apple. Hãy kiểm tra chi tiết đăng nhập của bạn và thử lại.",
+      "enrollment_failed": "Không thể hoàn tất đăng ký Apple Find. Hãy thử lại.",
+      "collector_unavailable": "Home Assistant Core không thể bắt đầu ủy quyền Tài khoản Apple.",
+      "account_mismatch": "Sử dụng Tài khoản Apple đã được kết nối với bản cài đặt Apple Find này.",
+      "invalid_code": "Apple không chấp nhận mã xác minh.",
+      "code_format": "Nhập mã gồm sáu chữ số.",
+      "session_expired": "Phiên xác minh đã hết hạn. Đăng nhập lại."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Ủy quyền Danh bạ iCloud đã được lưu. Apple Find khớp các tên ở chế độ nền nên có thể mất chút thời gian để danh sách liên hệ tự động cập nhật."
+    },
+    "abort": {
+      "already_configured": "Apple Find đã được định cấu hình.",
+      "session_expired": "Phiên xác minh đã hết hạn. Đăng nhập lại.",
+      "reauth_successful": "Bạn đã đăng nhập thành công.",
+      "reconfigure_successful": "Bạn đã đăng nhập thành công."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Ủy quyền Danh bạ iCloud đã được lưu. Apple Find khớp các tên ở chế độ nền nên có thể mất chút thời gian để danh sách liên hệ tự động cập nhật."
+    },
+    "step": {
+      "init": {
+        "title": "Hiển thị tên từ Danh bạ iCloud",
+        "description": "Hiển thị tên từ Danh bạ iCloud của bạn trong danh sách liên hệ. Apple Find khớp từng người theo địa chỉ email hoặc số điện thoại họ sử dụng để chia sẻ vị trí của mình. Nếu không tìm thấy tên, danh sách sẽ hiển thị địa chỉ email hoặc số điện thoại. Để bật tính năng khớp tên, hãy nhập mật khẩu dành riêng cho ứng dụng được tạo cho cùng một Tài khoản Apple. Để trống trường này để tắt nó.\n\n[Tạo mật khẩu dành riêng cho ứng dụng]({password_guide_url})",
+        "data": {
+          "contacts_password": "Mật khẩu dành riêng cho ứng dụng"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple từ chối quyền truy cập vào Danh bạ. Kiểm tra mật khẩu dành riêng cho ứng dụng.",
+      "contacts_unavailable": "Không thể đọc Danh bạ iCloud. Hãy thử lại."
+    }
+  },
+  "common": {
+    "contacts": "Danh bạ",
+    "devices": "Thiết bị",
+    "reauth_notification_title": "Đăng nhập lại vào Apple Find",
+    "reauth_notification_message": "Apple yêu cầu bạn đăng nhập lại. Làm theo lời nhắc đăng nhập trong Home Assistant.\n\n[Sửa chữa](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Tôi"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Phát một âm thanh"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Tôi"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple hiện không cung cấp tùy chọn phát âm thanh trên thiết bị này."
+    },
+    "sound_reauth": {
+      "message": "Apple yêu cầu bạn đăng nhập lại. Đi tới Sửa chữa trong Trợ lý tại nhà."
+    },
+    "sound_rejected": {
+      "message": "Apple từ chối yêu cầu phát âm thanh."
+    },
+    "sound_request_failed": {
+      "message": "Không thể xác nhận liệu Apple có nhận được yêu cầu phát âm thanh hay không."
+    }
+  }
+}
