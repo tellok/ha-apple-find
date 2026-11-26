@@ -65,6 +65,8 @@ docker build -f research/Dockerfile -t findmy-people-research:local .
 docker run --rm -v "$PWD:/workspace:ro" findmy-people-research:local python -m pytest -q -p no:cacheprovider
 ```
 
+See the [Changesets and release workflow](.changeset/README.md) for versioned changes.
+
 ## Home Assistant setup
 
 On Home Assistant 2026.11 or later, open **Settings → Marketplace → Add from link** and enter `https://github.com/tellok/ha-apple-find`. Install **Apple Find** and restart Home Assistant when prompted.

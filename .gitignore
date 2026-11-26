@@ -4,3 +4,5 @@ bin/
 .DS_Store
 ._*
 .env
+node_modules/
+.version-pr-notes.md

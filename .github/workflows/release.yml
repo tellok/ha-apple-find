@@ -1,0 +1,125 @@
+name: Release integration
+
+on:
+  pull_request_target:
+    types: [closed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Merged version PR number
+        required: true
+        type: string
+      source:
+        description: Full original merge commit SHA
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  qualify:
+    if: >-
+      github.ref == 'refs/heads/main' && !github.event.repository.fork &&
+      (github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.merged &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'release/version-update'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      source: ${{ steps.pr.outputs.source }}
+      version: ${{ steps.source.outputs.version }}
+      tag: ${{ steps.source.outputs.tag }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.workflow_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check the merged version PR
+        id: pr
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          script: |
+            await require('./.github/scripts/pr.cjs').releasePR(github, context, core);
+      - name: Verify exact release source and Changeset consumption
+        id: source
+        env:
+          SOURCE: ${{ steps.pr.outputs.source }}
+          PR_HEAD: ${{ steps.pr.outputs.head }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+        run: |
+          git fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main
+          git fetch --no-tags origin "refs/pull/$PR_NUMBER/head"
+          test "$(git rev-parse FETCH_HEAD)" = "$PR_HEAD"
+          git merge-base --is-ancestor "$SOURCE" origin/main
+          base=$(git rev-parse "$SOURCE^1")
+          python3 .github/scripts/version.py verify "$base" "$PR_HEAD" "$SOURCE"
+          printf 'Release source %s from version PR #%s. Workflow revision %s.\n' \
+            "$SOURCE" "$PR_NUMBER" "$GITHUB_WORKFLOW_SHA" >> "$GITHUB_STEP_SUMMARY"
+
+  quality:
+    needs: qualify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ needs.qualify.outputs.source }}
+          persist-credentials: false
+      - uses: ./.github/actions/integration-check
+
+  publish:
+    needs: [qualify, quality]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    concurrency:
+      group: publish-apple-find
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ needs.qualify.outputs.source }}
+          persist-credentials: false
+      - name: Build and verify the HACS ZIP
+        env:
+          SOURCE: ${{ needs.qualify.outputs.source }}
+        run: |
+          python3 .github/scripts/version.py pack "$SOURCE" "$RUNNER_TEMP/hacs"
+          sha256sum "$RUNNER_TEMP/hacs/apple_find.zip" >> "$GITHUB_STEP_SUMMARY"
+      - name: Check stable release ordering
+        id: latest
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        env:
+          VERSION: ${{ needs.qualify.outputs.version }}
+        with:
+          script: |
+            const parse = tag => {
+              if (!/^v(?:0|[1-9]\d*)(?:\.(?:0|[1-9]\d*)){2}$/.test(tag)) {
+                throw new Error(`Unexpected stable release tag ${tag}`);
+              }
+              return tag.slice(1).split('.').map(BigInt);
+            };
+            const version = parse(`v${process.env.VERSION}`);
+            const releases = await github.paginate(github.rest.repos.listReleases, { ...context.repo, per_page: 100 });
+            const newer = tag => {
+              const other = parse(tag);
+              const difference = other.findIndex((part, index) => part !== version[index]);
+              return difference !== -1 && other[difference] > version[difference];
+            };
+            core.setOutput('promote', !releases.some(release =>
+              !release.draft && !release.prerelease && newer(release.tag_name)));
+      - uses: tellok/actions/github-actions/github-release@9df224593aad286a012adc6760fa7de7cb175e22
+        with:
+          source: ${{ needs.qualify.outputs.source }}
+          tag: ${{ needs.qualify.outputs.tag }}
+          name: Apple Find ${{ needs.qualify.outputs.version }}
+          notes-file: ${{ runner.temp }}/hacs/notes.md
+          assets-file: ${{ runner.temp }}/hacs/assets.json
+          latest: ${{ steps.latest.outputs.promote }}

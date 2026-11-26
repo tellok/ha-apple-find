@@ -1,0 +1,31 @@
+name: Recheck PRs after target push
+
+on:
+  push:
+    branches: ['**']
+
+permissions:
+  contents: read
+  pull-requests: read
+  checks: read
+  actions: write
+
+jobs:
+  recheck:
+    if: "!github.event.deleted && !github.event.repository.fork"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          script: |
+            const fs = require('node:fs');
+            if (!fs.existsSync('.github/workflows/recheck.yml')) {
+              core.notice('Target-branch refresh becomes active after this workflow lands on the default branch.');
+              return;
+            }
+            await require('./.github/scripts/pr.cjs').dispatchRefreshes(github, context, core);

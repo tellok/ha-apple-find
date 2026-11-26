@@ -1,0 +1,45 @@
+name: Integration checks
+description: Run HACS, hassfest and pytest against the checked-out integration.
+runs:
+  using: composite
+  steps:
+    - id: source
+      shell: bash
+      run: printf 'sha=%s\n' "$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+    - uses: hacs/action@1ebf01c408f29afcb6406bd431bc98fd8cbb15aa
+      with:
+        category: integration
+        repository: ${{ github.repository }}
+        comment: 'false'
+      env:
+        # HACS reads GitHub's API, so bind it to the same SHA hassfest sees on disk.
+        REPOSITORY_REF: ${{ steps.source.outputs.sha }}
+    - uses: home-assistant/actions/hassfest@9e9565e68f5a70d874202871f4c4064d23814235
+      if: "!cancelled()"
+    - name: Run the Python test suite
+      if: "!cancelled()"
+      shell: bash
+      run: |
+        mkdir -p "$RUNNER_TEMP/apple-find-tests"
+        docker build -f research/Dockerfile -t apple-find-tests .
+        docker run --rm \
+          -v "$PWD:/workspace:ro" \
+          -v "$RUNNER_TEMP/apple-find-tests:/reports" \
+          apple-find-tests python -m pytest -q -p no:cacheprovider --junitxml=/reports/pytest.xml
+    - name: Summarize Python test results
+      if: "!cancelled()"
+      shell: bash
+      run: |
+        python3 - "$RUNNER_TEMP/apple-find-tests/pytest.xml" <<'PY' >> "$GITHUB_STEP_SUMMARY"
+        import sys
+        import xml.etree.ElementTree as ET
+
+        suites = ET.parse(sys.argv[1]).getroot().findall("testsuite")
+        counts = {
+            key: sum(int(suite.get(key, 0)) for suite in suites)
+            for key in ("tests", "failures", "errors", "skipped")
+        }
+        print("Python tests — " + ", ".join(f"{key}: {count}" for key, count in counts.items()))
+        if counts["tests"] <= counts["skipped"] or counts["failures"] or counts["errors"]:
+            sys.exit("Python test suite did not pass")
+        PY
