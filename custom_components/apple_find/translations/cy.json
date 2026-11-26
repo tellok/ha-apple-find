@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Dangos enwau o iCloud Contacts",
+        "description": "Dangoswch enwau o'ch Cysylltiadau iCloud yn y rhestr gyswllt. Mae Apple Find yn cyfateb i bob person yn ôl y cyfeiriad e-bost neu'r rhif ffôn y maent yn ei ddefnyddio i rannu eu lleoliad. Os na cheir enw, mae'r rhestr yn dangos y cyfeiriad e-bost neu'r rhif ffôn. I droi paru enwau ymlaen, rhowch gyfrinair app-benodol a gynhyrchir ar gyfer yr un Cyfrif Apple. Gadewch y maes hwn yn wag i'w ddiffodd.\n\n[Creu cyfrinair app-benodol]({password_guide_url})",
+        "data": {
+          "contacts_password": "Cyfrinair ap-benodol"
+        }
+      },
+      "apple_login": {
+        "title": "Mewngofnodwch i'ch Cyfrif Apple",
+        "description": "Rhowch gyfeiriad e-bost neu rif ffôn eich Cyfrif Apple a chyfrinair eich cyfrif.",
+        "data": {
+          "username": "Cyfeiriad e-bost neu rif ffôn Cyfrif Apple",
+          "password": "Cyfrinair Cyfrif Apple"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple dau-ffactor dilysu",
+        "description": "Tap Caniatáu ar ddyfais Apple y gellir ymddiried ynddi, yna nodwch y cod dilysu chwe digid a ddangosir yno. Dewiswch Ail-anfon cod dilysu i ofyn am god newydd.",
+        "data": {
+          "code": "Cod dilysu chwe digid",
+          "resend": "Ail-anfon cod dilysu"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Gwrthododd Apple fynediad i Contacts. Gwiriwch y cyfrinair app-benodol.",
+      "contacts_unavailable": "Methu darllen iCloud Contacts. Ceisiwch eto.",
+      "invalid_auth": "Ni dderbyniodd Apple eich manylion mewngofnodi.",
+      "authorization_failed": "Methu â chwblhau awdurdodiad Apple. Gwiriwch eich manylion mewngofnodi a rhowch gynnig arall arni.",
+      "enrollment_failed": "Methu gorffen cofrestru Apple Find. Ceisiwch eto.",
+      "collector_unavailable": "Ni allai Home Assistant Core ddechrau awdurdodiad Cyfrif Apple.",
+      "account_mismatch": "Defnyddiwch y Cyfrif Apple sydd eisoes wedi'i gysylltu â'r gosodiad Apple Find hwn.",
+      "invalid_code": "Ni dderbyniodd Apple y cod dilysu.",
+      "code_format": "Rhowch god chwe digid.",
+      "session_expired": "Daeth y sesiwn ddilysu i ben. Mewngofnodwch eto."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Cadwyd awdurdodiad Cysylltiadau iCloud. Mae Apple Find yn cyfateb i enwau yn y cefndir, felly gall gymryd ychydig o amser i'r rhestr gyswllt ddiweddaru'n awtomatig."
+    },
+    "abort": {
+      "already_configured": "Mae Apple Find eisoes wedi'i ffurfweddu.",
+      "session_expired": "Daeth y sesiwn ddilysu i ben. Mewngofnodwch eto.",
+      "reauth_successful": "Rydych wedi mewngofnodi'n llwyddiannus.",
+      "reconfigure_successful": "Rydych wedi mewngofnodi'n llwyddiannus."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Cadwyd awdurdodiad Cysylltiadau iCloud. Mae Apple Find yn cyfateb i enwau yn y cefndir, felly gall gymryd ychydig o amser i'r rhestr gyswllt ddiweddaru'n awtomatig."
+    },
+    "step": {
+      "init": {
+        "title": "Dangos enwau o iCloud Contacts",
+        "description": "Dangoswch enwau o'ch Cysylltiadau iCloud yn y rhestr gyswllt. Mae Apple Find yn cyfateb i bob person yn ôl y cyfeiriad e-bost neu'r rhif ffôn y maent yn ei ddefnyddio i rannu eu lleoliad. Os na cheir enw, mae'r rhestr yn dangos y cyfeiriad e-bost neu'r rhif ffôn. I droi paru enwau ymlaen, rhowch gyfrinair app-benodol a gynhyrchir ar gyfer yr un Cyfrif Apple. Gadewch y maes hwn yn wag i'w ddiffodd.\n\n[Creu cyfrinair app-benodol]({password_guide_url})",
+        "data": {
+          "contacts_password": "Cyfrinair ap-benodol"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Gwrthododd Apple fynediad i Contacts. Gwiriwch y cyfrinair app-benodol.",
+      "contacts_unavailable": "Methu darllen iCloud Contacts. Ceisiwch eto."
+    }
+  },
+  "common": {
+    "contacts": "Cysylltiadau",
+    "devices": "Dyfeisiau",
+    "reauth_notification_title": "Mewngofnodwch i Apple Find eto",
+    "reauth_notification_message": "Mae Apple yn gofyn i chi fewngofnodi eto. Dilynwch yr awgrymiadau mewngofnodi yn Home Assistant.\n\n[Repairs](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Fi"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Chwarae sain"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Fi"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Ar hyn o bryd nid yw Apple yn cynnig yr opsiwn i chwarae sain ar y ddyfais hon."
+    },
+    "sound_reauth": {
+      "message": "Mae Apple yn gofyn i chi fewngofnodi eto. Ewch i Cynorthwyydd Atgyweiriadau yn y Cartref."
+    },
+    "sound_rejected": {
+      "message": "Gwrthododd Apple y cais i chwarae sain."
+    },
+    "sound_request_failed": {
+      "message": "Methu â chadarnhau a gafodd Apple y cais i chwarae sain."
+    }
+  }
+}

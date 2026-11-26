@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Vis navne fra iCloud-kontakter",
+        "description": "Vis navne fra dine iCloud-kontakter på kontaktlisten. Apple Find matcher hver person med den e-mailadresse eller telefonnummer, de bruger til at dele deres placering. Hvis der ikke findes noget navn, viser listen e-mailadressen eller telefonnummeret. For at aktivere navnematchning skal du indtaste en app-specifik adgangskode, der er genereret til den samme Apple-konto. Lad dette felt stå tomt for at slå det fra.\n\n[Opret en app-specifik adgangskode]({password_guide_url})",
+        "data": {
+          "contacts_password": "App-specifik adgangskode"
+        }
+      },
+      "apple_login": {
+        "title": "Log ind på din Apple-konto",
+        "description": "Indtast e-mailadressen eller telefonnummeret til din Apple-konto og din kontoadgangskode.",
+        "data": {
+          "username": "Apple-konto-e-mailadresse eller telefonnummer",
+          "password": "Apple-konto adgangskode"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple to-faktor-godkendelse",
+        "description": "Tryk på Tillad på en betroet Apple-enhed, og indtast derefter den sekscifrede bekræftelseskode, der vises der. Vælg Send bekræftelseskode igen for at anmode om en ny kode.",
+        "data": {
+          "code": "Sekscifret bekræftelseskode",
+          "resend": "Send bekræftelseskoden igen"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple afviste adgang til kontakter. Tjek den app-specifikke adgangskode.",
+      "contacts_unavailable": "Kunne ikke læse iCloud-kontakter. Prøv igen.",
+      "invalid_auth": "Apple accepterede ikke dine loginoplysninger.",
+      "authorization_failed": "Kunne ikke fuldføre Apple-autorisation. Tjek dine loginoplysninger, og prøv igen.",
+      "enrollment_failed": "Kunne ikke afslutte registreringen af ​​Apple Find. Prøv igen.",
+      "collector_unavailable": "Home Assistant Core kunne ikke starte Apple-kontogodkendelse.",
+      "account_mismatch": "Brug den Apple-konto, der allerede er forbundet til denne Apple Find-installation.",
+      "invalid_code": "Apple accepterede ikke bekræftelseskoden.",
+      "code_format": "Indtast en sekscifret kode.",
+      "session_expired": "Bekræftelsessessionen udløb. Log ind igen."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Godkendelsen af ​​iCloud-kontakter blev gemt. Apple Find matcher navne i baggrunden, så det kan tage lidt tid, før kontaktlisten opdateres automatisk."
+    },
+    "abort": {
+      "already_configured": "Apple Find er allerede konfigureret.",
+      "session_expired": "Bekræftelsessessionen udløb. Log ind igen.",
+      "reauth_successful": "Du har logget ind.",
+      "reconfigure_successful": "Du har logget ind."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Godkendelsen af ​​iCloud-kontakter blev gemt. Apple Find matcher navne i baggrunden, så det kan tage lidt tid, før kontaktlisten opdateres automatisk."
+    },
+    "step": {
+      "init": {
+        "title": "Vis navne fra iCloud-kontakter",
+        "description": "Vis navne fra dine iCloud-kontakter på kontaktlisten. Apple Find matcher hver person med den e-mailadresse eller telefonnummer, de bruger til at dele deres placering. Hvis der ikke findes noget navn, viser listen e-mailadressen eller telefonnummeret. For at aktivere navnematchning skal du indtaste en app-specifik adgangskode, der er genereret til den samme Apple-konto. Lad dette felt stå tomt for at slå det fra.\n\n[Opret en app-specifik adgangskode]({password_guide_url})",
+        "data": {
+          "contacts_password": "App-specifik adgangskode"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple afviste adgang til kontakter. Tjek den app-specifikke adgangskode.",
+      "contacts_unavailable": "Kunne ikke læse iCloud-kontakter. Prøv igen."
+    }
+  },
+  "common": {
+    "contacts": "Kontaktpersoner",
+    "devices": "Enheder",
+    "reauth_notification_title": "Log ind på Apple Find igen",
+    "reauth_notification_message": "Apple kræver, at du logger ind igen. Følg login-prompterne i Home Assistant.\n\n[Reparationer](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Mig"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Afspil en lyd"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Mig"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple tilbyder i øjeblikket ikke muligheden for at afspille en lyd på denne enhed."
+    },
+    "sound_reauth": {
+      "message": "Apple kræver, at du logger ind igen. Gå til Reparationer i Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple afviste anmodningen om at afspille en lyd."
+    },
+    "sound_request_failed": {
+      "message": "Kunne ikke bekræfte, om Apple modtog anmodningen om at afspille en lyd."
+    }
+  }
+}

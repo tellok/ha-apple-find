@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Namen aus iCloud-Kontakten anzeigen",
+        "description": "Zeigen Sie in der Kontaktliste die Namen aus Ihren iCloud-Kontakten an. Apple Find ordnet jede Person anhand der E-Mail-Adresse oder Telefonnummer zu, mit der sie ihren Standort teilt. Wenn kein Name gefunden wird, bleibt die E-Mail-Adresse oder Telefonnummer sichtbar. Geben Sie zum Aktivieren ein anwendungsspezifisches Passwort für denselben Apple Account ein. Lassen Sie das Feld leer, um die Funktion zu deaktivieren.\n\n[Anwendungsspezifisches Passwort erstellen]({password_guide_url})",
+        "data": {
+          "contacts_password": "Anwendungsspezifisches Passwort"
+        }
+      },
+      "apple_login": {
+        "title": "Melden Sie sich bei Ihrem Apple-Konto an",
+        "description": "Geben Sie die E-Mail-Adresse oder Telefonnummer für Ihr Apple-Konto und Ihr Kontopasswort ein.",
+        "data": {
+          "username": "E-Mail-Adresse oder Telefonnummer des Apple-Kontos",
+          "password": "Passwort für das Apple-Konto"
+        }
+      },
+      "apple_verification": {
+        "title": "Zwei-Faktor-Authentifizierung von Apple",
+        "description": "Tippen Sie auf einem vertrauenswürdigen Apple-Gerät auf „Zulassen“ und geben Sie dann den dort angezeigten sechsstelligen Bestätigungscode ein. Wählen Sie Bestätigungscode erneut senden, um einen neuen Code anzufordern.",
+        "data": {
+          "code": "Sechsstelliger Bestätigungscode",
+          "resend": "Bestätigungscode erneut senden"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple hat den Zugriff auf Kontakte abgelehnt. Überprüfen Sie das App-spezifische Passwort.",
+      "contacts_unavailable": "iCloud-Kontakte konnten nicht gelesen werden. Versuchen Sie es erneut.",
+      "invalid_auth": "Apple hat Ihre Anmeldedaten nicht akzeptiert.",
+      "authorization_failed": "Die Apple-Autorisierung konnte nicht abgeschlossen werden. Überprüfen Sie Ihre Anmeldedaten und versuchen Sie es erneut.",
+      "enrollment_failed": "Die Registrierung von Apple Find konnte nicht abgeschlossen werden. Versuchen Sie es erneut.",
+      "collector_unavailable": "Home Assistant Core konnte die Autorisierung des Apple-Kontos nicht starten.",
+      "account_mismatch": "Verwenden Sie das Apple-Konto, das bereits mit dieser Apple Find-Installation verbunden ist.",
+      "invalid_code": "Apple hat den Bestätigungscode nicht akzeptiert.",
+      "code_format": "Geben Sie einen sechsstelligen Code ein.",
+      "session_expired": "Die Verifizierungssitzung ist abgelaufen. Melden Sie sich erneut an."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Die Autorisierung für iCloud-Kontakte wurde gespeichert. Apple Find gleicht Namen im Hintergrund ab, daher kann es eine Weile dauern, bis die Kontaktliste automatisch aktualisiert wird."
+    },
+    "abort": {
+      "already_configured": "Apple Find ist bereits konfiguriert.",
+      "session_expired": "Die Verifizierungssitzung ist abgelaufen. Melden Sie sich erneut an.",
+      "reauth_successful": "Sie sind bei Apple Find angemeldet.",
+      "reconfigure_successful": "Sie sind bei Apple Find angemeldet."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Die Autorisierung für iCloud-Kontakte wurde gespeichert. Apple Find gleicht Namen im Hintergrund ab, daher kann es eine Weile dauern, bis die Kontaktliste automatisch aktualisiert wird."
+    },
+    "step": {
+      "init": {
+        "title": "Namen aus iCloud-Kontakten anzeigen",
+        "description": "Zeigen Sie in der Kontaktliste die Namen aus Ihren iCloud-Kontakten an. Apple Find ordnet jede Person anhand der E-Mail-Adresse oder Telefonnummer zu, mit der sie ihren Standort teilt. Wenn kein Name gefunden wird, bleibt die E-Mail-Adresse oder Telefonnummer sichtbar. Geben Sie zum Aktivieren ein anwendungsspezifisches Passwort für denselben Apple Account ein. Lassen Sie das Feld leer, um die Funktion zu deaktivieren.\n\n[Anwendungsspezifisches Passwort erstellen]({password_guide_url})",
+        "data": {
+          "contacts_password": "Anwendungsspezifisches Passwort"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple hat den Zugriff auf Kontakte abgelehnt. Überprüfen Sie das App-spezifische Passwort.",
+      "contacts_unavailable": "iCloud-Kontakte konnten nicht gelesen werden. Versuchen Sie es erneut."
+    }
+  },
+  "common": {
+    "contacts": "Kontakte",
+    "devices": "Geräte",
+    "reauth_notification_title": "Erneut bei Apple Find anmelden",
+    "reauth_notification_message": "Apple verlangt von Ihnen eine erneute Anmeldung. Befolgen Sie die Anmeldeanweisungen in Home Assistant.\n\n[Reparaturen](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Ich"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Ton abspielen"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Ich"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple bietet derzeit nicht die Möglichkeit, auf diesem Gerät einen Ton abzuspielen."
+    },
+    "sound_reauth": {
+      "message": "Apple verlangt von Ihnen eine erneute Anmeldung. Gehen Sie in Home Assistant zu „Reparaturen“."
+    },
+    "sound_rejected": {
+      "message": "Apple lehnte die Aufforderung ab, einen Ton abzuspielen."
+    },
+    "sound_request_failed": {
+      "message": "Es konnte nicht bestätigt werden, ob Apple die Anfrage zum Abspielen eines Sounds erhalten hat."
+    }
+  }
+}

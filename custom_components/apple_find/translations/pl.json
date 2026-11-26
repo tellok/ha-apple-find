@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Pokaż nazwy z Kontaktów iCloud",
+        "description": "Pokaż nazwiska z kontaktów iCloud na liście kontaktów. Apple Find dopasowuje każdą osobę na podstawie adresu e-mail lub numeru telefonu, którego używają do udostępniania swojej lokalizacji. Jeśli nie zostanie znalezione żadne nazwisko, na liście pojawi się adres e-mail lub numer telefonu. Aby włączyć dopasowywanie nazw, wprowadź hasło aplikacji wygenerowane dla tego samego konta Apple. Pozostaw to pole puste, aby je wyłączyć.\n\n[Utwórz hasło specyficzne dla aplikacji]({password_guide_url})",
+        "data": {
+          "contacts_password": "Hasło specyficzne dla aplikacji"
+        }
+      },
+      "apple_login": {
+        "title": "Zaloguj się na swoje konto Apple",
+        "description": "Wprowadź adres e-mail lub numer telefonu swojego konta Apple i hasło do konta.",
+        "data": {
+          "username": "Adres e-mail lub numer telefonu konta Apple",
+          "password": "Hasło do konta Apple"
+        }
+      },
+      "apple_verification": {
+        "title": "Uwierzytelnianie dwuskładnikowe Apple",
+        "description": "Stuknij opcję Zezwalaj na zaufanym urządzeniu Apple, a następnie wprowadź pokazany tam sześciocyfrowy kod weryfikacyjny. Wybierz opcję Wyślij ponownie kod weryfikacyjny, aby poprosić o nowy kod.",
+        "data": {
+          "code": "Sześciocyfrowy kod weryfikacyjny",
+          "resend": "Wyślij ponownie kod weryfikacyjny"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple odrzuciło dostęp do Kontaktów. Sprawdź hasło aplikacji.",
+      "contacts_unavailable": "Nie można odczytać kontaktów iCloud. Spróbuj ponownie.",
+      "invalid_auth": "Firma Apple nie zaakceptowała Twoich danych logowania.",
+      "authorization_failed": "Nie można dokończyć autoryzacji Apple. Sprawdź swoje dane logowania i spróbuj ponownie.",
+      "enrollment_failed": "Nie można dokończyć rejestracji Apple Find. Spróbuj ponownie.",
+      "collector_unavailable": "Home Assistant Core nie mógł rozpocząć autoryzacji konta Apple.",
+      "account_mismatch": "Użyj konta Apple, które jest już połączone z tą instalacją Apple Find.",
+      "invalid_code": "Apple nie zaakceptowało kodu weryfikacyjnego.",
+      "code_format": "Wprowadź sześciocyfrowy kod.",
+      "session_expired": "Sesja weryfikacyjna wygasła. Zaloguj się ponownie."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Autoryzacja Kontaktów iCloud została zapisana. Funkcja Apple Find dopasowuje nazwiska w tle, więc automatyczna aktualizacja listy kontaktów może chwilę potrwać."
+    },
+    "abort": {
+      "already_configured": "Usługa Apple Find jest już skonfigurowana.",
+      "session_expired": "Sesja weryfikacyjna wygasła. Zaloguj się ponownie.",
+      "reauth_successful": "Zalogowałeś się pomyślnie.",
+      "reconfigure_successful": "Zalogowałeś się pomyślnie."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Autoryzacja Kontaktów iCloud została zapisana. Funkcja Apple Find dopasowuje nazwiska w tle, więc automatyczna aktualizacja listy kontaktów może chwilę potrwać."
+    },
+    "step": {
+      "init": {
+        "title": "Pokaż nazwy z Kontaktów iCloud",
+        "description": "Pokaż nazwiska z kontaktów iCloud na liście kontaktów. Apple Find dopasowuje każdą osobę na podstawie adresu e-mail lub numeru telefonu, którego używają do udostępniania swojej lokalizacji. Jeśli nie zostanie znalezione żadne nazwisko, na liście pojawi się adres e-mail lub numer telefonu. Aby włączyć dopasowywanie nazw, wprowadź hasło aplikacji wygenerowane dla tego samego konta Apple. Pozostaw to pole puste, aby je wyłączyć.\n\n[Utwórz hasło specyficzne dla aplikacji]({password_guide_url})",
+        "data": {
+          "contacts_password": "Hasło specyficzne dla aplikacji"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple odrzuciło dostęp do Kontaktów. Sprawdź hasło aplikacji.",
+      "contacts_unavailable": "Nie można odczytać kontaktów iCloud. Spróbuj ponownie."
+    }
+  },
+  "common": {
+    "contacts": "Kontakty",
+    "devices": "Urządzenia",
+    "reauth_notification_title": "Zaloguj się ponownie do Apple Find",
+    "reauth_notification_message": "Apple wymaga ponownego zalogowania. Postępuj zgodnie z instrukcjami logowania wyświetlanymi w Home Assistant.\n\n[Problemy](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Ja"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Odtwórz dźwięk"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Ja"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Firma Apple nie oferuje obecnie opcji odtwarzania dźwięku na tym urządzeniu."
+    },
+    "sound_reauth": {
+      "message": "Apple wymaga ponownego zalogowania. Przejdź do Napraw w Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple odrzucił żądanie odtworzenia dźwięku."
+    },
+    "sound_request_failed": {
+      "message": "Nie można potwierdzić, czy Apple otrzymało żądanie odtworzenia dźwięku."
+    }
+  }
+}

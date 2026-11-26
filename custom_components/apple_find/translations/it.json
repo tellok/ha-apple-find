@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Mostra i nomi dai contatti di iCloud",
+        "description": "Mostra i nomi dei tuoi contatti iCloud nell'elenco dei contatti. Apple Find abbina ogni persona in base all'indirizzo e-mail o al numero di telefono che utilizza per condividere la propria posizione. Se non viene trovato alcun nome, l'elenco mostra l'indirizzo e-mail o il numero di telefono. Per attivare la corrispondenza dei nomi, inserisci una password specifica per l'app generata per lo stesso account Apple. Lascia vuoto questo campo per disattivarlo.\n\n[Crea una password specifica per l'app]({password_guide_url})",
+        "data": {
+          "contacts_password": "Password specifica per l'app"
+        }
+      },
+      "apple_login": {
+        "title": "Accedi al tuo account Apple",
+        "description": "Inserisci l'indirizzo email o il numero di telefono del tuo account Apple e la password del tuo account.",
+        "data": {
+          "username": "Indirizzo e-mail o numero di telefono dell'account Apple",
+          "password": "Password dell'account Apple"
+        }
+      },
+      "apple_verification": {
+        "title": "Autenticazione a due fattori Apple",
+        "description": "Tocca Consenti su un dispositivo Apple attendibile, quindi inserisci il codice di verifica a sei cifre mostrato lì. Seleziona Invia nuovamente il codice di verifica per richiedere un nuovo codice.",
+        "data": {
+          "code": "Codice di verifica a sei cifre",
+          "resend": "Invia nuovamente il codice di verifica"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple ha rifiutato l'accesso ai Contatti. Controlla la password specifica dell'app.",
+      "contacts_unavailable": "Impossibile leggere i contatti di iCloud. Riprova.",
+      "invalid_auth": "Apple non ha accettato i tuoi dati di accesso.",
+      "authorization_failed": "Impossibile completare l'autorizzazione Apple. Controlla i dettagli di accesso e riprova.",
+      "enrollment_failed": "Impossibile completare la registrazione di Apple Find. Riprova.",
+      "collector_unavailable": "Home Assistant Core non è riuscito ad avviare l'autorizzazione dell'account Apple.",
+      "account_mismatch": "Utilizza l'account Apple già connesso a questa installazione di Apple Find.",
+      "invalid_code": "Apple non ha accettato il codice di verifica.",
+      "code_format": "Inserisci un codice di sei cifre.",
+      "session_expired": "La sessione di verifica è scaduta. Accedi di nuovo."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "L'autorizzazione dei contatti iCloud è stata salvata. Apple Find abbina i nomi in background, quindi potrebbe essere necessario un po' di tempo prima che l'elenco dei contatti si aggiorni automaticamente."
+    },
+    "abort": {
+      "already_configured": "Apple Find è già configurato.",
+      "session_expired": "La sessione di verifica è scaduta. Accedi di nuovo.",
+      "reauth_successful": "Hai effettuato l’accesso ad Apple Find.",
+      "reconfigure_successful": "Hai effettuato l’accesso ad Apple Find."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "L'autorizzazione dei contatti iCloud è stata salvata. Apple Find abbina i nomi in background, quindi potrebbe essere necessario un po' di tempo prima che l'elenco dei contatti si aggiorni automaticamente."
+    },
+    "step": {
+      "init": {
+        "title": "Mostra i nomi dai contatti di iCloud",
+        "description": "Mostra i nomi dei tuoi contatti iCloud nell'elenco dei contatti. Apple Find abbina ogni persona in base all'indirizzo e-mail o al numero di telefono che utilizza per condividere la propria posizione. Se non viene trovato alcun nome, l'elenco mostra l'indirizzo e-mail o il numero di telefono. Per attivare la corrispondenza dei nomi, inserisci una password specifica per l'app generata per lo stesso account Apple. Lascia vuoto questo campo per disattivarlo.\n\n[Crea una password specifica per l'app]({password_guide_url})",
+        "data": {
+          "contacts_password": "Password specifica per l'app"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple ha rifiutato l'accesso ai Contatti. Controlla la password specifica dell'app.",
+      "contacts_unavailable": "Impossibile leggere i contatti di iCloud. Riprova."
+    }
+  },
+  "common": {
+    "contacts": "Contatti",
+    "devices": "Dispositivi",
+    "reauth_notification_title": "Accedi di nuovo ad Apple Find",
+    "reauth_notification_message": "Apple richiede di accedere nuovamente. Segui le istruzioni di accesso in Home Assistant.\n\n[Riparazioni](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Io"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Riproduci un suono"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Io"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple attualmente non offre la possibilità di riprodurre un suono su questo dispositivo."
+    },
+    "sound_reauth": {
+      "message": "Apple richiede di accedere nuovamente. Vai a Riparazioni in Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple ha rifiutato la richiesta di riprodurre un suono."
+    },
+    "sound_request_failed": {
+      "message": "Impossibile confermare se Apple ha ricevuto la richiesta di riprodurre un suono."
+    }
+  }
+}

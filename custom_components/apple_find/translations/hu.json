@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Nevek megjelenítése az iCloud Névjegyekből",
+        "description": "Az iCloud-névjegyekből származó nevek megjelenítése a névjegyzékben. Az Apple Find minden egyes személyt a tartózkodási helyük megosztásához használt e-mail cím vagy telefonszám alapján egyeztet. Ha nem található név, a lista megjeleníti az e-mail címet vagy telefonszámot. A névegyeztetés bekapcsolásához adjon meg egy alkalmazásspecifikus jelszót, amelyet ugyanahhoz az Apple-fiókhoz generáltak. Hagyja üresen ezt a mezőt a kikapcsoláshoz.\n\n[Hozzon létre egy alkalmazásspecifikus jelszót]({password_guide_url})",
+        "data": {
+          "contacts_password": "Alkalmazásspecifikus jelszó"
+        }
+      },
+      "apple_login": {
+        "title": "Jelentkezzen be Apple-fiókjába",
+        "description": "Adja meg az Apple-fiókjához tartozó e-mail címet vagy telefonszámot és a fiók jelszavát.",
+        "data": {
+          "username": "Apple-fiók e-mail címe vagy telefonszáma",
+          "password": "Apple fiók jelszava"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple kétfaktoros hitelesítés",
+        "description": "Koppintson az Engedélyezés elemre egy megbízható Apple-eszközön, majd írja be az ott látható hatjegyű ellenőrző kódot. Új kód kéréséhez válassza az Ellenőrző kód újraküldése lehetőséget.",
+        "data": {
+          "code": "Hatjegyű ellenőrző kód",
+          "resend": "Ellenőrző kód újraküldése"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Az Apple megtagadta a hozzáférést a Névjegyekhez. Ellenőrizze az alkalmazásfüggő jelszót.",
+      "contacts_unavailable": "Nem sikerült beolvasni az iCloud névjegyeket. Próbáld újra.",
+      "invalid_auth": "Az Apple nem fogadta el az Ön bejelentkezési adatait.",
+      "authorization_failed": "Nem sikerült befejezni az Apple hitelesítését. Ellenőrizze bejelentkezési adatait, és próbálja újra.",
+      "enrollment_failed": "Nem sikerült befejezni az Apple Find regisztrációját. Próbáld újra.",
+      "collector_unavailable": "A Home Assistant Core nem tudta elindítani az Apple-fiók hitelesítését.",
+      "account_mismatch": "Használja azt az Apple Fiókot, amely már kapcsolódik ehhez az Apple Find telepítéshez.",
+      "invalid_code": "Az Apple nem fogadta el az ellenőrző kódot.",
+      "code_format": "Írjon be egy hatjegyű kódot.",
+      "session_expired": "Az ellenőrző munkamenet lejárt. Jelentkezzen be újra."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Az iCloud-névjegyek engedélyezése mentve. Az Apple Find egyezik a nevekkel a háttérben, így eltarthat egy ideig, amíg a névjegyzék automatikusan frissül."
+    },
+    "abort": {
+      "already_configured": "Az Apple Find már konfigurálva van.",
+      "session_expired": "Az ellenőrző munkamenet lejárt. Jelentkezzen be újra.",
+      "reauth_successful": "Sikeresen bejelentkezett.",
+      "reconfigure_successful": "Sikeresen bejelentkezett."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Az iCloud-névjegyek engedélyezése mentve. Az Apple Find egyezik a nevekkel a háttérben, így eltarthat egy ideig, amíg a névjegyzék automatikusan frissül."
+    },
+    "step": {
+      "init": {
+        "title": "Nevek megjelenítése az iCloud Névjegyekből",
+        "description": "Az iCloud-névjegyekből származó nevek megjelenítése a névjegyzékben. Az Apple Find minden egyes személyt a tartózkodási helyük megosztásához használt e-mail cím vagy telefonszám alapján egyeztet. Ha nem található név, a lista megjeleníti az e-mail címet vagy telefonszámot. A névegyeztetés bekapcsolásához adjon meg egy alkalmazásspecifikus jelszót, amelyet ugyanahhoz az Apple-fiókhoz generáltak. Hagyja üresen ezt a mezőt a kikapcsoláshoz.\n\n[Hozzon létre egy alkalmazásspecifikus jelszót]({password_guide_url})",
+        "data": {
+          "contacts_password": "Alkalmazásspecifikus jelszó"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Az Apple megtagadta a hozzáférést a Névjegyekhez. Ellenőrizze az alkalmazásfüggő jelszót.",
+      "contacts_unavailable": "Nem sikerült beolvasni az iCloud névjegyeket. Próbáld újra."
+    }
+  },
+  "common": {
+    "contacts": "Kapcsolatok",
+    "devices": "Eszközök",
+    "reauth_notification_title": "Jelentkezzen be újra az Apple Find szolgáltatásba",
+    "reauth_notification_message": "Az Apple újra be kell jelentkeznie. Kövesse a Home Assistant bejelentkezési utasításait.\n\n[Javítások](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Én"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Játssz le egy hangot"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Én"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Az Apple jelenleg nem kínál hangot ezen az eszközön."
+    },
+    "sound_reauth": {
+      "message": "Az Apple újbóli bejelentkezést kér. Lépjen a Javítások az Otthoni asszisztensben részhez."
+    },
+    "sound_rejected": {
+      "message": "Az Apple elutasította a hang lejátszására vonatkozó kérést."
+    },
+    "sound_request_failed": {
+      "message": "Nem sikerült megerősíteni, hogy az Apple megkapta-e a hang lejátszására vonatkozó kérést."
+    }
+  }
+}

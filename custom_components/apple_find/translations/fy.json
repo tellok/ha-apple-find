@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Toan nammen fan iCloud Kontakten",
+        "description": "Lit nammen sjen fan jo iCloud-kontakten yn 'e kontaktlist. Apple Find komt oerien mei elke persoan troch it e-mailadres of telefoannûmer dat se brûke om har lokaasje te dielen. As gjin namme wurdt fûn, toant de list it e-mailadres of telefoannûmer. Om nammen oerienkomst yn te skeakeljen, fier in app-spesifyk wachtwurd yn dat is oanmakke foar itselde Apple-akkount. Lit dit fjild leech litte om it út te skeakeljen.\n\n[Meitsje in app-spesifyk wachtwurd]({password_guide_url})",
+        "data": {
+          "contacts_password": "App-spesifike wachtwurd"
+        }
+      },
+      "apple_login": {
+        "title": "Oanmelde by jo Apple-akkount",
+        "description": "Fier it e-mailadres of telefoannûmer yn foar jo Apple-akkount en jo akkountwachtwurd.",
+        "data": {
+          "username": "E-postadres of telefoannûmer fan Apple Account",
+          "password": "Apple Account wachtwurd"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple twa-faktor autentikaasje",
+        "description": "Tap Tastean op in fertroud Apple-apparaat, fier dan de seis-sifers ferifikaasjekoade yn dy't dêr werjûn wurdt. Selektearje Ferifikaasjekoade opnij ferstjoere om in nije koade oan te freegjen.",
+        "data": {
+          "code": "Seis-sifers ferifikaasjekoade",
+          "resend": "Ferstjoere ferifikaasjekoade opnij"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple wegere tagong ta kontakten. Kontrolearje it app-spesifike wachtwurd.",
+      "contacts_unavailable": "Koe iCloud Kontakten net lêze. Besykje opnij.",
+      "invalid_auth": "Apple hat jo oanmeldgegevens net akseptearre.",
+      "authorization_failed": "Koe Apple-autorisaasje net foltôgje. Kontrolearje jo oanmeldgegevens en besykje it nochris.",
+      "enrollment_failed": "Koe it registrearjen fan Apple Find net ôfmeitsje. Besykje opnij.",
+      "collector_unavailable": "Home Assistant Core koe Apple Account-autorisaasje net starte.",
+      "account_mismatch": "Brûk it Apple-akkount dat al ferbûn is mei dizze Apple Find-ynstallaasje.",
+      "invalid_code": "Apple akseptearre de ferifikaasjekoade net.",
+      "code_format": "Fier in seis-sifers koade yn.",
+      "session_expired": "De ferifikaasje sesje ferrûn. Oanmelde wer."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "iCloud Kontakten autorisaasje waard bewarre. Apple Find komt oerien mei nammen op 'e eftergrûn, dus it kin in skoft duorje foar de kontaktlist automatysk bywurke."
+    },
+    "abort": {
+      "already_configured": "Apple Find is al ynsteld.",
+      "session_expired": "De ferifikaasje sesje ferrûn. Oanmelde wer.",
+      "reauth_successful": "Jo binne mei súkses oanmeld.",
+      "reconfigure_successful": "Jo binne mei súkses oanmeld."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "iCloud Kontakten autorisaasje waard bewarre. Apple Find komt oerien mei nammen op 'e eftergrûn, dus it kin in skoft duorje foar de kontaktlist automatysk bywurke."
+    },
+    "step": {
+      "init": {
+        "title": "Toan nammen fan iCloud Kontakten",
+        "description": "Lit nammen sjen fan jo iCloud-kontakten yn 'e kontaktlist. Apple Find komt oerien mei elke persoan troch it e-mailadres of telefoannûmer dat se brûke om har lokaasje te dielen. As gjin namme wurdt fûn, toant de list it e-mailadres of telefoannûmer. Om nammen oerienkomst yn te skeakeljen, fier in app-spesifyk wachtwurd yn dat is oanmakke foar itselde Apple-akkount. Lit dit fjild leech litte om it út te skeakeljen.\n\n[Meitsje in app-spesifyk wachtwurd]({password_guide_url})",
+        "data": {
+          "contacts_password": "App-spesifike wachtwurd"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple wegere tagong ta kontakten. Kontrolearje it app-spesifike wachtwurd.",
+      "contacts_unavailable": "Koe iCloud Kontakten net lêze. Besykje opnij."
+    }
+  },
+  "common": {
+    "contacts": "Kontakten",
+    "devices": "Apparaten",
+    "reauth_notification_title": "Oanmelde by Apple Find wer",
+    "reauth_notification_message": "Apple fereasket dat jo opnij oanmelde. Folgje de oanmeldprompts yn Home Assistant.\n\n[Reparaasjes](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Ik"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Spielje in lûd"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Ik"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple biedt op it stuit gjin opsje om in lûd op dit apparaat te spyljen."
+    },
+    "sound_reauth": {
+      "message": "Apple fereasket dat jo opnij oanmelde. Gean nei Reparaasjes yn Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple wegere it fersyk om in lûd te spyljen."
+    },
+    "sound_request_failed": {
+      "message": "Koe net befestigje oft Apple it fersyk krige om in lûd te spyljen."
+    }
+  }
+}

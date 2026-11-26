@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Rādīt vārdus no iCloud kontaktpersonām",
+        "description": "Rādīt vārdus no jūsu iCloud Contacts kontaktpersonu sarakstā. Apple Find saskaņo katru personu pēc e-pasta adreses vai tālruņa numura, ko viņi izmanto, lai kopīgotu savu atrašanās vietu. Ja vārds netiek atrasts, sarakstā tiek parādīta e-pasta adrese vai tālruņa numurs. Lai ieslēgtu vārda saskaņošanu, ievadiet tam pašam Apple kontam ģenerētu lietotnes paroli. Lai to izslēgtu, atstājiet šo lauku tukšu.\n\n[Izveidojiet lietotnes paroli]({password_guide_url})",
+        "data": {
+          "contacts_password": "Lietotnei noteikta parole"
+        }
+      },
+      "apple_login": {
+        "title": "Pierakstieties savā Apple kontā",
+        "description": "Ievadiet sava Apple konta e-pasta adresi vai tālruņa numuru un konta paroli.",
+        "data": {
+          "username": "Apple konta e-pasta adrese vai tālruņa numurs",
+          "password": "Apple konta parole"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple divu faktoru autentifikācija",
+        "description": "Uzticamā Apple ierīcē pieskarieties pie Atļaut, pēc tam ievadiet tur redzamo sešciparu verifikācijas kodu. Atlasiet Atkārtoti nosūtīt verifikācijas kodu, lai pieprasītu jaunu kodu.",
+        "data": {
+          "code": "Sešu ciparu verifikācijas kods",
+          "resend": "Atkārtoti nosūtīt verifikācijas kodu"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple noraidīja piekļuvi kontaktpersonām. Pārbaudiet lietotnes paroli.",
+      "contacts_unavailable": "Nevarēja nolasīt iCloud kontaktpersonas. Mēģiniet vēlreiz.",
+      "invalid_auth": "Apple nepieņēma jūsu pierakstīšanās informāciju.",
+      "authorization_failed": "Nevarēja pabeigt Apple autorizāciju. Pārbaudiet savu pierakstīšanās informāciju un mēģiniet vēlreiz.",
+      "enrollment_failed": "Nevarēja pabeigt Apple Find reģistrāciju. Mēģiniet vēlreiz.",
+      "collector_unavailable": "Home Assistant Core nevarēja sākt Apple konta autorizāciju.",
+      "account_mismatch": "Izmantojiet Apple kontu, kas jau ir saistīts ar šo Apple Find instalāciju.",
+      "invalid_code": "Apple nepieņēma verifikācijas kodu.",
+      "code_format": "Ievadiet sešciparu kodu.",
+      "session_expired": "Verifikācijas sesija beidzās. Pierakstieties vēlreiz."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "iCloud Contacts autorizācija tika saglabāta. Apple Find saskaņo vārdus fonā, tāpēc var paiet kāds laiks, līdz kontaktpersonu saraksts tiks automātiski atjaunināts."
+    },
+    "abort": {
+      "already_configured": "Apple Find jau ir konfigurēts.",
+      "session_expired": "Verifikācijas sesija beidzās. Pierakstieties vēlreiz.",
+      "reauth_successful": "Jūs esat veiksmīgi pierakstījies.",
+      "reconfigure_successful": "Jūs esat veiksmīgi pierakstījies."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "iCloud Contacts autorizācija tika saglabāta. Apple Find saskaņo vārdus fonā, tāpēc var paiet kāds laiks, līdz kontaktpersonu saraksts tiks automātiski atjaunināts."
+    },
+    "step": {
+      "init": {
+        "title": "Rādīt vārdus no iCloud kontaktpersonām",
+        "description": "Rādīt vārdus no jūsu iCloud Contacts kontaktpersonu sarakstā. Apple Find saskaņo katru personu pēc e-pasta adreses vai tālruņa numura, ko viņi izmanto, lai kopīgotu savu atrašanās vietu. Ja vārds netiek atrasts, sarakstā tiek parādīta e-pasta adrese vai tālruņa numurs. Lai ieslēgtu vārda saskaņošanu, ievadiet tam pašam Apple kontam ģenerētu lietotnes paroli. Lai to izslēgtu, atstājiet šo lauku tukšu.\n\n[Izveidojiet lietotnes paroli]({password_guide_url})",
+        "data": {
+          "contacts_password": "Lietotnei noteikta parole"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple noraidīja piekļuvi kontaktpersonām. Pārbaudiet lietotnes paroli.",
+      "contacts_unavailable": "Nevarēja nolasīt iCloud kontaktpersonas. Mēģiniet vēlreiz."
+    }
+  },
+  "common": {
+    "contacts": "Kontakti",
+    "devices": "Ierīces",
+    "reauth_notification_title": "Vēlreiz pierakstieties pakalpojumā Apple Find",
+    "reauth_notification_message": "Apple pieprasa vēlreiz pierakstīties. Izpildiet mājas palīgā redzamos pierakstīšanās norādījumus.\n\n[Problēmu novēršana](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Es"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Atskaņot skaņu"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Es"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple pašlaik nepiedāvā iespēju atskaņot skaņu šajā ierīcē."
+    },
+    "sound_reauth": {
+      "message": "Apple pieprasa vēlreiz pierakstīties. Atveriet sadaļu Mājas palīga remonts."
+    },
+    "sound_rejected": {
+      "message": "Apple noraidīja pieprasījumu atskaņot skaņu."
+    },
+    "sound_request_failed": {
+      "message": "Nevarēja apstiprināt, vai Apple saņēma pieprasījumu atskaņot skaņu."
+    }
+  }
+}

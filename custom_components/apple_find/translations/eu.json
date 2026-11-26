@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Erakutsi iCloud Kontaktuen izenak",
+        "description": "Erakutsi zure iCloud Kontaktuen izenak kontaktuen zerrendan. Apple Find-ek pertsona bakoitzarekin bat egiten du bere kokapena partekatzeko erabiltzen duen helbide elektronikoaren edo telefono-zenbakiaren arabera. Izenik aurkitzen ez bada, zerrendak helbide elektronikoa edo telefono zenbakia erakusten du. Izenak bat etortzea aktibatzeko, sartu Apple kontu bererako sortutako aplikaziorako berariazko pasahitza. Utzi eremu hau hutsik desaktibatzeko.\n\n[Sortu aplikazioaren pasahitz espezifikoa]({password_guide_url})",
+        "data": {
+          "contacts_password": "Aplikazioaren pasahitz espezifikoa"
+        }
+      },
+      "apple_login": {
+        "title": "Hasi saioa zure Apple kontuan",
+        "description": "Sartu zure Apple kontuaren helbide elektronikoa edo telefono zenbakia eta zure kontuaren pasahitza.",
+        "data": {
+          "username": "Apple kontuaren helbide elektronikoa edo telefono zenbakia",
+          "password": "Apple kontuaren pasahitza"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple bi faktoreko autentifikazioa",
+        "description": "Sakatu Baimendu Apple gailu fidagarri batean, eta idatzi bertan agertzen den sei digituko egiaztapen-kodea. Hautatu Berriz bidali egiaztapen-kodea kode berri bat eskatzeko.",
+        "data": {
+          "code": "Sei zifrako egiaztapen-kodea",
+          "resend": "Bidali berriro egiaztapen-kodea"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple-k Kontaktuetarako sarbidea baztertu du. Egiaztatu aplikazioaren pasahitza espezifikoa.",
+      "contacts_unavailable": "Ezin izan dira irakurri iCloud Kontaktuak. Saiatu berriro.",
+      "invalid_auth": "Apple-k ez ditu onartu saioa hasteko xehetasunak.",
+      "authorization_failed": "Ezin izan da Apple-ren baimena osatu. Egiaztatu saioa hasteko xehetasunak eta saiatu berriro.",
+      "enrollment_failed": "Ezin izan da Apple Find erregistratzen amaitu. Saiatu berriro.",
+      "collector_unavailable": "Home Assistant Core-k ezin izan du hasi Apple kontuaren baimena.",
+      "account_mismatch": "Erabili Apple Find instalazio honetara dagoeneko konektatuta dagoen Apple kontua.",
+      "invalid_code": "Apple-k ez zuen egiaztapen-kodea onartu.",
+      "code_format": "Sartu sei zifrako kodea.",
+      "session_expired": "Egiaztapen saioa iraungi da. Hasi saioa berriro."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "iCloud Contacts baimena gorde da. Apple Find-ek atzeko planoko izenekin bat egiten du, beraz, baliteke kontaktuen zerrenda automatikoki eguneratzeko denbora pixka bat behar izatea."
+    },
+    "abort": {
+      "already_configured": "Apple Find dagoeneko konfiguratuta dago.",
+      "session_expired": "Egiaztapen saioa iraungi da. Hasi saioa berriro.",
+      "reauth_successful": "Hasi duzu saioa behar bezala.",
+      "reconfigure_successful": "Hasi duzu saioa behar bezala."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "iCloud Contacts baimena gorde da. Apple Find-ek atzeko planoko izenekin bat egiten du, beraz, baliteke kontaktuen zerrenda automatikoki eguneratzeko denbora pixka bat behar izatea."
+    },
+    "step": {
+      "init": {
+        "title": "Erakutsi iCloud Kontaktuen izenak",
+        "description": "Erakutsi zure iCloud Kontaktuen izenak kontaktuen zerrendan. Apple Find-ek pertsona bakoitzarekin bat egiten du bere kokapena partekatzeko erabiltzen duen helbide elektronikoaren edo telefono-zenbakiaren arabera. Izenik aurkitzen ez bada, zerrendak helbide elektronikoa edo telefono zenbakia erakusten du. Izenak bat etortzea aktibatzeko, sartu Apple kontu bererako sortutako aplikaziorako berariazko pasahitza. Utzi eremu hau hutsik desaktibatzeko.\n\n[Sortu aplikazioaren pasahitz espezifikoa]({password_guide_url})",
+        "data": {
+          "contacts_password": "Aplikazioaren pasahitz espezifikoa"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple-k Kontaktuetarako sarbidea baztertu du. Egiaztatu aplikazioaren pasahitza espezifikoa.",
+      "contacts_unavailable": "Ezin izan dira irakurri iCloud Kontaktuak. Saiatu berriro."
+    }
+  },
+  "common": {
+    "contacts": "Kontaktuak",
+    "devices": "Gailuak",
+    "reauth_notification_title": "Hasi saioa berriro Apple Find-en",
+    "reauth_notification_message": "Applek berriro saioa hasteko eskatzen dizu. Jarraitu Home Assistant-en saioa hasteko gomendioak.\n\n[Konponketak](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Ni"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Soinu bat erreproduzitu"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Ni"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Applek ez du eskaintzen gailu honetan soinurik erreproduzitzeko aukerarik."
+    },
+    "sound_reauth": {
+      "message": "Applek berriro saioa hastea eskatzen dizu. Joan Konponketak atalera Home Assistant-en."
+    },
+    "sound_rejected": {
+      "message": "Soinu bat erreproduzitzeko eskaera baztertu zuen Applek."
+    },
+    "sound_request_failed": {
+      "message": "Ezin izan da baieztatu Applek soinu bat erreproduzitzeko eskaera jaso duen ala ez."
+    }
+  }
+}

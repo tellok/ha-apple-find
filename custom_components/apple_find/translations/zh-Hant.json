@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "顯示 iCloud 聯絡人姓名",
+        "description": "在聯絡人清單中顯示 iCloud 聯絡人中儲存的姓名。Apple Find 會用對方分享位置時使用的電子郵件地址或電話號碼比對。如果找不到姓名，清單會顯示電子郵件地址或電話號碼。若要啟用這項功能，請輸入相同 Apple 帳號所產生的 App 專用密碼。留空即可停用。\n\n[如何產生 App 專用密碼]({password_guide_url})",
+        "data": {
+          "contacts_password": "App 專用密碼"
+        }
+      },
+      "apple_login": {
+        "title": "登入 Apple 帳號",
+        "description": "輸入 Apple 帳號的電子郵件地址或電話號碼，以及帳號密碼。",
+        "data": {
+          "username": "Apple 帳號的電子郵件地址或電話號碼",
+          "password": "Apple 帳號密碼"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple 雙重認證",
+        "description": "在受信任的 Apple 裝置上點一下「允許」，然後輸入該裝置上顯示的六位數驗證碼。選取「重新傳送驗證碼」可取得新驗證碼。",
+        "data": {
+          "code": "六位數驗證碼",
+          "resend": "重新傳送驗證碼"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple 拒絕存取通訊錄。檢查應用程式專用密碼。",
+      "contacts_unavailable": "無法讀取 iCloud 通訊錄。再試一次。",
+      "invalid_auth": "Apple 不接受您的登入詳細資訊。",
+      "authorization_failed": "無法完成Apple授權。檢查您的登入詳細信息，然後再試一次。",
+      "enrollment_failed": "無法完成 Apple Find 註冊。再試一次。",
+      "collector_unavailable": "Home Assistant Core 無法啟動 Apple 帳號授權。",
+      "account_mismatch": "使用已連線至此 Apple Find 安裝的 Apple 帳戶。",
+      "invalid_code": "蘋果不接受驗證碼。",
+      "code_format": "請輸入六位數驗證碼。",
+      "session_expired": "驗證工作階段已過期，請重新登入。"
+    },
+    "create_entry": {
+      "contacts_matching_saved": "iCloud 通訊錄授權已儲存。 Apple Find 在背景符合姓名，因此聯絡人清單可能需要一段時間才能自動更新。"
+    },
+    "abort": {
+      "already_configured": "Apple Find 已配置。",
+      "session_expired": "驗證工作階段已過期，請重新登入。",
+      "reauth_successful": "已登入 Apple Find。",
+      "reconfigure_successful": "已登入 Apple Find。"
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "iCloud 通訊錄授權已儲存。 Apple Find 在背景符合姓名，因此聯絡人清單可能需要一段時間才能自動更新。"
+    },
+    "step": {
+      "init": {
+        "title": "顯示 iCloud 聯絡人姓名",
+        "description": "在聯絡人清單中顯示 iCloud 聯絡人中儲存的姓名。Apple Find 會用對方分享位置時使用的電子郵件地址或電話號碼比對。如果找不到姓名，清單會顯示電子郵件地址或電話號碼。若要啟用這項功能，請輸入相同 Apple 帳號所產生的 App 專用密碼。留空即可停用。\n\n[如何產生 App 專用密碼]({password_guide_url})",
+        "data": {
+          "contacts_password": "App 專用密碼"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple 拒絕存取通訊錄。檢查應用程式專用密碼。",
+      "contacts_unavailable": "無法讀取 iCloud 通訊錄。再試一次。"
+    }
+  },
+  "common": {
+    "contacts": "聯絡人",
+    "devices": "裝置",
+    "reauth_notification_title": "再次登入 Apple Find",
+    "reauth_notification_message": "Apple 要求您重新登入。請依照 Home Assistant 中的登入提示操作。\n\n[修復](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "我"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "播放聲音"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "我"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple 目前不提供在此裝置上播放聲音的選項。"
+    },
+    "sound_reauth": {
+      "message": "Apple 要求您重新登入。請從 Home Assistant 的「修復」頁面重新登入。"
+    },
+    "sound_rejected": {
+      "message": "蘋果拒絕了播放聲音的請求。"
+    },
+    "sound_request_failed": {
+      "message": "無法確認 Apple 是否收到播放聲音的請求。"
+    }
+  }
+}

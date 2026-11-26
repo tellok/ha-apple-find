@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Kuva nimed iCloudi kontaktidest",
+        "description": "Kuvage kontaktiloendis oma iCloudi kontaktide nimesid. Apple Find tuvastab iga inimese e-posti aadressi või telefoninumbri järgi, mida nad oma asukoha jagamiseks kasutavad. Kui nime ei leita, kuvatakse loendis e-posti aadress või telefoninumber. Nime sobitamise sisselülitamiseks sisestage sama Apple'i konto jaoks loodud rakendusepõhine parool. Selle väljalülitamiseks jätke see väli tühjaks.\n\n[Looge rakendusepõhine parool]({password_guide_url})",
+        "data": {
+          "contacts_password": "Rakendusepõhine parool"
+        }
+      },
+      "apple_login": {
+        "title": "Logige sisse oma Apple'i kontole",
+        "description": "Sisestage oma Apple'i konto e-posti aadress või telefoninumber ja konto parool.",
+        "data": {
+          "username": "Apple'i konto e-posti aadress või telefoninumber",
+          "password": "Apple'i konto parool"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple'i kahefaktoriline autentimine",
+        "description": "Puudutage usaldusväärsel Apple'i seadmel valikut Luba, seejärel sisestage seal kuvatav kuuekohaline kinnituskood. Uue koodi taotlemiseks valige Saada kinnituskood uuesti.",
+        "data": {
+          "code": "Kuuekohaline kinnituskood",
+          "resend": "Saada kinnituskood uuesti"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple keeldus juurdepääsust kontaktidele. Kontrollige rakendusepõhist parooli.",
+      "contacts_unavailable": "ICloudi kontakte ei õnnestunud lugeda. Proovi uuesti.",
+      "invalid_auth": "Apple ei aktsepteerinud teie sisselogimisandmeid.",
+      "authorization_failed": "Apple'i autoriseerimist ei õnnestunud lõpule viia. Kontrollige oma sisselogimisandmeid ja proovige uuesti.",
+      "enrollment_failed": "Apple Findi registreerimist ei saanud lõpetada. Proovi uuesti.",
+      "collector_unavailable": "Home Assistant Core ei saanud Apple'i konto autoriseerimist käivitada.",
+      "account_mismatch": "Kasutage Apple'i kontot, mis on selle Apple Findi installiga juba ühendatud.",
+      "invalid_code": "Apple ei aktsepteerinud kinnituskoodi.",
+      "code_format": "Sisestage kuuekohaline kood.",
+      "session_expired": "Kinnitusseanss aegus. Logige uuesti sisse."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "iCloudi kontaktide autoriseerimine salvestati. Apple Find otsib taustal nimesid, seega võib kontaktiloendi automaatne värskendamine veidi aega võtta."
+    },
+    "abort": {
+      "already_configured": "Apple Find on juba konfigureeritud.",
+      "session_expired": "Kinnitusseanss aegus. Logige uuesti sisse.",
+      "reauth_successful": "Olete edukalt sisse loginud.",
+      "reconfigure_successful": "Olete edukalt sisse loginud."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "iCloudi kontaktide autoriseerimine salvestati. Apple Find otsib taustal nimesid, seega võib kontaktiloendi automaatne värskendamine veidi aega võtta."
+    },
+    "step": {
+      "init": {
+        "title": "Kuva nimed iCloudi kontaktidest",
+        "description": "Kuvage kontaktiloendis oma iCloudi kontaktide nimesid. Apple Find tuvastab iga inimese e-posti aadressi või telefoninumbri järgi, mida nad oma asukoha jagamiseks kasutavad. Kui nime ei leita, kuvatakse loendis e-posti aadress või telefoninumber. Nime sobitamise sisselülitamiseks sisestage sama Apple'i konto jaoks loodud rakendusepõhine parool. Selle väljalülitamiseks jätke see väli tühjaks.\n\n[Looge rakendusepõhine parool]({password_guide_url})",
+        "data": {
+          "contacts_password": "Rakendusepõhine parool"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple keeldus juurdepääsust kontaktidele. Kontrollige rakendusepõhist parooli.",
+      "contacts_unavailable": "ICloudi kontakte ei õnnestunud lugeda. Proovi uuesti."
+    }
+  },
+  "common": {
+    "contacts": "Kontaktid",
+    "devices": "Seadmed",
+    "reauth_notification_title": "Logige uuesti sisse teenusesse Apple Find",
+    "reauth_notification_message": "Apple nõuab teilt uuesti sisse logimist. Järgige koduabilise sisselogimisviipasid.\n\n[Parandused](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Mina"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Esitage heli"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Mina"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple ei paku praegu selles seadmes heli esitamise võimalust."
+    },
+    "sound_reauth": {
+      "message": "Apple nõuab teilt uuesti sisse logimist. Avage Koduabilise remont."
+    },
+    "sound_rejected": {
+      "message": "Apple lükkas heli esitamise taotluse tagasi."
+    },
+    "sound_request_failed": {
+      "message": "Ei saanud kinnitada, kas Apple sai heli esitamise taotluse kätte."
+    }
+  }
+}

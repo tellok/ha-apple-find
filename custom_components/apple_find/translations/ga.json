@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Taispeáin ainmneacha ó iCloud Teagmhálacha",
+        "description": "Taispeáin ainmneacha ó do Teagmhálacha iCloud sa liosta teagmhála. Meaitseálann Apple Find gach duine leis an seoladh ríomhphoist nó leis an uimhir theileafóin a úsáideann siad chun a suíomh a roinnt. Mura bhfuarthas aon ainm, taispeánann an liosta an seoladh ríomhphoist nó an uimhir theileafóin. Chun meaitseáil ainmneacha a chur ar siúl, cuir isteach pasfhocal a bhaineann go sonrach leis an aip a ghintear don Chuntas Apple céanna. Fág bán an réimse seo chun é a chasadh as.\n\n[Cruthaigh pasfhocal a bhaineann go sonrach leis an aip]({password_guide_url})",
+        "data": {
+          "contacts_password": "Pasfhocal a bhaineann go sonrach leis an bhfeidhmchlár"
+        }
+      },
+      "apple_login": {
+        "title": "Sínigh isteach i do Chuntas Apple",
+        "description": "Cuir isteach an seoladh ríomhphoist nó uimhir theileafóin do Chuntas Apple agus do phasfhocal cuntais.",
+        "data": {
+          "username": "Seoladh ríomhphoist nó uimhir theileafóin an Chuntais Apple",
+          "password": "Pasfhocal Cuntas Apple"
+        }
+      },
+      "apple_verification": {
+        "title": "Fíordheimhniú dhá fhachtóir Apple",
+        "description": "Beartaíonn Ceadaigh ar ghléas Apple iontaofa, ansin cuir isteach an cód fíoraithe sé dhigit a thaispeántar ann. Roghnaigh Athsheol cód fíorúcháin chun cód nua a iarraidh.",
+        "data": {
+          "code": "Cód fíorúcháin sé dhigit",
+          "resend": "Seol an cód fíoraithe ar ais"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Dhiúltaigh Apple rochtain ar Theagmhálaithe. Seiceáil an pasfhocal a bhaineann go sonrach leis an aip.",
+      "contacts_unavailable": "Níorbh fhéidir Teagmhálacha iCloud a léamh. Bain triail eile as.",
+      "invalid_auth": "Níor ghlac Apple le do shonraí síniú isteach.",
+      "authorization_failed": "Níorbh fhéidir údarú Apple a chomhlánú. Seiceáil do shonraí síniú isteach agus bain triail eile as.",
+      "enrollment_failed": "Níorbh fhéidir clárú Apple Find a chríochnú. Bain triail eile as.",
+      "collector_unavailable": "Níorbh fhéidir le Home Assistant Core údarú Cuntais Apple a thosú.",
+      "account_mismatch": "Bain úsáid as an gCuntas Apple atá ceangailte leis an suiteáil Apple Find seo cheana féin.",
+      "invalid_code": "Níor ghlac Apple leis an gcód fíoraithe.",
+      "code_format": "Cuir isteach cód sé dhigit.",
+      "session_expired": "Chuaigh an seisiún fíoraithe in éag. Sínigh isteach arís."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Sábháladh údarú Teagmhálacha iCloud. Meaitseálann Apple Find ainmneacha sa chúlra, mar sin seans go dtógfaidh sé tamall beag ar an liosta teagmhála a nuashonrú go huathoibríoch."
+    },
+    "abort": {
+      "already_configured": "Tá Apple Find cumraithe cheana féin.",
+      "session_expired": "Chuaigh an seisiún fíoraithe in éag. Sínigh isteach arís.",
+      "reauth_successful": "D'éirigh leat síniú isteach.",
+      "reconfigure_successful": "D'éirigh leat síniú isteach."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Sábháladh údarú Teagmhálacha iCloud. Meaitseálann Apple Find ainmneacha sa chúlra, mar sin seans go dtógfaidh sé tamall beag ar an liosta teagmhála a nuashonrú go huathoibríoch."
+    },
+    "step": {
+      "init": {
+        "title": "Taispeáin ainmneacha ó iCloud Teagmhálacha",
+        "description": "Taispeáin ainmneacha ó do Teagmhálacha iCloud sa liosta teagmhála. Meaitseálann Apple Find gach duine leis an seoladh ríomhphoist nó leis an uimhir theileafóin a úsáideann siad chun a suíomh a roinnt. Mura bhfuarthas aon ainm, taispeánann an liosta an seoladh ríomhphoist nó an uimhir theileafóin. Chun meaitseáil ainmneacha a chur ar siúl, cuir isteach pasfhocal a bhaineann go sonrach leis an aip a ghintear don Chuntas Apple céanna. Fág bán an réimse seo chun é a chasadh as.\n\n[Cruthaigh pasfhocal a bhaineann go sonrach leis an aip]({password_guide_url})",
+        "data": {
+          "contacts_password": "Pasfhocal a bhaineann go sonrach leis an bhfeidhmchlár"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Dhiúltaigh Apple rochtain ar Theagmhálaithe. Seiceáil an pasfhocal a bhaineann go sonrach leis an aip.",
+      "contacts_unavailable": "Níorbh fhéidir Teagmhálacha iCloud a léamh. Bain triail eile as."
+    }
+  },
+  "common": {
+    "contacts": "Teagmhálaithe",
+    "devices": "Gléasanna",
+    "reauth_notification_title": "Sínigh isteach arís in Apple Find",
+    "reauth_notification_message": "Éilíonn Apple ort síniú isteach arís. Lean na leideanna síniú isteach in Home Assistant.\n\n[Deisiúcháin](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Mise"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Seinn fuaim"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Mise"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Ní thairgeann Apple an rogha faoi láthair fuaim a sheinm ar an ngléas seo."
+    },
+    "sound_reauth": {
+      "message": "Éilíonn Apple ort síniú isteach arís. Téigh go dtí an Cúntóir Deisiúcháin sa Bhaile."
+    },
+    "sound_rejected": {
+      "message": "Dhiúltaigh Apple don iarratas fuaim a sheinm."
+    },
+    "sound_request_failed": {
+      "message": "Níorbh fhéidir a dhearbhú an bhfuair Apple an t-iarratas chun fuaim a sheinm."
+    }
+  }
+}

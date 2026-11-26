@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Tunjukkan nama daripada Kenalan iCloud",
+        "description": "Tunjukkan nama daripada Kenalan iCloud anda dalam senarai kenalan. Apple Find memadankan setiap orang dengan alamat e-mel atau nombor telefon yang mereka gunakan untuk berkongsi lokasi mereka. Jika tiada nama ditemui, senarai menunjukkan alamat e-mel atau nombor telefon. Untuk menghidupkan padanan nama, masukkan kata laluan khusus apl yang dijana untuk Akaun Apple yang sama. Biarkan medan ini kosong untuk mematikannya.\n\n[Buat kata laluan khusus apl]({password_guide_url})",
+        "data": {
+          "contacts_password": "Kata laluan khusus apl"
+        }
+      },
+      "apple_login": {
+        "title": "Log masuk ke Akaun Apple anda",
+        "description": "Masukkan alamat e-mel atau nombor telefon untuk Akaun Apple anda dan kata laluan akaun anda.",
+        "data": {
+          "username": "Alamat e-mel atau nombor telefon Akaun Apple",
+          "password": "Kata laluan Akaun Apple"
+        }
+      },
+      "apple_verification": {
+        "title": "Pengesahan dua faktor Apple",
+        "description": "Ketik Benarkan pada peranti Apple yang dipercayai, kemudian masukkan kod pengesahan enam digit yang ditunjukkan di sana. Pilih Hantar semula kod pengesahan untuk meminta kod baharu.",
+        "data": {
+          "code": "Kod pengesahan enam digit",
+          "resend": "Hantar semula kod pengesahan"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple menolak akses kepada Kenalan. Semak kata laluan khusus apl.",
+      "contacts_unavailable": "Tidak dapat membaca Kenalan iCloud. Cuba lagi.",
+      "invalid_auth": "Apple tidak menerima butiran log masuk anda.",
+      "authorization_failed": "Tidak dapat melengkapkan kebenaran Apple. Semak butiran log masuk anda dan cuba lagi.",
+      "enrollment_failed": "Tidak dapat menyelesaikan pendaftaran Apple Find. Cuba lagi.",
+      "collector_unavailable": "Home Assistant Core tidak dapat memulakan kebenaran Akaun Apple.",
+      "account_mismatch": "Gunakan Akaun Apple yang telah disambungkan ke pemasangan Apple Find ini.",
+      "invalid_code": "Apple tidak menerima kod pengesahan.",
+      "code_format": "Masukkan kod enam digit.",
+      "session_expired": "Sesi pengesahan telah tamat tempoh. Log masuk semula."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Keizinan Kenalan iCloud telah disimpan. Apple Find sepadan dengan nama di latar belakang, jadi ia mungkin mengambil sedikit masa untuk senarai kenalan dikemas kini secara automatik."
+    },
+    "abort": {
+      "already_configured": "Apple Find sudah dikonfigurasikan.",
+      "session_expired": "Sesi pengesahan telah tamat tempoh. Log masuk semula.",
+      "reauth_successful": "Anda telah berjaya melog masuk.",
+      "reconfigure_successful": "Anda telah berjaya melog masuk."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Keizinan Kenalan iCloud telah disimpan. Apple Find sepadan dengan nama di latar belakang, jadi ia mungkin mengambil sedikit masa untuk senarai kenalan dikemas kini secara automatik."
+    },
+    "step": {
+      "init": {
+        "title": "Tunjukkan nama daripada Kenalan iCloud",
+        "description": "Tunjukkan nama daripada Kenalan iCloud anda dalam senarai kenalan. Apple Find memadankan setiap orang dengan alamat e-mel atau nombor telefon yang mereka gunakan untuk berkongsi lokasi mereka. Jika tiada nama ditemui, senarai menunjukkan alamat e-mel atau nombor telefon. Untuk menghidupkan padanan nama, masukkan kata laluan khusus apl yang dijana untuk Akaun Apple yang sama. Biarkan medan ini kosong untuk mematikannya.\n\n[Buat kata laluan khusus apl]({password_guide_url})",
+        "data": {
+          "contacts_password": "Kata laluan khusus apl"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple menolak akses kepada Kenalan. Semak kata laluan khusus apl.",
+      "contacts_unavailable": "Tidak dapat membaca Kenalan iCloud. Cuba lagi."
+    }
+  },
+  "common": {
+    "contacts": "Kenalan",
+    "devices": "Peranti",
+    "reauth_notification_title": "Log masuk ke Apple Find sekali lagi",
+    "reauth_notification_message": "Apple memerlukan anda untuk log masuk semula. Ikut gesaan log masuk dalam Home Assistant.\n\n[Pembaikan](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Saya"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Mainkan bunyi"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Saya"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Pada masa ini Apple tidak menawarkan pilihan untuk memainkan bunyi pada peranti ini."
+    },
+    "sound_reauth": {
+      "message": "Apple memerlukan anda untuk log masuk semula. Pergi ke Pembaikan dalam Pembantu Rumah."
+    },
+    "sound_rejected": {
+      "message": "Apple menolak permintaan untuk memainkan bunyi."
+    },
+    "sound_request_failed": {
+      "message": "Tidak dapat mengesahkan sama ada Apple menerima permintaan untuk memainkan bunyi."
+    }
+  }
+}

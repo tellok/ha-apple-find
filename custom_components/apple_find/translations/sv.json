@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Visa namn från iCloud-kontakter",
+        "description": "Visa namn från dina iCloud-kontakter i kontaktlistan. Apple Find matchar varje person med den e-postadress eller telefonnummer de använder för att dela sin plats. Om inget namn hittas visar listan e-postadressen eller telefonnumret. För att aktivera namnmatchning anger du ett appspecifikt lösenord som genererats för samma Apple-konto. Lämna detta fält tomt för att stänga av det.\n\n[Skapa ett appspecifikt lösenord]({password_guide_url})",
+        "data": {
+          "contacts_password": "Appspecifikt lösenord"
+        }
+      },
+      "apple_login": {
+        "title": "Logga in på ditt Apple-konto",
+        "description": "Ange e-postadressen eller telefonnumret för ditt Apple-konto och ditt kontolösenord.",
+        "data": {
+          "username": "Apple-kontots e-postadress eller telefonnummer",
+          "password": "Apple-kontolösenord"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple tvåfaktorsautentisering",
+        "description": "Tryck på Tillåt på en betrodd Apple-enhet och ange sedan den sexsiffriga verifieringskoden som visas där. Välj Skicka verifieringskod igen för att begära en ny kod.",
+        "data": {
+          "code": "Sexsiffrig verifieringskod",
+          "resend": "Skicka verifieringskoden igen"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple nekade åtkomst till kontakter. Kontrollera det appspecifika lösenordet.",
+      "contacts_unavailable": "Kunde inte läsa iCloud-kontakter. Försök igen.",
+      "invalid_auth": "Apple accepterade inte dina inloggningsuppgifter.",
+      "authorization_failed": "Det gick inte att slutföra Apple-auktorisering. Kontrollera dina inloggningsuppgifter och försök igen.",
+      "enrollment_failed": "Det gick inte att slutföra registreringen av Apple Find. Försök igen.",
+      "collector_unavailable": "Home Assistant Core kunde inte starta Apple-kontoauktorisering.",
+      "account_mismatch": "Använd Apple-kontot som redan är anslutet till denna Apple Find-installation.",
+      "invalid_code": "Apple accepterade inte verifieringskoden.",
+      "code_format": "Ange en sexsiffrig kod.",
+      "session_expired": "Verifieringssessionen löpte ut. Logga in igen."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "iCloud Contacts-auktorisering sparades. Apple Find matchar namnen i bakgrunden, så det kan ta en stund innan kontaktlistan uppdateras automatiskt."
+    },
+    "abort": {
+      "already_configured": "Apple Find är redan konfigurerat.",
+      "session_expired": "Verifieringssessionen löpte ut. Logga in igen.",
+      "reauth_successful": "Du har loggat in.",
+      "reconfigure_successful": "Du har loggat in."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "iCloud Contacts-auktorisering sparades. Apple Find matchar namnen i bakgrunden, så det kan ta en stund innan kontaktlistan uppdateras automatiskt."
+    },
+    "step": {
+      "init": {
+        "title": "Visa namn från iCloud-kontakter",
+        "description": "Visa namn från dina iCloud-kontakter i kontaktlistan. Apple Find matchar varje person med den e-postadress eller telefonnummer de använder för att dela sin plats. Om inget namn hittas visar listan e-postadressen eller telefonnumret. För att aktivera namnmatchning anger du ett appspecifikt lösenord som genererats för samma Apple-konto. Lämna detta fält tomt för att stänga av det.\n\n[Skapa ett appspecifikt lösenord]({password_guide_url})",
+        "data": {
+          "contacts_password": "Appspecifikt lösenord"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple nekade åtkomst till kontakter. Kontrollera det appspecifika lösenordet.",
+      "contacts_unavailable": "Kunde inte läsa iCloud-kontakter. Försök igen."
+    }
+  },
+  "common": {
+    "contacts": "Kontakter",
+    "devices": "Enheter",
+    "reauth_notification_title": "Logga in på Apple Find igen",
+    "reauth_notification_message": "Apple kräver att du loggar in igen. Följ inloggningsanvisningarna i Home Assistant.\n\n[Lagningar](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Jag"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Spela ett ljud"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Jag"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple erbjuder för närvarande inte möjligheten att spela upp ett ljud på den här enheten."
+    },
+    "sound_reauth": {
+      "message": "Apple kräver att du loggar in igen. Gå till Reparationer i Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple avvisade begäran om att spela upp ett ljud."
+    },
+    "sound_request_failed": {
+      "message": "Kunde inte bekräfta om Apple tog emot begäran om att spela upp ett ljud."
+    }
+  }
+}

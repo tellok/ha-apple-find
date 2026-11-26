@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Mostrar nombres de Contactos de iCloud",
+        "description": "Muestra en la lista los nombres de tus Contactos de iCloud. Apple Find busca a cada persona por la dirección de correo electrónico o el número de teléfono que usa para compartir su ubicación. Si no encuentra ningún nombre, la lista muestra la dirección de correo o el número de teléfono. Para activar esta función, introduce una contraseña específica para apps generada para la misma cuenta de Apple. Deja el campo vacío para desactivarla.\n\n[Crear una contraseña específica para apps]({password_guide_url})",
+        "data": {
+          "contacts_password": "Contraseña específica para apps"
+        }
+      },
+      "apple_login": {
+        "title": "Inicia sesión en tu cuenta de Apple",
+        "description": "Ingrese la dirección de correo electrónico o el número de teléfono de su cuenta Apple y la contraseña de su cuenta.",
+        "data": {
+          "username": "Dirección de correo electrónico o número de teléfono de la cuenta Apple",
+          "password": "Contraseña de la cuenta de Apple"
+        }
+      },
+      "apple_verification": {
+        "title": "Autenticación de dos factores de Apple",
+        "description": "Toque Permitir en un dispositivo Apple confiable, luego ingrese el código de verificación de seis dígitos que se muestra allí. Seleccione Reenviar código de verificación para solicitar un nuevo código.",
+        "data": {
+          "code": "Código de verificación de seis dígitos",
+          "resend": "Reenviar código de verificación"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple rechazó el acceso a Contactos. Verifique la contraseña específica de la aplicación.",
+      "contacts_unavailable": "No se pudieron leer los contactos de iCloud. Intentar otra vez.",
+      "invalid_auth": "Apple no aceptó sus datos de inicio de sesión.",
+      "authorization_failed": "No se pudo completar la autorización de Apple. Verifique sus datos de inicio de sesión e inténtelo nuevamente.",
+      "enrollment_failed": "No se pudo terminar de registrar Apple Find. Intentar otra vez.",
+      "collector_unavailable": "Home Assistant Core no pudo iniciar la autorización de la cuenta Apple.",
+      "account_mismatch": "Utilice la cuenta de Apple que ya está conectada a esta instalación de Apple Find.",
+      "invalid_code": "Apple no aceptó el código de verificación.",
+      "code_format": "Ingrese un código de seis dígitos.",
+      "session_expired": "La sesión de verificación expiró. Inicia sesión nuevamente."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "Se guardó la autorización de Contactos de iCloud. Apple Find busca nombres en segundo plano, por lo que la lista de contactos puede tardar un poco en actualizarse automáticamente."
+    },
+    "abort": {
+      "already_configured": "Apple Find ya está configurado.",
+      "session_expired": "La sesión de verificación expiró. Inicia sesión nuevamente.",
+      "reauth_successful": "Has iniciado sesión en Apple Find.",
+      "reconfigure_successful": "Has iniciado sesión en Apple Find."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "Se guardó la autorización de Contactos de iCloud. Apple Find busca nombres en segundo plano, por lo que la lista de contactos puede tardar un poco en actualizarse automáticamente."
+    },
+    "step": {
+      "init": {
+        "title": "Mostrar nombres de Contactos de iCloud",
+        "description": "Muestra en la lista los nombres de tus Contactos de iCloud. Apple Find busca a cada persona por la dirección de correo electrónico o el número de teléfono que usa para compartir su ubicación. Si no encuentra ningún nombre, la lista muestra la dirección de correo o el número de teléfono. Para activar esta función, introduce una contraseña específica para apps generada para la misma cuenta de Apple. Deja el campo vacío para desactivarla.\n\n[Crear una contraseña específica para apps]({password_guide_url})",
+        "data": {
+          "contacts_password": "Contraseña específica para apps"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple rechazó el acceso a Contactos. Verifique la contraseña específica de la aplicación.",
+      "contacts_unavailable": "No se pudieron leer los contactos de iCloud. Intentar otra vez."
+    }
+  },
+  "common": {
+    "contacts": "Contactos",
+    "devices": "Dispositivos",
+    "reauth_notification_title": "Vuelve a iniciar sesión en Apple Find",
+    "reauth_notification_message": "Apple requiere que inicies sesión nuevamente. Siga las instrucciones de inicio de sesión en Home Assistant.\n\n[Reparaciones](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Yo"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Reproducir sonido"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Yo"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple actualmente no ofrece la opción de reproducir un sonido en este dispositivo."
+    },
+    "sound_reauth": {
+      "message": "Apple requiere que inicies sesión nuevamente. Vaya a Reparaciones en Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple rechazó la solicitud de reproducir un sonido."
+    },
+    "sound_request_failed": {
+      "message": "No se pudo confirmar si Apple recibió la solicitud para reproducir un sonido."
+    }
+  }
+}

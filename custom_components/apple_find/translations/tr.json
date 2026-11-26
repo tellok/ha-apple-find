@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "iCloud Kişilerindeki adları göster",
+        "description": "Kişi listesinde iCloud Kişilerinizdeki adları gösterin. Apple Find, her kişiyi konumunu paylaşmak için kullandıkları e-posta adresine veya telefon numarasına göre eşleştirir. İsim bulunamazsa listede e-posta adresi veya telefon numarası gösterilir. Ad eşleştirmeyi açmak için aynı Apple Hesabı için oluşturulan uygulamaya özel parolayı girin. Kapatmak için bu alanı boş bırakın.\n\n[Uygulamaya özel bir şifre oluşturun]({password_guide_url})",
+        "data": {
+          "contacts_password": "Uygulamaya özel şifre"
+        }
+      },
+      "apple_login": {
+        "title": "Apple Hesabınızda oturum açın",
+        "description": "Apple Hesabınızın e-posta adresini veya telefon numarasını ve hesap şifrenizi girin.",
+        "data": {
+          "username": "Apple Hesabı e-posta adresi veya telefon numarası",
+          "password": "Apple Hesabı şifresi"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple'ın iki faktörlü kimlik doğrulaması",
+        "description": "Güvenilir bir Apple cihazında İzin Ver'e dokunun ve orada gösterilen altı haneli doğrulama kodunu girin. Yeni bir kod istemek için Doğrulama kodunu yeniden gönder'i seçin.",
+        "data": {
+          "code": "Altı haneli doğrulama kodu",
+          "resend": "Doğrulama kodunu yeniden gönder"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple, Kişiler'e erişimi reddetti. Uygulamaya özel şifreyi kontrol edin.",
+      "contacts_unavailable": "iCloud Kişileri okunamadı. Tekrar deneyin.",
+      "invalid_auth": "Apple oturum açma bilgilerinizi kabul etmedi.",
+      "authorization_failed": "Apple yetkilendirmesi tamamlanamadı. Oturum açma ayrıntılarınızı kontrol edip tekrar deneyin.",
+      "enrollment_failed": "Apple Find'ın kaydı tamamlanamadı. Tekrar deneyin.",
+      "collector_unavailable": "Home Assistant Core, Apple Hesabı yetkilendirmesini başlatamadı.",
+      "account_mismatch": "Bu Apple Find kurulumuna zaten bağlı olan Apple Hesabını kullanın.",
+      "invalid_code": "Apple doğrulama kodunu kabul etmedi.",
+      "code_format": "Altı haneli bir kod girin.",
+      "session_expired": "Doğrulama oturumunun süresi doldu. Tekrar oturum açın."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "iCloud Kişiler yetkilendirmesi kaydedildi. Apple Find, arka planda adları eşleştirdiğinden kişi listesinin otomatik olarak güncellenmesi biraz zaman alabilir."
+    },
+    "abort": {
+      "already_configured": "Apple Find zaten yapılandırılmıştır.",
+      "session_expired": "Doğrulama oturumunun süresi doldu. Tekrar oturum açın.",
+      "reauth_successful": "Başarıyla oturum açtınız.",
+      "reconfigure_successful": "Başarıyla oturum açtınız."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "iCloud Kişiler yetkilendirmesi kaydedildi. Apple Find, arka planda adları eşleştirdiğinden kişi listesinin otomatik olarak güncellenmesi biraz zaman alabilir."
+    },
+    "step": {
+      "init": {
+        "title": "iCloud Kişilerindeki adları göster",
+        "description": "Kişi listesinde iCloud Kişilerinizdeki adları gösterin. Apple Find, her kişiyi konumunu paylaşmak için kullandıkları e-posta adresine veya telefon numarasına göre eşleştirir. İsim bulunamazsa listede e-posta adresi veya telefon numarası gösterilir. Ad eşleştirmeyi açmak için aynı Apple Hesabı için oluşturulan uygulamaya özel parolayı girin. Kapatmak için bu alanı boş bırakın.\n\n[Uygulamaya özel bir şifre oluşturun]({password_guide_url})",
+        "data": {
+          "contacts_password": "Uygulamaya özel şifre"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple, Kişiler'e erişimi reddetti. Uygulamaya özel şifreyi kontrol edin.",
+      "contacts_unavailable": "iCloud Kişileri okunamadı. Tekrar deneyin."
+    }
+  },
+  "common": {
+    "contacts": "Kişiler",
+    "devices": "Cihazlar",
+    "reauth_notification_title": "Apple Find'da tekrar oturum açın",
+    "reauth_notification_message": "Apple tekrar oturum açmanızı gerektiriyor. Ev Asistanı'ndaki oturum açma talimatlarını izleyin.\n\n[Onarımlar](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Ben"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Bir ses çal"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Ben"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple şu anda bu cihazda ses çalma seçeneğini sunmuyor."
+    },
+    "sound_reauth": {
+      "message": "Apple tekrar oturum açmanızı gerektiriyor. Ev Asistanında Onarımlar'a gidin."
+    },
+    "sound_rejected": {
+      "message": "Apple ses çalma isteğini reddetti."
+    },
+    "sound_request_failed": {
+      "message": "Apple'ın ses çalma isteğini alıp almadığı doğrulanamadı."
+    }
+  }
+}

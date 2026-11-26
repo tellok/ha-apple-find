@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Weist Nimm vun iCloud Kontakter",
+        "description": "Weist Nimm vun Ärem iCloud Kontakter an der Kontaktlëscht. Apple Find entsprécht all Persoun duerch d'E-Mailadress oder d'Telefonsnummer déi se benotze fir hir Positioun ze deelen. Wann keen Numm fonnt gëtt, weist d'Lëscht d'E-Mailadress oder d'Telefonsnummer. Fir den Numm Matching auszeschalten, gitt en appspezifesche Passwuert fir deeselwechten Apple Kont generéiert. Loosst dëst Feld eidel fir et auszeschalten.\n\n[Erstellt en appspezifesche Passwuert]({password_guide_url})",
+        "data": {
+          "contacts_password": "App-spezifesch Passwuert"
+        }
+      },
+      "apple_login": {
+        "title": "Mellt Iech op Ären Apple Kont un",
+        "description": "Gitt d'E-Mailadress oder d'Telefonsnummer fir Ären Apple Kont an Äert Kont Passwuert un.",
+        "data": {
+          "username": "Apple Kont E-Mail Adress oder Telefonsnummer",
+          "password": "Apple Kont Passwuert"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple zwee-Faktor Authentifikatioun",
+        "description": "Tippen op Erlaabt op engem vertrauenswürdege Apple-Apparat, gitt dann de sechs-Zifferen Verifizéierungscode, deen do ugewise gëtt. Wielt d'Verifikatiounscode nei schécken fir en neie Code ze froen.",
+        "data": {
+          "code": "Sechs-Ziffer Verifikatiounscode",
+          "resend": "Schéckt d'Verifikatiounscode erëm"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple refuséiert Zougang zu Kontakter. Kontrolléiert d'App-spezifesch Passwuert.",
+      "contacts_unavailable": "Konnt iCloud Kontakter net liesen. Probéiert nach eng Kéier.",
+      "invalid_auth": "Apple huet Är Umeldungsdetailer net akzeptéiert.",
+      "authorization_failed": "Konnt d'Apple Autorisatioun net fäerdeg maachen. Kontrolléiert Är Umeldungsdetailer a probéiert nach eng Kéier.",
+      "enrollment_failed": "Konnt d'Aschreiwung vun Apple Find net fäerdeg maachen. Probéiert nach eng Kéier.",
+      "collector_unavailable": "Home Assistant Core konnt d'Apple Account Autorisatioun net starten.",
+      "account_mismatch": "Benotzt den Apple Kont dee scho mat dëser Apple Find Installatioun verbonnen ass.",
+      "invalid_code": "Apple huet de Verifizéierungscode net akzeptéiert.",
+      "code_format": "Gitt e sechs Zifferen Code.",
+      "session_expired": "D'Verifizéierungssitzung ass ofgelaf. Mellt Iech nach eng Kéier un."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "iCloud Kontakter Autorisatioun gouf gespäichert. Apple Find entsprécht Nimm am Hannergrond, sou datt et e bëssen Zäit dauert bis d'Kontaktlëscht automatesch aktualiséiert gëtt."
+    },
+    "abort": {
+      "already_configured": "Apple Find ass scho konfiguréiert.",
+      "session_expired": "D'Verifizéierungssitzung ass ofgelaf. Mellt Iech nach eng Kéier un.",
+      "reauth_successful": "Dir hutt erfollegräich ageloggt.",
+      "reconfigure_successful": "Dir hutt erfollegräich ageloggt."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "iCloud Kontakter Autorisatioun gouf gespäichert. Apple Find entsprécht Nimm am Hannergrond, sou datt et e bëssen Zäit dauert bis d'Kontaktlëscht automatesch aktualiséiert gëtt."
+    },
+    "step": {
+      "init": {
+        "title": "Weist Nimm vun iCloud Kontakter",
+        "description": "Weist Nimm vun Ärem iCloud Kontakter an der Kontaktlëscht. Apple Find entsprécht all Persoun duerch d'E-Mailadress oder d'Telefonsnummer déi se benotze fir hir Positioun ze deelen. Wann keen Numm fonnt gëtt, weist d'Lëscht d'E-Mailadress oder d'Telefonsnummer. Fir den Numm Matching auszeschalten, gitt en appspezifesche Passwuert fir deeselwechten Apple Kont generéiert. Loosst dëst Feld eidel fir et auszeschalten.\n\n[Erstellt en appspezifesche Passwuert]({password_guide_url})",
+        "data": {
+          "contacts_password": "App-spezifesch Passwuert"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple refuséiert Zougang zu Kontakter. Kontrolléiert d'App-spezifesch Passwuert.",
+      "contacts_unavailable": "Konnt iCloud Kontakter net liesen. Probéiert nach eng Kéier."
+    }
+  },
+  "common": {
+    "contacts": "Kontakter",
+    "devices": "Apparater",
+    "reauth_notification_title": "Mellt Iech erëm bei Apple Find un",
+    "reauth_notification_message": "Apple verlaangt datt Dir Iech erëm umellt. Follegt d'Umeldungsinstruktiounen am Home Assistant.\n\n[Repairs](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Ech"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Spillt en Toun"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Ech"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple bitt de Moment net d'Optioun fir en Toun op dësem Apparat ze spillen."
+    },
+    "sound_reauth": {
+      "message": "Apple verlaangt datt Dir Iech erëm umellt. Gitt op Reparaturen am Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple huet d'Demande refuséiert fir en Toun ze spillen."
+    },
+    "sound_request_failed": {
+      "message": "Konnt net bestätegen ob Apple d'Ufro krut fir en Toun ze spillen."
+    }
+  }
+}

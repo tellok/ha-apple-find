@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "iCloudの連絡先の名前を表示",
+        "description": "iCloudの連絡先に保存されている名前を一覧に表示します。Apple Findは、相手が位置情報の共有に使っているメールアドレスや電話番号で連絡先を照合します。名前が見つからない場合は、メールアドレスまたは電話番号が表示されます。この機能を有効にするには、同じApple Accountで発行したアプリ用パスワードを入力してください。無効にするには、空欄のままにしてください。\n\n[アプリ用パスワードを作成する]({password_guide_url})",
+        "data": {
+          "contacts_password": "アプリ用パスワード"
+        }
+      },
+      "apple_login": {
+        "title": "Apple アカウントにサインインします",
+        "description": "Apple アカウントの電子メール アドレスまたは電話番号とアカウントのパスワードを入力します。",
+        "data": {
+          "username": "Apple アカウントのメールアドレスまたは電話番号",
+          "password": "Appleアカウントのパスワード"
+        }
+      },
+      "apple_verification": {
+        "title": "Appleの二要素認証",
+        "description": "信頼できる Apple デバイスで [許可] をタップし、そこに表示されている 6 桁の確認コードを入力します。新しいコードを要求するには、「確認コードを再送信」を選択します。",
+        "data": {
+          "code": "6桁の認証コード",
+          "resend": "確認コードを再送信する"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple は連絡先へのアクセスを拒否しました。アプリ固有のパスワードを確認してください。",
+      "contacts_unavailable": "iCloud 連絡先を読み取れませんでした。もう一度やり直してください。",
+      "invalid_auth": "Apple はサインインの詳細を受け入れませんでした。",
+      "authorization_failed": "Apple 認証を完了できませんでした。サインインの詳細を確認して、もう一度試してください。",
+      "enrollment_failed": "Apple Find の登録を完了できませんでした。もう一度やり直してください。",
+      "collector_unavailable": "ホーム アシスタント コアは Apple アカウントの認証を開始できませんでした。",
+      "account_mismatch": "この Apple Find インストールにすでに接続されている Apple アカウントを使用します。",
+      "invalid_code": "Apple は確認コードを受け入れませんでした。",
+      "code_format": "6桁のコードを入力してください。",
+      "session_expired": "検証セッションの有効期限が切れました。再度サインインします。"
+    },
+    "create_entry": {
+      "contacts_matching_saved": "iCloud連絡先の認証が保存されました。 Apple Find はバックグラウンドで名前を照合するため、連絡先リストが自動的に更新されるまでに少し時間がかかる場合があります。"
+    },
+    "abort": {
+      "already_configured": "Apple Find はすでに設定されています。",
+      "session_expired": "検証セッションの有効期限が切れました。再度サインインします。",
+      "reauth_successful": "Apple Find にサインインしました。",
+      "reconfigure_successful": "Apple Find にサインインしました。"
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "iCloud連絡先の認証が保存されました。 Apple Find はバックグラウンドで名前を照合するため、連絡先リストが自動的に更新されるまでに少し時間がかかる場合があります。"
+    },
+    "step": {
+      "init": {
+        "title": "iCloudの連絡先の名前を表示",
+        "description": "iCloudの連絡先に保存されている名前を一覧に表示します。Apple Findは、相手が位置情報の共有に使っているメールアドレスや電話番号で連絡先を照合します。名前が見つからない場合は、メールアドレスまたは電話番号が表示されます。この機能を有効にするには、同じApple Accountで発行したアプリ用パスワードを入力してください。無効にするには、空欄のままにしてください。\n\n[アプリ用パスワードを作成する]({password_guide_url})",
+        "data": {
+          "contacts_password": "アプリ用パスワード"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple は連絡先へのアクセスを拒否しました。アプリ固有のパスワードを確認してください。",
+      "contacts_unavailable": "iCloud 連絡先を読み取れませんでした。もう一度やり直してください。"
+    }
+  },
+  "common": {
+    "contacts": "連絡先",
+    "devices": "デバイス",
+    "reauth_notification_title": "Apple Find に再サインイン",
+    "reauth_notification_message": "Apple は再度サインインすることを要求します。ホーム アシスタントのサインイン プロンプトに従います。\n\n[修復](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "私"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "サウンドを再生"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "私"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple は現在、このデバイスでサウンドを再生するオプションを提供していません。"
+    },
+    "sound_reauth": {
+      "message": "Apple は再度サインインすることを要求します。ホームアシスタントの「修復」に移動します。"
+    },
+    "sound_rejected": {
+      "message": "Apple はサウンドの再生要求を拒否しました。"
+    },
+    "sound_request_failed": {
+      "message": "Apple がサウンドの再生リクエストを受け取ったかどうかは確認できませんでした。"
+    }
+  }
+}

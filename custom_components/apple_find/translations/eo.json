@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Montru nomojn de iCloud Kontaktoj",
+        "description": "Montru nomojn de viaj iCloud Kontaktoj en la kontaktlisto. Apple Find kongruas kun ĉiu persono laŭ la retadreso aŭ telefonnumero, kiun ili uzas por dividi sian lokon. Se neniu nomo estas trovita, la listo montras la retadreson aŭ telefonnumeron. Por ŝalti la kongruon de nomoj, enigu program-specifan pasvorton generitan por la sama Apple-Konto. Lasu ĉi tiun kampon malplena por malŝalti ĝin.\n\n[Kreu program-specifan pasvorton]({password_guide_url})",
+        "data": {
+          "contacts_password": "Pasvorto specifa por aplikaĵo"
+        }
+      },
+      "apple_login": {
+        "title": "Ensalutu al via Apple-Konto",
+        "description": "Enigu la retpoŝtadreson aŭ telefonnumeron por via Apple-Konto kaj via konta pasvorto.",
+        "data": {
+          "username": "Retadreso aŭ telefonnumero de Apple Konto",
+          "password": "Pasvorto de Apple Konto"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple-dufaktora aŭtentigo",
+        "description": "Frapu Permesi sur fidinda Apple-aparato, tiam enigu la sesciferan konfirmkodon montritan tie. Elektu Resendi konfirmkodon por peti novan kodon.",
+        "data": {
+          "code": "Sescifera konfirmkodo",
+          "resend": "Resendu konfirmkodon"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple malakceptis aliron al Kontaktoj. Kontrolu la specifan pasvorton de la aplikaĵo.",
+      "contacts_unavailable": "Ne eblis legi iCloud Kontaktojn. Provu denove.",
+      "invalid_auth": "Apple ne akceptis viajn ensalutitajn detalojn.",
+      "authorization_failed": "Ne eblis kompletigi Apple-rajtigon. Kontrolu viajn ensalutitajn detalojn kaj provu denove.",
+      "enrollment_failed": "Ne eblis fini registri Apple Find. Provu denove.",
+      "collector_unavailable": "Home Assistant Core ne povis komenci rajtigon de Apple-Konto.",
+      "account_mismatch": "Uzu la Apple-Konton, kiu jam estas konektita al ĉi tiu Apple Find-instalaĵo.",
+      "invalid_code": "Apple ne akceptis la konfirmkodon.",
+      "code_format": "Enigu sesciferan kodon.",
+      "session_expired": "La kontrola sesio eksvalidiĝis. Ensalutu denove."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "La rajtigo de iCloud Kontaktoj estis konservita. Apple Find kongruas kun nomoj en la fono, do eble daŭros iom da tempo por la kontaktlisto aŭtomate ĝisdatigi."
+    },
+    "abort": {
+      "already_configured": "Apple Find jam estas agordita.",
+      "session_expired": "La kontrola sesio eksvalidiĝis. Ensalutu denove.",
+      "reauth_successful": "Vi ensalutis sukcese.",
+      "reconfigure_successful": "Vi ensalutis sukcese."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "La rajtigo de iCloud Kontaktoj estis konservita. Apple Find kongruas kun nomoj en la fono, do eble daŭros iom da tempo por la kontaktlisto aŭtomate ĝisdatigi."
+    },
+    "step": {
+      "init": {
+        "title": "Montru nomojn de iCloud Kontaktoj",
+        "description": "Montru nomojn de viaj iCloud Kontaktoj en la kontaktlisto. Apple Find kongruas kun ĉiu persono laŭ la retadreso aŭ telefonnumero, kiun ili uzas por dividi sian lokon. Se neniu nomo estas trovita, la listo montras la retadreson aŭ telefonnumeron. Por ŝalti la kongruon de nomoj, enigu program-specifan pasvorton generitan por la sama Apple-Konto. Lasu ĉi tiun kampon malplena por malŝalti ĝin.\n\n[Kreu program-specifan pasvorton]({password_guide_url})",
+        "data": {
+          "contacts_password": "Pasvorto specifa por aplikaĵo"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple malakceptis aliron al Kontaktoj. Kontrolu la specifan pasvorton de la aplikaĵo.",
+      "contacts_unavailable": "Ne eblis legi iCloud Kontaktojn. Provu denove."
+    }
+  },
+  "common": {
+    "contacts": "Kontaktoj",
+    "devices": "Aparatoj",
+    "reauth_notification_title": "Ensalutu al Apple Find denove",
+    "reauth_notification_message": "Apple postulas vin ensaluti denove. Sekvu la ensalutilojn en Hejma Asistanto.\n\n[Repairs](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Mi"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Ludu sonon"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Mi"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple nuntempe ne ofertas la eblon ludi sonon sur ĉi tiu aparato."
+    },
+    "sound_reauth": {
+      "message": "Apple postulas vin ensaluti denove. Iru al Riparoj en Hejma Asistanto."
+    },
+    "sound_rejected": {
+      "message": "Apple malakceptis la peton ludi sonon."
+    },
+    "sound_request_failed": {
+      "message": "Ne povis konfirmi ĉu Apple ricevis la peton ludi sonon."
+    }
+  }
+}

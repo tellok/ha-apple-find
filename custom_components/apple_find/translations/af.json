@@ -1,0 +1,105 @@
+{
+  "config": {
+    "step": {
+      "icloud_contacts": {
+        "title": "Wys name vanaf iCloud-kontakte",
+        "description": "Wys name van jou iCloud-kontakte in die kontaklys. Apple Find pas by elke persoon deur die e-posadres of telefoonnommer wat hulle gebruik om hul ligging te deel. As geen naam gevind word nie, wys die lys die e-posadres of telefoonnommer. Om naampassing aan te skakel, voer 'n programspesifieke wagwoord in wat vir dieselfde Apple-rekening gegenereer is. Laat hierdie veld leeg om dit af te skakel.\n\n[Skep 'n programspesifieke wagwoord]({password_guide_url})",
+        "data": {
+          "contacts_password": "Programspesifieke wagwoord"
+        }
+      },
+      "apple_login": {
+        "title": "Meld aan by jou Apple-rekening",
+        "description": "Voer die e-posadres of telefoonnommer vir jou Apple-rekening en jou rekeningwagwoord in.",
+        "data": {
+          "username": "Apple-rekening se e-posadres of telefoonnommer",
+          "password": "Apple-rekeningwagwoord"
+        }
+      },
+      "apple_verification": {
+        "title": "Apple-tweefaktor-verifikasie",
+        "description": "Tik Laat toe op 'n vertroude Apple-toestel en voer dan die sessyfer-verifikasiekode in wat daar gewys word. Kies Herstuur verifikasiekode om 'n nuwe kode te versoek.",
+        "data": {
+          "code": "Sessyfer-verifikasiekode",
+          "resend": "Stuur verifikasiekode weer"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple het toegang tot kontakte geweier. Gaan die programspesifieke wagwoord na.",
+      "contacts_unavailable": "Kon nie iCloud-kontakte lees nie. Probeer weer.",
+      "invalid_auth": "Apple het nie jou aanmeldbesonderhede aanvaar nie.",
+      "authorization_failed": "Kon nie Apple-magtiging voltooi nie. Gaan jou aanmeldbesonderhede na en probeer weer.",
+      "enrollment_failed": "Kon nie Apple Find klaar registreer nie. Probeer weer.",
+      "collector_unavailable": "Home Assistant Core kon nie Apple-rekeningmagtiging begin nie.",
+      "account_mismatch": "Gebruik die Apple-rekening wat reeds aan hierdie Apple Find-installasie gekoppel is.",
+      "invalid_code": "Apple het nie die verifikasiekode aanvaar nie.",
+      "code_format": "Voer 'n ses-syfer kode in.",
+      "session_expired": "Die verifikasiesessie het verstryk. Meld weer aan."
+    },
+    "create_entry": {
+      "contacts_matching_saved": "iCloud-kontakte-magtiging is gestoor. Apple Find pas by name op die agtergrond, so dit kan 'n rukkie neem vir die kontaklys om outomaties op te dateer."
+    },
+    "abort": {
+      "already_configured": "Apple Find is reeds opgestel.",
+      "session_expired": "Die verifikasiesessie het verstryk. Meld weer aan.",
+      "reauth_successful": "Jy het suksesvol aangemeld.",
+      "reconfigure_successful": "Jy het suksesvol aangemeld."
+    }
+  },
+  "options": {
+    "abort": {
+      "contacts_matching_saved": "iCloud-kontakte-magtiging is gestoor. Apple Find pas by name op die agtergrond, so dit kan 'n rukkie neem vir die kontaklys om outomaties op te dateer."
+    },
+    "step": {
+      "init": {
+        "title": "Wys name vanaf iCloud-kontakte",
+        "description": "Wys name van jou iCloud-kontakte in die kontaklys. Apple Find pas by elke persoon deur die e-posadres of telefoonnommer wat hulle gebruik om hul ligging te deel. As geen naam gevind word nie, wys die lys die e-posadres of telefoonnommer. Om naampassing aan te skakel, voer 'n programspesifieke wagwoord in wat vir dieselfde Apple-rekening gegenereer is. Laat hierdie veld leeg om dit af te skakel.\n\n[Skep 'n programspesifieke wagwoord]({password_guide_url})",
+        "data": {
+          "contacts_password": "Programspesifieke wagwoord"
+        }
+      }
+    },
+    "error": {
+      "contacts_invalid_auth": "Apple het toegang tot kontakte geweier. Gaan die programspesifieke wagwoord na.",
+      "contacts_unavailable": "Kon nie iCloud-kontakte lees nie. Probeer weer."
+    }
+  },
+  "common": {
+    "contacts": "Kontakte",
+    "devices": "Toestelle",
+    "reauth_notification_title": "Meld weer by Apple Find aan",
+    "reauth_notification_message": "Apple vereis dat jy weer aanmeld. Volg die aanmeldaanwysings in Home Assistant.\n\n[Repairs](/config/repairs)"
+  },
+  "device": {
+    "me": {
+      "name": "Ek"
+    }
+  },
+  "entity": {
+    "button": {
+      "play_sound": {
+        "name": "Speel 'n klank"
+      }
+    },
+    "device_tracker": {
+      "me": {
+        "name": "Ek"
+      }
+    }
+  },
+  "exceptions": {
+    "sound_target_unavailable": {
+      "message": "Apple bied tans nie die opsie om 'n klank op hierdie toestel te speel nie."
+    },
+    "sound_reauth": {
+      "message": "Apple vereis dat jy weer aanmeld. Gaan na Repairs in Home Assistant."
+    },
+    "sound_rejected": {
+      "message": "Apple het die versoek om 'n klank te speel verwerp."
+    },
+    "sound_request_failed": {
+      "message": "Kon nie bevestig of Apple die versoek ontvang het om 'n klank te speel nie."
+    }
+  }
+}
