@@ -1,0 +1,9 @@
+{
+  "name": "ha-apple-find",
+  "version": "0.7.3",
+  "private": true,
+  "devDependencies": {
+    "@changesets/cli": "3.0.3",
+    "prettier": "3.10.1"
+  }
+}
