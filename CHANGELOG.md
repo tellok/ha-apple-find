@@ -1,5 +1,11 @@
 # ha-apple-find
 
+## 0.7.5
+
+### Patch Changes
+
+- 50c7150: Fix Apple ID sign-in failures caused by GrandSlam returning HTTP 503 for the `macOS` client label. Use the compatible `Mac OS X` label for new and existing ADI identities without requiring users to reset their integration.
+
 ## 0.7.4
 
 ### Patch Changes
