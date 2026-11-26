@@ -32,8 +32,9 @@ class CourierDisconnected(RuntimeError):
 
 
 class Receiver:
-    def __init__(self, http, target_uri, self_uri):
+    def __init__(self, http, target_uri, self_uri, *, on_searchparty_notification=None):
         self.http = http
+        self.on_searchparty_notification = on_searchparty_notification
         self.target_uri = target_uri.lower() if target_uri else None
         self.self_uri = self_uri.lower()
         self.push = json.loads((PRIVATE / "apns-identity.json").read_text())
@@ -100,6 +101,12 @@ class Receiver:
                     self.writer.write(frame(0x0b, [(1, base64.b64decode(self.push["token"])),
                         (4, values[4]), (8, b"\x00")]))
                     await self.writer.drain()
+                    topic = TOPICS_BY_HASH.get(values.get(2), "unknown")
+                    if topic == "com.apple.icloud.searchparty" and self.on_searchparty_notification is not None:
+                        # The topic is an account-level hint. Only a separate verified
+                        # location report can identify a contact or supply a position.
+                        self.on_searchparty_notification()
+                        continue
                     try:
                         packet = plistlib.loads(values[3])
                     except (KeyError, ValueError, TypeError):
@@ -117,7 +124,6 @@ class Receiver:
                         expected_token = isinstance(sender_token, bytes) and sender_token in self.selected_push_tokens
                         is_pair_ec = packet.get("E") == "pair-ec" and packet.get("c") == 242
                         # Count wire commands without logging any sender or payload data.
-                        topic = TOPICS_BY_HASH.get(values.get(2), "unknown")
                         wire_command = packet.get("c")
                         command_label = wire_command if type(wire_command) is int and 0 <= wire_command <= 255 else "other"
                         signature = f"{topic}:{command_label}"

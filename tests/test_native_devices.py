@@ -33,6 +33,35 @@ def test_sound_capability_survives_a_missing_location():
     assert snapshot == [previous[0] | {"play_sound": True}]
 
 
+def test_device_poll_diagnostics_distinguish_new_and_repeated_reports(monkeypatch, tmp_path):
+    import asyncio
+    import json
+    from unittest.mock import AsyncMock
+
+    from custom_components.apple_find.backend import native_devices
+
+    now = datetime.now(timezone.utc)
+    phone = {"id": "private-device-id", "name": "private-name", "locationEnabled": True,
+             "location": {"timeStamp": now.timestamp() * 1000, "latitude": 12.345678,
+                          "longitude": 90.123456, "horizontalAccuracy": 5}}
+    monkeypatch.setattr(native_devices, "fetch_devices", AsyncMock(return_value=[phone]))
+    monkeypatch.setattr(native_devices, "VerifiedHttpSession", lambda *args, **kwargs: AsyncMock())
+    monkeypatch.setattr(native_devices, "account_generation", lambda: "test")
+    monkeypatch.setattr(native_devices, "mark_reauth", lambda *args, **kwargs: None)
+    monkeypatch.setattr(native_devices, "OUTPUT", tmp_path / "snapshot.json")
+    messages = []
+    monkeypatch.setattr(native_devices, "log_diagnostic", lambda message, **_: messages.append(message))
+
+    for _ in range(2):
+        asyncio.run(native_devices.run(None, provider=object()))
+    polls = [json.loads(message) for message in messages]
+    assert [poll["report_time_changed"] for poll in polls] == [1, 0]
+    assert all(poll["listed"] == poll["located"] == 1 for poll in polls)
+    assert all(0 <= poll["fetch_ms"] <= poll["elapsed_ms"] for poll in polls)
+    assert all(private not in message for private in ("private-device-id", "private-name", "12.345678", "90.123456")
+               for message in messages)
+
+
 def test_play_sound_addresses_only_the_currently_supported_device(monkeypatch):
     import asyncio
     import json

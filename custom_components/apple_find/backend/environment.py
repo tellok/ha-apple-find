@@ -66,6 +66,22 @@ def module_command(module, *args):
     return (sys.executable, "-m", f"{__package__}.{module}", *args)
 
 
+def failure_origin(error):
+    """Describe the failing integration frame without logging arguments or exception text."""
+    while isinstance(error, BaseExceptionGroup):
+        error = error.exceptions[0]
+    description = type(error).__name__
+    frame = error.__traceback__
+    prefix = __package__.rsplit(".", 1)[0] + "."
+    while frame:
+        module = frame.tb_frame.f_globals.get("__name__", "")
+        if module.startswith(prefix):
+            function = frame.tb_frame.f_code.co_name
+            description = f"{type(error).__name__} at {module}.{function}:{frame.tb_lineno}"
+        frame = frame.tb_next
+    return description
+
+
 def log_diagnostic(message, *, flush=False, level=logging.DEBUG):
     """Send shareable diagnostics to HA, or print them for standalone probes."""
     if environment.in_core:

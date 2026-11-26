@@ -118,6 +118,7 @@ class AuthorizationBridge:
     async def expire(self, session):
         async with self.lock:
             if self.session == session:
+                LOGGER.debug("Discarding expired Apple sign-in challenge")
                 await self.discard()
 
     @property

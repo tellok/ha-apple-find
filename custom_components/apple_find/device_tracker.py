@@ -54,14 +54,19 @@ async def async_setup_contacts(hass, entry, async_add_entities):
 
     def read_contacts(contacts, max_age):
         data = {}
+        missing = rejected = 0
         for contact in contacts:
             target_id = "friend:" + contact.handles[0]
             try:
                 position = read_positions(directory / contact.snapshot_name, {target_id}, max_age).get(target_id)
+            except FileNotFoundError:
+                missing += 1
+                position = None
             except (OSError, ValueError, KeyError, TypeError, AttributeError):
+                rejected += 1
                 position = None
             data[contact.target] = (contact.name, position, contact.handles[0])
-        return data
+        return data, missing, rejected
 
     async def update():
         manual = {
@@ -70,7 +75,7 @@ async def async_setup_contacts(hass, entry, async_add_entities):
             if candidate.data.get("kind") != "devices" and "target_id" in candidate.data
         }
         contacts, own_device, max_age = await runtime.async_contacts()
-        data = await hass.async_add_executor_job(
+        data, missing, rejected = await hass.async_add_executor_job(
             read_contacts, [contact for contact in contacts if manual.isdisjoint(contact.handles)], max_age,
         )
         devices = entry.runtime_data
@@ -79,9 +84,14 @@ async def async_setup_contacts(hass, entry, async_add_entities):
             if own_device and devices.last_update_success and device.discovery_key == own_device
         ]
         own_position = matches[0] if len(matches) == 1 else None
+        previous = coordinator.data or {}
+        located = {target: position for target, (_, position, _) in data.items() if position is not None}
         LOGGER.debug(
-            "Apple Find contact trackers refreshed (contacts: %d, with location: %d, Me located: %s)",
-            len(data), sum(position is not None for _, position, _ in data.values()), own_position is not None,
+            "Apple Find contact trackers refreshed (contacts: %d, with location: %d, new or changed "
+            "positions: %d, missing snapshots: %d, rejected snapshots: %d, max age: %s s, Me located: %s)",
+            len(data), len(located), sum(target not in previous or previous[target][1] != position
+                                         for target, position in located.items()),
+            missing, rejected, max_age, own_position is not None,
         )
         data[OWN_LOCATION] = (None, own_position, None)
         return data
@@ -132,12 +142,15 @@ async def async_setup_entry(hass, entry, async_add_entities):
     async def update():
         try:
             result = await hass.async_add_executor_job(read_positions, path, targets, config["max_age"])
-        except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        except (OSError, ValueError, KeyError, TypeError, AttributeError) as error:
             # Avoid leaking file content or coordinates in logs.
+            LOGGER.debug("Apple Find selected contact snapshot could not be read (%s)", type(error).__name__)
             raise UpdateFailed("Location snapshot missing, stale, or invalid") from None
         previous = coordinator.data or {}
         if any(k in previous and p.timestamp < previous[k].timestamp for k, p in result.items()):
             raise UpdateFailed("Location timestamp moved backwards")
+        LOGGER.debug("Apple Find selected contact snapshot read (with location: %d, changed: %s)",
+                     len(result), result != previous)
         return result
 
     coordinator = DataUpdateCoordinator(

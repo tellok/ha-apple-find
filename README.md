@@ -2,7 +2,7 @@
 
 <img src="custom_components/apple_find/brand/icon.png" alt="macOS Find My app icon" width="96">
 
-Apple Find is a custom integration for Home Assistant Core. Its People and Devices clients share one Apple session, provisioned CoreADI state and APNs identity on the HA host. The People client polls Apple for location reports and uses Apple push to receive contact share keys when needed. The Devices client polls Apple's native device service and discovers trackers that provide usable locations.
+Apple Find is a custom integration for Home Assistant Core. Its People and Devices clients share one Apple session, provisioned CoreADI state and APNs identity on the HA host. The People client receives contact share keys via Apple push. A SearchParty notification prompts it to check for new location reports from existing shares. The Devices client polls Apple's native device service and discovers trackers that provide usable locations.
 
 ## Status
 
@@ -26,7 +26,7 @@ The current macOS Find My daemon was observed issuing `SubscribeAndFetch` with t
 - `scripts/emulated_anisette.py` obtains a new OTP as needed from the bundled CoreADI emulator. Home Assistant creates a new ADI identity during first sign-in and stores it with the Apple session.
 - `scripts/people_bootstrap.py`, `scripts/ids_enroll.py`, `scripts/ids_register.py` and `scripts/ids_receiver.py` implement the IDS delegate, certificate, registration and receipt stages.
 - `custom_components/apple_find/backend` implements native People, Devices, and Apple authorization. HA Core owns the collectors. Both use one CoreADI provider and discover contacts and devices for the authorized account.
-- `custom_components/apple_find/device_tracker.py` validates normalized location snapshots. Device discovery runs every 120 seconds under normal conditions. Apple’s shared contact list is refreshed every five minutes. Each contact’s location is normally polled every 60 seconds. Requests are backed off on service errors.
+- `custom_components/apple_find/device_tracker.py` validates normalized location snapshots. Device discovery runs every 120 seconds under normal conditions. Apple’s shared contact list is refreshed every five minutes. For automatically discovered contacts, the collector checks for location reports every 30 seconds. An account-wide SearchParty notification immediately queues a check of existing shares. Notifications received during a check queue one follow-up as soon as the collector is available. A notification can concern other Find My activity, and Apple may return the previous report. Requests back off on service errors.
 - The command-line probes in `scripts` can still be used independently for development.
 
 The emulation and native protocol probes reference the [Zerotistic protocol analysis](https://zerotistic.blog/posts/find-my-people-linux/), [pypush](https://github.com/JJTech0130/pypush), [rustpush](https://github.com/stek29/rustpush) and [os-findmy-e](https://github.com/sacca97/os-findmy-e). See [bundled assets and sources](custom_components/apple_find/assets/README.md).
@@ -58,6 +58,17 @@ Open a tracked device in **Apple Find → Devices** to use its **Play Sound** bu
 
 In **Settings → Devices & services → Apple Find**, open the integration's menu and select **Enable debug logging**. Reproduce the problem, then select **Disable debug logging** to download the log. For missing or stale locations, leave it enabled for at least five minutes so the log can include a contact discovery cycle.
 
+The following DEBUG messages trace a contact update from the push receiver to the HA tracker.
+
+| Event | What to check |
+| --- | --- |
+| `searchparty_hint` | An account-level push arrived. `newly_requested` counts contact checks added and `already_pending` counts those already queued. |
+| `push_refresh` or `scheduled_refresh` | A check started. Match its temporary `share_slot` with the `completed`, `waiting_for_share_key`, or `request_error` for the same check. Slots are reassigned when the collector restarts. |
+| `fetch_location` and `snapshot` | Check the request duration and status, then the snapshot result. `updated` means a newer report was written, `already_current` means the stored timestamp was at least as recent, and `no_fresh_supported_report` means no returned report passed validation. `report_age_seconds` gives the age of the selected report. |
+| `Apple Find contact trackers refreshed` | HA read the snapshots. The counts show how many positions changed and how many snapshots were missing or rejected. |
+
+For device updates, inspect `device_poll` for the fetch duration, number of usable positions, and number of changed report timestamps. The subsequent HA device snapshot log shows how many positions passed validation.
+
 To keep a particular level across restarts, use Home Assistant's [Logger integration](https://www.home-assistant.io/integrations/logger/) in `configuration.yaml`. Merge this into your existing `logger:` section if you have one:
 
 ```yaml
@@ -66,7 +77,7 @@ logger:
     custom_components.apple_find: debug
 ```
 
-You can also change the same logger at runtime with the `logger.set_level` action. Use `debug` for troubleshooting, `info` for events such as successful authorization, or `warning` for problems that may need attention.
+You can also change the same logger at runtime with the `logger.set_level` action. INFO covers startup, successful authorization, and connection recovery. WARNING identifies failures such as a disconnected push receiver or a rate-limited query, with the retry delay where available. An unexpected runtime exit after startup is logged at ERROR with the failing integration function and line when available.
 
 When reporting an issue, include your Home Assistant and Apple Find versions, the approximate time of the problem, and the lines from `custom_components.apple_find` and its submodules. Apple Find logs counts, status codes, and retry times. Review the download before sharing because it may contain messages from other Home Assistant integrations. Never attach your Apple Find state directory or Home Assistant backups.
 

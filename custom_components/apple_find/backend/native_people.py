@@ -117,6 +117,17 @@ class PollTarget:
     due: float = 0.0
     next_key_refresh: float = 0.0
     needs_refresh: bool = False
+    refresh_requested: bool = False
+    not_before: float = 0.0
+    share_slot: int | None = None
+
+    @property
+    def next_poll(self):
+        return self.not_before if self.refresh_requested else self.due
+
+    def defer_until(self, deadline):
+        self.not_before = max(self.not_before, deadline)
+        self.due = max(self.due, deadline)
 
 
 class AppleRequestError(RuntimeError):
@@ -251,8 +262,10 @@ class PeopleClient:
         body = fetch_body(self.selected, base64.b64decode(self.push["token"]).hex().upper(), self.push["device_id"].upper(), advertised)
         headers = await self.headers()
         headers["Accept-Version"] = "1"
+        started = time.monotonic()
         response = await self.http.post(base.rstrip("/") + "/fetch", auth=(self.dsid, self.tokens["searchPartyToken"]),
                                         headers=headers, json=body)
+        elapsed_ms = round((time.monotonic() - started) * 1000)
         diagnostic = {"stage": "fetch_location" if key else "distribute_keys", "http_status": response.status_code,
                       "response_bytes": len(response._content)}
         data = response.json() if response.ok and response._content else {}
@@ -263,7 +276,7 @@ class PeopleClient:
         log_diagnostic(json.dumps({
             "stage": diagnostic["stage"], "http_status": response.status_code,
             "status_code": diagnostic["status_code"] if type(diagnostic["status_code"]) is int else None,
-            "accepted": response.ok and status == "200",
+            "accepted": response.ok and status == "200", "elapsed_ms": elapsed_ms,
         }), flush=True)
         if not response.ok or status != "200":
             effective_status = int(status) if response.ok and status.isdecimal() else response.status_code
@@ -292,17 +305,21 @@ class PeopleClient:
     async def position(self, key, output, *, max_age=FRESH_LOCATION_SECONDS):
         target_id = f"friend:{self.target}"
         positions = []
+        reports = await self.fetch(key)
         now = datetime.now(timezone.utc)
-        for report in await self.fetch(key):
+        for report in reports:
             try:
                 positions.append(position_from_report(report, target_id=target_id, now=now, max_age=max_age))
             except (ValueError, TypeError, KeyError):
                 continue
         if not positions:
-            log_diagnostic(json.dumps({"stage": "snapshot", "result": "no_fresh_supported_report"}), flush=True)
+            log_diagnostic(json.dumps({"stage": "snapshot", "result": "no_fresh_supported_report",
+                                       "report_count": len(reports)}), flush=True)
             return False
         best = max(positions, key=lambda position: position.timestamp)
-        fresh = (now - best.timestamp).total_seconds() <= FRESH_LOCATION_SECONDS
+        age_seconds = (now - best.timestamp).total_seconds()
+        fresh = age_seconds <= FRESH_LOCATION_SECONDS
+        diagnostic = {"stage": "snapshot", "report_age_seconds": round(age_seconds, 1), "fresh": fresh}
         previous = None
         if output.is_file():
             previous = json.loads(output.read_text())["positions"][0]
@@ -310,13 +327,13 @@ class PeopleClient:
             if previous["target_id"] != target_id:
                 raise ValueError("Snapshot output belongs to another target")
             if best.timestamp <= datetime.fromisoformat(previous["timestamp"]):
-                log_diagnostic(json.dumps({"stage": "snapshot", "result": "already_current", "fresh": fresh}))
+                log_diagnostic(json.dumps({**diagnostic, "result": "already_current"}))
                 return fresh
         save_private(output, {"schema_version": 1, "positions": [{
             "target_id": target_id, "latitude": best.latitude, "longitude": best.longitude,
             "accuracy": best.accuracy, "timestamp": best.timestamp.isoformat(), "floor": best.floor,
         }]})
-        log_diagnostic(json.dumps({"stage": "snapshot", "result": "updated"}), flush=True)
+        log_diagnostic(json.dumps({**diagnostic, "result": "updated"}), flush=True)
         return fresh
 
 
@@ -458,6 +475,14 @@ def poll_targets(args):
 async def poll_target(target, interval, *, shared_keys=False):
     delay = interval
     now = time.monotonic()
+    trigger = "push" if target.refresh_requested else "scheduled"
+    diagnostic = {"stage": "people_poll", "trigger": trigger}
+    if target.share_slot is not None:
+        diagnostic["share_slot"] = target.share_slot
+    log_diagnostic(json.dumps({**diagnostic, "result": f"{trigger}_refresh",
+                               "seconds_early": round(max(0, target.due - now), 1)}))
+    # Consume only hints received before this fetch. A hint during I/O stays pending.
+    target.refresh_requested = False
     refresh = not shared_keys and target.needs_refresh and now >= target.next_key_refresh
     if refresh:
         target.next_key_refresh = now + 1800
@@ -467,55 +492,76 @@ async def poll_target(target, interval, *, shared_keys=False):
         key = read_share_key(opts.target) if shared_keys else None
         relationship_id = getattr(opts, "relationship_id", None)
         if shared_keys and (not key or relationship_id is not None and key.get("fm_id") != relationship_id):
-            log_diagnostic(json.dumps({"stage": "people_poll", "result": "waiting_for_share_key"}))
+            log_diagnostic(json.dumps({**diagnostic, "result": "waiting_for_share_key"}))
             target.needs_refresh = True
             target.due = now + interval
+            target.not_before = now
             return 0
         target.needs_refresh = not await collect_once(opts, refresh_key=refresh)
         mark_reauth("people", generation, required=False)
         if target.needs_refresh and not shared_keys:
             delay = max(delay, 300)
     except AppleRequestError as error:
-        log_diagnostic(json.dumps({"stage": "people_poll", "http_status": error.status}), flush=True)
+        retry_seconds = 2700 if error.status == 429 else max(delay, 300)
+        log_diagnostic(json.dumps({**diagnostic, "result": "request_error", "http_status": error.status,
+                                   "elapsed_ms": round((time.monotonic() - now) * 1000),
+                                   "retry_seconds": retry_seconds}), flush=True)
         if error.status == 429:
-            return 2700
-        if error.status == 401:
-            target.due = time.monotonic() + max(delay, 300)
-            return -1
-        delay = max(delay, 300)
+            return retry_seconds
+        target.defer_until(time.monotonic() + retry_seconds)
+        return -1 if error.status == 401 else 0
     except (ClientError, OSError, ValueError, KeyError, RuntimeError) as error:
-        log_diagnostic(json.dumps({"stage": "people_poll", "error_type": type(error).__name__}), flush=True)
-        delay = max(delay, 300)
-    target.due = time.monotonic() + delay
+        retry_seconds = max(delay, 300)
+        log_diagnostic(json.dumps({**diagnostic, "result": "request_error", "error_type": type(error).__name__,
+                                   "elapsed_ms": round((time.monotonic() - now) * 1000),
+                                   "retry_seconds": retry_seconds}), flush=True)
+        target.defer_until(time.monotonic() + retry_seconds)
+        return 0
+    finished = time.monotonic()
+    target.due = finished + delay
+    target.not_before = finished
+    log_diagnostic(json.dumps({**diagnostic, "result": "completed", "fresh": not target.needs_refresh,
+                               "elapsed_ms": round((finished - now) * 1000)}))
     return 0
 
 
-async def run(args, *, targets=None, shared_keys=False):
+async def run(args, *, targets=None, shared_keys=False, wake=None):
     if targets is None:
         targets = poll_targets(args)
     if args.poll_interval is None:
         for target in targets:
             await collect_once(target.args)
         return
+    for slot, target in enumerate(targets, start=1):
+        target.share_slot = slot
     next_token_refresh = 0.0
+    wake = wake or asyncio.Event()
     generation = account_generation()
     while True:
-        target = min(targets, key=lambda item: item.due)
-        remaining = target.due - time.monotonic()
+        wake.clear()
+        current_generation = account_generation()
+        if generation != current_generation:
+            generation = current_generation
+            next_token_refresh = 0.0
+            for item in targets:
+                item.due = item.not_before = 0.0
+                item.refresh_requested = False
+        target = min(targets, key=lambda item: item.next_poll)
+        remaining = target.next_poll - time.monotonic()
         if remaining > 0:
-            await asyncio.sleep(min(remaining, 15))
-            if generation != account_generation():
-                generation = account_generation()
-                next_token_refresh = 0.0
-                for item in targets:
-                    item.due = 0.0
+            try:
+                await asyncio.wait_for(wake.wait(), min(remaining, 15))
+            except TimeoutError:
+                pass
             continue
         result = await poll_target(target, getattr(target.args, "poll_interval", args.poll_interval),
                                    shared_keys=shared_keys)
         if result > 0:
             until = time.monotonic() + result
             for item in targets:
-                item.due = max(item.due, until)
+                item.defer_until(until)
+            log_diagnostic(json.dumps({"stage": "people_poll", "result": "rate_limited", "http_status": 429,
+                                       "retry_seconds": result}), level=logging.WARNING)
         elif result == -1 and time.monotonic() < next_token_refresh:
             mark_reauth("people", generation, required=True)
         elif result == -1:
