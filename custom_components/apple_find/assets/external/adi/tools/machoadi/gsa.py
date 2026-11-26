@@ -36,7 +36,7 @@ LOOKUP_URL = "https://gsa.apple.com/grandslam/GsService2/lookup"
 # AuthKit's own identifiers.
 USER_AGENT = "akd/1.0 CFNetwork/1404.0.5 Darwin/22.3.0"
 DEFAULT_CLIENT_INFO = (
-    "<MacBookPro13,2> <macOS;13.1;22C65> <com.apple.AuthKit/1 (com.apple.akd/1.0)>"
+    "<MacBookPro13,2> <Mac OS X;13.1;22C65> <com.apple.AuthKit/1 (com.apple.akd/1.0)>"
 )
 CLIENT_APP_NAME = "Setup"
 
