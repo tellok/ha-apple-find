@@ -20,5 +20,5 @@
     "phonenumbers==9.0.43",
     "vobject>=0.9.9"
   ],
-  "version": "0.6.0"
+  "version": "0.7.0"
 }
