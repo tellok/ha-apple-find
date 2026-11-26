@@ -4,8 +4,30 @@
 
 Apple Find is a custom integration for Home Assistant Core. Its People and Devices clients share one Apple session, provisioned CoreADI state and APNs identity on the HA host. The People client receives contact share keys via Apple push. A SearchParty notification prompts it to check for new location reports from existing shares. The Devices client polls Apple's native device service and discovers trackers that provide usable locations.
 
+**Common uses**
+
+- **Find a misplaced device by sound.** Press **Play Sound** in Home Assistant to make a supported Apple device ring and help you locate it nearby.
+- **Check where you left a device.** See the last reported location of your iPhone, iPad, or Mac on the Home Assistant map.
+- **See where family and friends are.** View the latest locations of people who already share their location with you through Apple Find My.
+
 > [!TIP]
 > See where your Apple Find contacts and devices have been with [Location History Card](https://github.com/tellok/ha-location-history-card). Scrub a shared timeline to compare their tracks, or select a time range to replay on the map.
+
+## Screenshots
+
+These screenshots use fictional contacts, devices, and locations around Central Park.
+
+### Contacts and devices
+
+![Apple Find integration page with separate Contacts and Devices groups](docs/images/apple-find-integration.webp)
+
+### Map
+
+![Home Assistant map showing the latest locations of fictional contacts and devices](docs/images/apple-find-map.webp)
+
+### Play Sound
+
+![Example iPhone device page with the Play Sound button](docs/images/apple-find-play-sound.webp)
 
 ## Status
 
