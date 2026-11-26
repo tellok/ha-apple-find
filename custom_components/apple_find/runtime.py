@@ -17,7 +17,7 @@ from .snapshots import notify_snapshot_changed
 
 LOGGER = logging.getLogger(__name__)
 PEOPLE_POLL_SECONDS = 15
-DEVICE_POLL_SECONDS = 120
+DEVICE_POLL_SECONDS = 15
 CONTACT_DISCOVERY_SECONDS = 300
 ADDRESS_BOOK_REFRESH_SECONDS = 1800
 
