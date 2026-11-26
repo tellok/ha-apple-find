@@ -1,0 +1,12 @@
+{
+  "unit": "ha-apple-find",
+  "base": "0ae4d5be0441afebf42f9cec1e7bb703c24908b3",
+  "old": "0.7.3",
+  "new": "0.7.4",
+  "bump": "patch",
+  "tag": "v0.7.4",
+  "asset": "apple_find.zip",
+  "changesets": {
+    ".changeset/localize-apple-find.md": "05b51472dfc293933e2fc8bc44cd1ec739910026"
+  }
+}
