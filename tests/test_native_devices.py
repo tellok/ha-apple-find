@@ -38,13 +38,18 @@ def test_device_poll_diagnostics_distinguish_new_and_repeated_reports(monkeypatc
     import json
     from unittest.mock import AsyncMock
 
+    import pytest
+
     from custom_components.apple_find.backend import native_devices
 
     now = datetime.now(timezone.utc)
     phone = {"id": "private-device-id", "name": "private-name", "locationEnabled": True,
              "location": {"timeStamp": now.timestamp() * 1000, "latitude": 12.345678,
                           "longitude": 90.123456, "horizontalAccuracy": 5}}
-    monkeypatch.setattr(native_devices, "fetch_devices", AsyncMock(return_value=[phone]))
+    newer_phone = phone | {"location": phone["location"] | {"timeStamp": (now.timestamp() + 1) * 1000}}
+    monkeypatch.setattr(native_devices, "fetch_devices", AsyncMock(
+        side_effect=([phone], [phone], [newer_phone], asyncio.CancelledError),
+    ))
     monkeypatch.setattr(native_devices, "VerifiedHttpSession", lambda *args, **kwargs: AsyncMock())
     monkeypatch.setattr(native_devices, "account_generation", lambda: "test")
     monkeypatch.setattr(native_devices, "mark_reauth", lambda *args, **kwargs: None)
@@ -52,10 +57,16 @@ def test_device_poll_diagnostics_distinguish_new_and_repeated_reports(monkeypatc
     messages = []
     monkeypatch.setattr(native_devices, "log_diagnostic", lambda message, **_: messages.append(message))
 
-    for _ in range(2):
-        asyncio.run(native_devices.run(None, provider=object()))
+    published = []
+
+    def snapshot_changed(path):
+        published.append(json.loads(path.read_text())["devices"][0]["position"]["timestamp"])
+
+    with pytest.raises(asyncio.CancelledError):
+        asyncio.run(native_devices.run(0, provider=object(), on_snapshot_changed=snapshot_changed))
     polls = [json.loads(message) for message in messages]
-    assert [poll["report_time_changed"] for poll in polls] == [1, 0]
+    assert [poll["report_time_changed"] for poll in polls] == [1, 0, 1]
+    assert len(published) == 2 and published[0] < published[1]
     assert all(poll["listed"] == poll["located"] == 1 for poll in polls)
     assert all(0 <= poll["fetch_ms"] <= poll["elapsed_ms"] for poll in polls)
     assert all(private not in message for private in ("private-device-id", "private-name", "12.345678", "90.123456")

@@ -13,6 +13,7 @@ from homeassistant.exceptions import HomeAssistantError
 
 from . import DOMAIN, workspace_path
 from .backend import environment as backend_environment
+from .snapshots import notify_snapshot_changed
 
 LOGGER = logging.getLogger(__name__)
 PEOPLE_POLL_SECONDS = 15
@@ -121,10 +122,15 @@ class NativeRuntime:
         from .backend.icloud_contacts import CONF_CONTACTS_PASSWORD
 
         async with self.entry_lock:
+            previous = self.entries.get(entry_id)
             if data is None:
                 self.entries.pop(entry_id, None)
             else:
                 self.entries[entry_id] = {**data, CONF_CONTACTS_PASSWORD: (options or {}).get(CONF_CONTACTS_PASSWORD)}
+
+            changed_entry = data if data is not None else previous
+            if changed_entry is not None and changed_entry.get("kind") != "devices":
+                self._snapshot_changed()
 
             if self.provider is None:
                 LOGGER.debug("Waiting for Apple authorization before starting collectors")
@@ -140,7 +146,9 @@ class NativeRuntime:
             await self._sync_people()
             await self._set_collector(
                 "devices", devices,
-                lambda: self.native_devices.run(DEVICE_POLL_SECONDS, provider=self.provider),
+                lambda: self.native_devices.run(
+                    DEVICE_POLL_SECONDS, provider=self.provider, on_snapshot_changed=self._snapshot_changed,
+                ),
             )
 
     async def _sync_people(self):
@@ -156,6 +164,9 @@ class NativeRuntime:
         )
         settings = tuple(sorted(people, key=lambda item: item[:2]))
         await self._set_collector("people", settings, lambda: self._collect_people(settings))
+
+    def _snapshot_changed(self, path=None):
+        notify_snapshot_changed(self.hass, path)
 
     async def async_contacts(self):
         return await self._call(self._contacts)
@@ -243,10 +254,15 @@ class NativeRuntime:
                 )
                 async with self.entry_lock:
                     if generation == account_generation():
+                        changed = (contacts, own_device, position_ttl, generation) != (
+                            self.contacts, self.own_device, self.contact_position_ttl, self.contact_generation,
+                        )
                         self.contacts = contacts
                         self.own_device = own_device
                         self.contact_position_ttl = position_ttl
                         self.contact_generation = generation
+                        if changed:
+                            self._snapshot_changed()
                         await self._sync_people()
                     else:
                         LOGGER.debug("Discarded contact discovery result after Apple session changed")
@@ -291,7 +307,7 @@ class NativeRuntime:
         targets = [
             self.native_people.PollTarget(argparse.Namespace(
                 target=handle, snapshot=Path(path), self_uri=None, keys=True,
-                provider=self.provider,
+                provider=self.provider, on_snapshot_changed=self._snapshot_changed,
                 poll_interval=interval, relationship_id=relationship_id, max_age=max_age,
             ))
             for handle, path, interval, relationship_id, max_age in entries
@@ -363,6 +379,7 @@ class NativeRuntime:
                 status = result["status"]
                 LOGGER.debug("Apple Find %s completed with %s in %.2fs", action, status, monotonic() - started)
                 if status == "authorized":
+                    self._snapshot_changed()
                     LOGGER.info("Apple Find authorization completed")
                 elif status not in ("verification_required", "invalid_code"):
                     LOGGER.warning("Apple Find authorization failed (%s)", status)

@@ -3,7 +3,6 @@
 HA's Recorder can retain position attributes whenever the tracker state updates.
 Locations are loaded from verified snapshots for the corresponding share.
 """
-from datetime import timedelta
 import json
 import logging
 from pathlib import Path
@@ -13,7 +12,7 @@ from homeassistant.core import callback
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.update_coordinator import (
-    CoordinatorEntity, DataUpdateCoordinator, UpdateFailed,
+    CoordinatorEntity, UpdateFailed,
 )
 from homeassistant.util import dt as dt_util, slugify
 
@@ -21,6 +20,7 @@ from . import DEVICES_ID, DOMAIN, workspace_path
 from .groups import CONTACTS, DEVICES, group_id
 from .protocol import Position
 from .runtime import async_get_runtime
+from .snapshots import SnapshotCoordinator
 
 LOGGER = logging.getLogger(__name__)
 OWN_LOCATION = "me"
@@ -93,13 +93,15 @@ async def async_setup_contacts(hass, entry, async_add_entities):
                                          for target, position in located.items()),
             missing, rejected, max_age, own_position is not None,
         )
+        coordinator.async_schedule_position_expiry(located.values(), max_age)
         data[OWN_LOCATION] = (None, own_position, None)
         return data
 
-    coordinator = DataUpdateCoordinator(
-        hass, LOGGER, name="Apple Find shared contacts", update_method=update,
-        update_interval=timedelta(seconds=30), always_update=False, config_entry=entry,
+    coordinator = SnapshotCoordinator(
+        hass, LOGGER, name="Apple Find shared contacts", update_method=update, config_entry=entry,
+        accepts_snapshot=lambda path: path is None or path.parent == directory,
     )
+    entry.async_on_unload(entry.runtime_data.async_add_listener(coordinator.async_snapshot_changed))
 
     @callback
     def discover():
@@ -151,12 +153,12 @@ async def async_setup_entry(hass, entry, async_add_entities):
             raise UpdateFailed("Location timestamp moved backwards")
         LOGGER.debug("Apple Find selected contact snapshot read (with location: %d, changed: %s)",
                      len(result), result != previous)
+        coordinator.async_schedule_position_expiry(result.values(), config["max_age"])
         return result
 
-    coordinator = DataUpdateCoordinator(
-        hass, LOGGER, name="Apple Find My selected targets", update_method=update,
-        update_interval=timedelta(seconds=config["poll_seconds"]), always_update=False,
-        config_entry=entry,
+    coordinator = SnapshotCoordinator(
+        hass, LOGGER, name="Apple Find My selected targets", update_method=update, config_entry=entry,
+        accepts_snapshot=lambda changed: changed == path,
     )
     await coordinator.async_refresh()
     async_add_entities([SelectedTracker(coordinator, target, name) for target, name in targets.items()])

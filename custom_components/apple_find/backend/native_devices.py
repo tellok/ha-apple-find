@@ -141,13 +141,14 @@ async def play_sound(provider, http, target):
     })
 
 
-async def run(interval, *, provider=None):
+async def run(interval, *, provider=None, on_snapshot_changed=None):
     owns_provider = provider is None
     provider = provider or EmulatedMacAnisette.from_json()
     http = VerifiedHttpSession(PROXY, persist_cookies=False)
     try:
         previous = json.loads(OUTPUT.read_text())["devices"] if OUTPUT.is_file() else []
         failures = 0
+        published = None
         while True:
             started = time.monotonic()
             generation = account_generation()
@@ -156,6 +157,9 @@ async def run(interval, *, provider=None):
                 fetched = time.monotonic()
                 snapshot = device_snapshot(devices, previous, datetime.now(timezone.utc))
                 save_private(OUTPUT, snapshot)
+                if on_snapshot_changed is not None and (snapshot != published or failures):
+                    on_snapshot_changed(OUTPUT)
+                    published = snapshot
                 prior_stamps = {
                     row["target_id"]: row["position"].get("timestamp")
                     for row in previous if isinstance(row.get("position"), dict)

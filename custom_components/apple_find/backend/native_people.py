@@ -302,7 +302,7 @@ class PeopleClient:
             log_diagnostic(json.dumps({"stage": "decrypt_locations", "report_count": len(reports)}), flush=True)
         return reports
 
-    async def position(self, key, output, *, max_age=FRESH_LOCATION_SECONDS):
+    async def position(self, key, output, *, max_age=FRESH_LOCATION_SECONDS, on_snapshot_changed=None):
         target_id = f"friend:{self.target}"
         positions = []
         reports = await self.fetch(key)
@@ -333,6 +333,8 @@ class PeopleClient:
             "target_id": target_id, "latitude": best.latitude, "longitude": best.longitude,
             "accuracy": best.accuracy, "timestamp": best.timestamp.isoformat(), "floor": best.floor,
         }]})
+        if on_snapshot_changed is not None:
+            on_snapshot_changed(output)
         log_diagnostic(json.dumps({**diagnostic, "result": "updated"}), flush=True)
         return fresh
 
@@ -450,7 +452,10 @@ async def collect_once(args, *, refresh_key=False):
                     log_diagnostic(json.dumps({"stage": "key_delivery_ack", "error_type": type(error).__name__}), flush=True)
                 break
         if key:
-            return await client.position(key, output, max_age=getattr(args, "max_age", FRESH_LOCATION_SECONDS))
+            return await client.position(
+                key, output, max_age=getattr(args, "max_age", FRESH_LOCATION_SECONDS),
+                on_snapshot_changed=getattr(args, "on_snapshot_changed", None),
+            )
         return False
     finally:
         if receiver:

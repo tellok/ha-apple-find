@@ -1,17 +1,17 @@
 """Shared Home Assistant discovery for native devices."""
 
 from dataclasses import dataclass
-from datetime import timedelta
 import json
 import logging
 
 from homeassistant.core import callback
 from homeassistant.helpers.device_registry import DeviceInfo
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util import dt as dt_util
 
 from . import DOMAIN, workspace_path
 from .protocol import Position
+from .snapshots import SnapshotCoordinator
 
 LOGGER = logging.getLogger(__name__)
 
@@ -27,11 +27,11 @@ class NativeDevice:
         return DeviceInfo(identifiers={(DOMAIN, target)}, name=self.name, manufacturer="Apple")
 
 
-class DevicesCoordinator(DataUpdateCoordinator[dict[str, NativeDevice]]):
+class DevicesCoordinator(SnapshotCoordinator):
     def __init__(self, hass, entry):
-        super().__init__(hass, LOGGER, config_entry=entry, name="Apple Find Devices",
-                         update_interval=timedelta(seconds=30), always_update=False)
         self.path = workspace_path(hass) / "state" / "native-devices.json"
+        super().__init__(hass, LOGGER, config_entry=entry, name="Apple Find Devices",
+                         accepts_snapshot=lambda path: path == self.path)
 
     def read_snapshot(self):
         snapshot = json.loads(self.path.read_text())
@@ -57,7 +57,9 @@ class DevicesCoordinator(DataUpdateCoordinator[dict[str, NativeDevice]]):
 
     async def _async_update_data(self):
         try:
-            return await self.hass.async_add_executor_job(self.read_snapshot)
+            devices = await self.hass.async_add_executor_job(self.read_snapshot)
+            self.async_schedule_position_expiry((device.position for device in devices.values()), 900)
+            return devices
         except (OSError, ValueError, KeyError, TypeError) as error:
             LOGGER.debug("Apple Find device snapshot could not be read (%s)", type(error).__name__)
             raise UpdateFailed("Native device snapshot unavailable") from None

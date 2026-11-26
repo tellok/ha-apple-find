@@ -142,8 +142,15 @@ def test_household_hint_wakes_scheduler_and_publishes_fetched_report(monkeypatch
     monkeypatch.setattr(people, "NATIVE", tmp_path)
     monkeypatch.setattr(people_keys, "account_generation", lambda: 1)
     monkeypatch.setattr(people_keys, "VerifiedHttpSession", lambda *args, **kwargs: AsyncMock())
+    published = []
+
+    def snapshot_changed(path):
+        assert path == snapshot
+        published.append(json.loads(path.read_text())["positions"][0]["latitude"])
+
     target = people.PollTarget(Namespace(target="a@example.invalid", relationship_id="share-a", keys=True,
-                                        self_uri="mailto:self@example.invalid", snapshot=snapshot),
+                                        self_uri="mailto:self@example.invalid", snapshot=snapshot,
+                                        on_snapshot_changed=snapshot_changed),
                                due=scheduler_clock.now + 60)
 
     async def exercise():
@@ -217,6 +224,7 @@ def test_household_hint_wakes_scheduler_and_publishes_fetched_report(monkeypatch
     snapshots = [e for e in events if e["stage"] == "snapshot"]
     assert [e["result"] for e in snapshots] == ["updated", "already_current", "updated", "already_current"]
     assert all("report_age_seconds" in e and e["fresh"] for e in snapshots)
+    assert published == [25, 25.001]
     assert all(value not in caplog.text for value in (target.args.target, "self@example.invalid", "share-a",
                                                        "latitude", "longitude"))
 
