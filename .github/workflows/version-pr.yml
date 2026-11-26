@@ -1,0 +1,65 @@
+name: Prepare version PR
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: version-pr-main
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  maintain:
+    if: github.ref == 'refs/heads/main' && !github.event.repository.fork && !github.event.deleted
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: tellok/actions/github-actions/changesets-version-pr@9df224593aad286a012adc6760fa7de7cb175e22
+        id: pending
+        with:
+          operation: detect
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        if: steps.pending.outputs.found == 'true'
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Calculate the release plan
+        id: plan
+        if: steps.pending.outputs.found == 'true'
+        run: |
+          npm ci --ignore-scripts
+          python3 .github/scripts/version.py plan
+      - name: Require the dedicated version PR PAT
+        if: steps.plan.outputs.title != ''
+        env:
+          VERSION_PR_TOKEN: ${{ secrets.VERSION_PR_TOKEN }}
+        run: |
+          if [[ -z "$VERSION_PR_TOKEN" ]]; then
+            echo "::error::Configure the VERSION_PR_TOKEN repository secret to write the version PR."
+            exit 1
+          fi
+      - uses: tellok/actions/github-actions/changesets-version-pr@9df224593aad286a012adc6760fa7de7cb175e22
+        if: steps.plan.outputs.title != ''
+        with:
+          base: main
+          branch: release/version-update
+          managed-author: ''
+          title: ${{ steps.plan.outputs.title }}
+          body-file: .version-pr-notes.md
+          version-command: python3 .github/scripts/version.py prepare
+          allowed-paths: |
+            .changeset/*.md
+            .changeset/release.json
+            CHANGELOG.md
+            package.json
+            package-lock.json
+            custom_components/apple_find/manifest.json
+          github-token: ${{ secrets.VERSION_PR_TOKEN }}
