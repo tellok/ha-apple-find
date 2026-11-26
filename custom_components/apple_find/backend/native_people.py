@@ -305,8 +305,8 @@ class PeopleClient:
     async def position(self, key, output, *, max_age=FRESH_LOCATION_SECONDS):
         target_id = f"friend:{self.target}"
         positions = []
-        now = datetime.now(timezone.utc)
         reports = await self.fetch(key)
+        now = datetime.now(timezone.utc)
         for report in reports:
             try:
                 positions.append(position_from_report(report, target_id=target_id, now=now, max_age=max_age))
